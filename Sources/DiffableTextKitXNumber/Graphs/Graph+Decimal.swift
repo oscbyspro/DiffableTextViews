@@ -21,9 +21,9 @@ public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyab
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
-    public typealias Number   = _StandardID<Value.FormatStyle         >.Style
-    public typealias Percent  = _StandardID<Value.FormatStyle.Percent >.Style
-    public typealias Currency = _CurrencyID<Value.FormatStyle.Currency>.Style
+    public typealias Number   = _StandardStyle<Value.FormatStyle         >
+    public typealias Percent  = _StandardStyle<Value.FormatStyle.Percent >
+    public typealias Currency = _CurrencyStyle<Value.FormatStyle.Currency>
 
     //=------------------------------------------------------------------------=
     // MARK: State

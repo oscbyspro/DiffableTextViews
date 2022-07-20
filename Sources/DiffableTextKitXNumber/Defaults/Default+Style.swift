@@ -7,6 +7,10 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+//*============================================================================*
+// MARK: * Default x Style
+//*============================================================================*
+
 import DiffableTextKit
 import Foundation
 
@@ -14,40 +18,51 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public struct _DefaultStyle<ID: _DefaultID>: _Style {
-    public typealias Graph = ID.Graph
-    public typealias Cache = ID.Cache
-    public typealias Input = ID.Input
-    public typealias Value = ID.Input
+@usableFromInline protocol _DefaultStyle<Value>: _Style
+where Graph == Input.NumberTextGraph, Value == Input,
+Cache: _DefaultCache, Cache.Style == Self, Value == Input {
+        
+    associatedtype Format: _Format
+    
+    typealias Input = Format.FormatInput
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
+        
+    @inlinable var locale: Locale { get set }
     
-    @usableFromInline var id: ID
-    @usableFromInline var bounds: Bounds<Input>?
-    @usableFromInline var precision: Precision<Input>?
+    @inlinable var bounds: Bounds<Input>? { get set }
+    
+    @inlinable var precision: Precision<Input>? { get set }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func similar(to other: Self) -> Bool    
+}
+
+extension _DefaultStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func locale(_  locale:  Locale) -> Self {
-        var result = self; result.id.locale = locale; return self
+    @inlinable public func locale(_ locale:  Locale) -> Self {
+        var result = self; result.locale = locale; return self
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Utilitie
     //=------------------------------------------------------------------------=
-    
+
     @inlinable public func cache() -> Cache {
-        ID.cache(self)
+        Cache(self)
     }
     
     @inlinable public func update(_ cache: inout Cache) {
-        switch cache.style.id == id {
-        case  true: cache.style = self
-        case false: cache = self.cache() }
+        similar(to: cache.style) ? (cache.style = self) : (cache = self.cache())
     }
     
     //=------------------------------------------------------------------------=
@@ -81,15 +96,15 @@ extension _DefaultStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
-        self.bounds(.init(limits))
+        self.bounds(Bounds(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
-        self.bounds(.init(limits))
+        self.bounds(Bounds(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
-        self.bounds(.init(limits))
+        self.bounds(Bounds(limits))
     }
     
     //=------------------------------------------------------------------------=
@@ -113,17 +128,17 @@ extension _DefaultStyle {
     
     @inlinable public func precision<I>(integer: I) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(.init(integer: integer))
+        self.precision(Precision(integer: integer))
     }
     
     @inlinable public func precision<F>(fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
-        self.precision(.init(fraction: fraction))
+        self.precision(Precision(fraction: fraction))
     }
     
     @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
     where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.precision(.init(integer: integer, fraction: fraction))
+        self.precision(Precision(integer: integer, fraction: fraction))
     }
     
     //=------------------------------------------------------------------------=
@@ -132,55 +147,5 @@ extension _DefaultStyle {
     
     @inlinable @inline(__always) func precision(_ precision: Precision<Input>) -> Self {
         var result = self; result.precision = precision; return result
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Traits x Standard
-//=----------------------------------------------------------------------------=
-
-extension _DefaultStyle: _Standard where ID: _Standard {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var locale: Locale {
-        id.locale
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.id = ID(locale: locale)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Traits x Currency
-//=----------------------------------------------------------------------------=
-
-extension _DefaultStyle: _Currency where ID: _Currency {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var locale: Locale {
-        id.locale
-    }
-    
-    @inlinable public var currencyCode: String {
-        id.currencyCode
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
-        self.id = ID(code: code, locale: locale)
     }
 }

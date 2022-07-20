@@ -20,9 +20,9 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
-    public typealias Number   = _StandardID<FloatingPointFormatStyle<Value>         >.Style
-    public typealias Percent  = _StandardID<FloatingPointFormatStyle<Value>.Percent >.Style
-    public typealias Currency = _CurrencyID<FloatingPointFormatStyle<Value>.Currency>.Style
+    public typealias Number   = _StandardStyle<FloatingPointFormatStyle<Value>         >
+    public typealias Percent  = _StandardStyle<FloatingPointFormatStyle<Value>.Percent >
+    public typealias Currency = _CurrencyStyle<FloatingPointFormatStyle<Value>.Currency>
 
     //=------------------------------------------------------------------------=
     // MARK: State

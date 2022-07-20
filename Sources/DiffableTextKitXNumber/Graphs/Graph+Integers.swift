@@ -20,8 +20,8 @@ where Value: _Input & FixedWidthInteger {
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
-    public typealias Number   = _StandardID<IntegerFormatStyle<Value>         >.Style
-    public typealias Currency = _CurrencyID<IntegerFormatStyle<Value>.Currency>.Style
+    public typealias Number   = _StandardStyle<IntegerFormatStyle<Value>         >
+    public typealias Currency = _CurrencyStyle<IntegerFormatStyle<Value>.Currency>
 
     //=------------------------------------------------------------------------=
     // MARK: State

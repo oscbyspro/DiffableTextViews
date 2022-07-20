@@ -30,10 +30,10 @@ final class StyleTestsOnPrecision: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T>(_ style: _DefaultStyle<T>,
+    func XCTAssert<T>(_ style:  some _DefaultStyle<T>,
     integer: ClosedRange<Int>?, fraction: ClosedRange<Int>?) {
-        XCTAssertEqual(style.precision?.integer,  integer )
-        XCTAssertEqual(style.precision?.fraction, fraction)
+        XCTAssertEqual(style.precision?.integer,   integer )
+        XCTAssertEqual(style.precision?.fraction,  fraction)
     }
     
     //=------------------------------------------------------------------------=

@@ -30,7 +30,7 @@ final class StyleTestsOnBounds: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T>(_ style: _DefaultStyle<T>, _ expectation: ClosedRange<T.Input>?) {
+    func XCTAssert<T>(_ style: some _DefaultStyle<T>, _ expectation: ClosedRange<T>?) {
         XCTAssertEqual(style.bounds?.min, expectation?.lowerBound)
         XCTAssertEqual(style.bounds?.max, expectation?.upperBound)
     }

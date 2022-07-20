@@ -101,14 +101,14 @@ extension Bounds {
     
     @inlinable func autocorrect(_ input: inout Input) {
         //=--------------------------------------=
-        // Lower
+        // Lower Bound
         //=--------------------------------------=
         if  input < min {
             Brrr.autocorrection << Info([.mark(input), "is less than \(min)"])
             input = min; return
         }
         //=--------------------------------------=
-        // Upper
+        // Upper Bound
         //=--------------------------------------=
         if  input > max {
             Brrr.autocorrection << Info([.mark(input), "is more than \(max)"])
@@ -145,13 +145,13 @@ extension Bounds {
     
     @inlinable func autovalidate(_ input: Input, _ number: inout Number) throws {
         //=--------------------------------------=
-        // Location
+        // Full, Or Not Full, Or Out Of Bounds
         //=--------------------------------------=
         guard let full = full(input) else {
             throw Info([.mark(input), "is not in \(self)"])
         }
         //=--------------------------------------=
-        // Remove Separator On Value Is Maxed Out
+        // Remove Separator When Input Is Full
         //=--------------------------------------=
         if  full, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])

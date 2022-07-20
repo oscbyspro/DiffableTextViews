@@ -11,78 +11,44 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Cache
+// MARK: * Default x Cache
 //*============================================================================*
 
-public final class _DefaultCache<ID: _DefaultID>: _Cache {
-    public typealias Style = ID.Style
-    public typealias Input = ID.Input
+@usableFromInline protocol _DefaultCache: _Cache where Input == Style.Input {
+    
+    associatedtype Style: _DefaultStyle
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var style: Style
-    @usableFromInline let adapter: Adapter<ID.Format>
-    @usableFromInline let preferences: Preferences<Input>
+    @inlinable var style: Style { get set }
     
-    @usableFromInline let interpreter: Interpreter
-    @usableFromInline let adjustments: ((inout Snapshot) -> Void)?
-
+    @inlinable var adapter: Adapter<Style.Format> { get }
+    
+    @inlinable var preferences: Preferences<Input> { get }
+    
+    @inlinable var interpreter: Interpreter { get }
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) where ID: _Standard {
-        self.style  = style
-        
-        self.preferences =  .standard()
-        self.adapter = .init(unchecked: ID.format(style.id))
-        //=--------------------------------------=
-        // Formatter
-        //=--------------------------------------=
-        let formatter = NumberFormatter()
-        formatter.locale = style.id.locale
-        //=--------------------------------------=
-        // Formatter x None
-        //=--------------------------------------=
-        assert(formatter.numberStyle == .none)
-        self.interpreter = .standard(formatter)
-        self.adjustments = .none
-    }
+    init(_ style: Style)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func snapshot(_  characters: String) -> Snapshot
+}
 
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ style: Style) where ID: _Currency {
-        self.style  = style
-        
-        self.adapter = .init(unchecked: ID.format(style.id))
-        //=--------------------------------------=
-        // Formatter
-        //=--------------------------------------=
-        let formatter = NumberFormatter()
-        formatter.locale = style.id.locale
-        formatter.currencyCode = style.id.currencyCode
-        //=--------------------------------------=
-        // Formatter x None
-        //=--------------------------------------=
-        assert(formatter.numberStyle == .none)
-        self.interpreter = .currency(formatter)
-        //=--------------------------------------=
-        // Formatter x Currency
-        //=--------------------------------------=
-        formatter.numberStyle = .currency
-        self.preferences = .currency(formatter)
-        //=--------------------------------------=
-        // Formatter x Currency x Fractionless
-        //=--------------------------------------=
-        formatter.maximumFractionDigits = .zero
-        let label = Label.currency(formatter, interpreter.components)
-        self.adjustments = label?.autocorrect(_:)
-    }
-    
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _DefaultCache {
+
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -94,6 +60,12 @@ public final class _DefaultCache<ID: _DefaultID>: _Cache {
     @inlinable var precision: Precision<Input> {
         style.precision ?? preferences.precision
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Defaults
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
 }
 
 //=----------------------------------------------------------------------------=
@@ -193,18 +165,16 @@ extension _DefaultCache {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
 
-    @inlinable func commit(_ adapter: inout Adapter<ID.Format>,
+    @inlinable func commit(_ adapter: inout Adapter<Style.Format>,
     _ value: Input, _ number: Number) -> Commit<Input> {
         Commit(value, snapshot(characters(&adapter, value, number)))
     }
     
-    @inlinable func snapshot(_  characters: String) -> Snapshot {
-        var snapshot = Snapshot(characters,
-        as: { interpreter.attributes[$0] })
-        adjustments?(&snapshot); return snapshot
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        Snapshot(characters, as: { interpreter.attributes[$0] })
     }
     
-    @inlinable func characters(_ adapter: inout Adapter<ID.Format>,
+    @inlinable func characters(_ adapter: inout Adapter<Style.Format>,
     _ value: Input, _ number: Number) -> String {
         adapter.transform(number.sign)
         adapter.transform(number.separator)

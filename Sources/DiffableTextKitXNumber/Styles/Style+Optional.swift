@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Optional x Style
+// MARK: * Style x Optional
 //*============================================================================*
 
 public struct _OptionalStyle<Style: _Style>:
