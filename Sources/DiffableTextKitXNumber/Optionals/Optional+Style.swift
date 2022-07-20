@@ -105,7 +105,7 @@ extension _OptionalStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Optional x Traits x Standard
+// MARK: + Traits x Standard
 //=----------------------------------------------------------------------------=
 
 extension _OptionalStyle: _Standard where Style: _Standard {
@@ -128,7 +128,7 @@ extension _OptionalStyle: _Standard where Style: _Standard {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Optional x Traits x Currency
+// MARK: + Traits x Currency
 //=----------------------------------------------------------------------------=
 
 extension _OptionalStyle: _Currency where Style: _Currency {
