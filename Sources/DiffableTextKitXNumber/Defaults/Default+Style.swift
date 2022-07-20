@@ -32,7 +32,7 @@ public struct _DefaultStyle<ID: _DefaultID>: _Style {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func locale(_ locale: Locale) -> Self {
+    @inlinable public func locale(_  locale:  Locale) -> Self {
         var result = self; result.id.locale = locale; return self
     }
     

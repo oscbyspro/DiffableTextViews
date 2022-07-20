@@ -56,9 +56,9 @@ extension _OptionalGraph: _Currencyable where Graph: _Currencyable {
     public typealias Currency = _OptionalStyle<Graph.Currency>
 }
 
-//*============================================================================*
-// MARK: * Optional x Graph
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Optional(s)
+//=----------------------------------------------------------------------------=
 
 extension Optional: _Value where Wrapped: _Input {
     

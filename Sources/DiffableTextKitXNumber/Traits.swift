@@ -39,6 +39,7 @@ public protocol _Currency {
     //=------------------------------------------------------------------------=
     
     @inlinable var locale: Locale { get }
+    
     @inlinable var currencyCode: String { get }
     
     //=------------------------------------------------------------------------=

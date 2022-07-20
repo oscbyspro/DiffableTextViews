@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Decimal
 //*============================================================================*
 
-public struct _Decimal: _Graph, _Numberable, _Percentable, _Currencyable {
+public struct _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyable {
     public typealias Value = Decimal
     public typealias Input = Decimal
     
@@ -28,7 +28,7 @@ public struct _Decimal: _Graph, _Numberable, _Percentable, _Currencyable {
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     public let min: Value
     public let max: Value
     public let precision: Int
@@ -40,7 +40,7 @@ public struct _Decimal: _Graph, _Numberable, _Percentable, _Currencyable {
     @inlinable init() {
         self.precision = 38
         self.max = Value(string: String(repeating: "9", count: precision))!
-        self.min = -max
+        self.min = -(max)
     }
 
     //=------------------------------------------------------------------------=
@@ -60,4 +60,4 @@ public struct _Decimal: _Graph, _Numberable, _Percentable, _Currencyable {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension Decimal: _Input { public static let _NumberTextGraph = _Decimal() }
+extension Decimal: _Input { public static let _NumberTextGraph = _DecimalGraph() }

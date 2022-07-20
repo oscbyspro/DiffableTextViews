@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Float
 //*============================================================================*
 
-public struct _Float<Value>: _Graph, _Numberable, _Percentable, _Currencyable
+public struct _FloatGraph<Value>: _Graph, _Numberable, _Percentable, _Currencyable
 where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     
     //=------------------------------------------------------------------------=
@@ -36,11 +36,14 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(precision: Int) where Value: LosslessStringConvertible {
-        let  abs = Value(String(repeating: "9", count: precision))!
-        self.precision = precision; self.min = -abs; self.max = abs
+    /// - Max `Double.precision` due to `FloatingPointFormatStyle`.
+    @inlinable init() where Value: LosslessStringConvertible {
+        let size = Swift.min(Double.significandBitCount, Value.significandBitCount)
+        self.precision = Int(log10(pow(2, Double(size))))
+        self.max = Value(String(repeating: "9", count: precision))!
+        self.min = -(max)
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -58,4 +61,4 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
 // MARK: + Double
 //=----------------------------------------------------------------------------=
 
-extension Double: _Input { public static let _NumberTextGraph = _Float<Self>(precision: 15) }
+extension Double: _Input { public static let _NumberTextGraph = _FloatGraph<Self>() }

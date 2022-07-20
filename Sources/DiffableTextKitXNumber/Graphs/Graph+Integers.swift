@@ -10,60 +10,68 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Graph x UInt
+// MARK: * Graph x Integer
 //*============================================================================*
 
-public struct _UInt<Value>: _Graph, _Numberable, _Currencyable
-where Value: _Input & FixedWidthInteger & UnsignedInteger {
+public struct _IntegerGraph<Value>: _Graph, _Numberable, _Currencyable
+where Value: _Input & FixedWidthInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Nodes
     //=------------------------------------------------------------------------=
-
+    
     public typealias Number   = _StandardID<IntegerFormatStyle<Value>         >.Style
     public typealias Currency = _CurrencyID<IntegerFormatStyle<Value>.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
+    public let min: Value
     public let max: Value
     public let precision: Int
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @inlinable init(precision: Int) {
-        self.precision = precision; self.max = .max
+    
+    /// - Max `Int.precision` due to `IntegerFormatStyle`.
+    @inlinable init() {
+        let large = Value.bitWidth >= Int.bitWidth
+        self.max = large  ? Value(Int.max) : Value.max
+        self.min = large && Value.isSigned ? Value(Int.min) : Value.min
+        self.precision = Int(ceil(log10(Double(max))))
     }
     
-    /// IntegerFormatStyle uses an Int; values above Int.max crash.
-    @inlinable init(max  int: (some _Value & FixedWidthInteger & SignedInteger).Type) {
-        self.precision = int.precision; self.max = Value(int.max)
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-
-    @inlinable @inline(__always) public var min:  Value { .min  }
     
     @inlinable @inline(__always) public var zero: Value { .zero }
     
     @inlinable @inline(__always) public var optional: Bool { false }
     
-    @inlinable @inline(__always) public var unsigned: Bool { true  }
+    @inlinable @inline(__always) public var unsigned: Bool { !Value.isSigned }
     
     @inlinable @inline(__always) public var integer:  Bool { true  }
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: + Int(s)
+//=----------------------------------------------------------------------------=
+
+extension Int:   _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension Int8:  _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension Int16: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension Int32: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension Int64: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+
+//=----------------------------------------------------------------------------=
 // MARK: + UInt(s)
 //=----------------------------------------------------------------------------=
 
-extension UInt:   _Input { public static let _NumberTextGraph = _UInt<Self>(max:Int  .self) }
-extension UInt8:  _Input { public static let _NumberTextGraph = _UInt<Self>(precision:  03) }
-extension UInt16: _Input { public static let _NumberTextGraph = _UInt<Self>(precision:  05) }
-extension UInt32: _Input { public static let _NumberTextGraph = _UInt<Self>(precision:  10) }
-extension UInt64: _Input { public static let _NumberTextGraph = _UInt<Self>(max:Int64.self) }
+extension UInt:   _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension UInt8:  _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension UInt16: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension UInt32: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
+extension UInt64: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }

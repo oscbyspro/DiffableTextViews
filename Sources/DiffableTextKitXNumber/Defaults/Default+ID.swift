@@ -42,7 +42,7 @@ public protocol _DefaultID<Format>: Equatable {
 // MARK: * ID x Standard
 //*============================================================================*
 
-public struct _StandardID<Format: _Format & _Standard>: _Standard, _DefaultID {
+public struct _StandardID<Format: _Format & _Standard>: _DefaultID, _Standard {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -75,7 +75,7 @@ public struct _StandardID<Format: _Format & _Standard>: _Standard, _DefaultID {
 // MARK: * ID x Currency
 //*============================================================================*
 
-public struct _CurrencyID<Format: _Format & _Currency>: _Currency, _DefaultID {
+public struct _CurrencyID<Format: _Format & _Currency>: _DefaultID, _Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: State
