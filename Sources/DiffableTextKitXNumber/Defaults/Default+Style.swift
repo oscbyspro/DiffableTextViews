@@ -25,8 +25,8 @@ public struct _DefaultStyle<ID: _DefaultID>: _Style {
     //=------------------------------------------------------------------------=
     
     @usableFromInline var id: ID
-    @usableFromInline var bounds: _Bounds<Input>?
-    @usableFromInline var precision: _Precision<Input>?
+    @usableFromInline var bounds: Bounds<Input>?
+    @usableFromInline var precision: Precision<Input>?
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -96,7 +96,7 @@ extension _DefaultStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func bounds(_ bounds: _Bounds<Input>) -> Self {
+    @inlinable @inline(__always) func bounds(_ bounds: Bounds<Input>) -> Self {
         var result = self; result.bounds = bounds; return result
     }
 }
@@ -130,7 +130,7 @@ extension _DefaultStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ precision: _Precision<Input>) -> Self {
+    @inlinable @inline(__always) func precision(_ precision: Precision<Input>) -> Self {
         var result = self; result.precision = precision; return result
     }
 }

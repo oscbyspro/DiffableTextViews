@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Sign
 //*============================================================================*
 
-@usableFromInline struct Sign: _Token {
+@usableFromInline struct Sign: Token {
     @usableFromInline static let allCases = [positive, negative]
     
     //=------------------------------------------------------------------------=

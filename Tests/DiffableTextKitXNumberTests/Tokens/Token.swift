@@ -23,7 +23,7 @@ final class TokenTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssertBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: _Token {
+    func XCTAssertBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: Token {
         for token in T.allCases {
             XCTAssertEqual(token.ascii, Swift.unsafeBitCast(token, to: UInt8.self))
         }

@@ -19,24 +19,15 @@ public final class _DefaultCache<ID: _DefaultID>: _Cache {
     public typealias Input = ID.Input
     
     //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline typealias Adapter     = _Adapter<ID.Format>
-    @usableFromInline typealias Preferences = _Preferences<Input>
-    @usableFromInline typealias Interpreter = _Interpreter
-    @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
-    @usableFromInline let adapter: Adapter
-    @usableFromInline let preferences: Preferences
+    @usableFromInline let adapter: Adapter<ID.Format>
+    @usableFromInline let preferences: Preferences<Input>
     
     @usableFromInline let interpreter: Interpreter
-    @usableFromInline let adjustments: Adjustments?
+    @usableFromInline let adjustments: ((inout Snapshot) -> Void)?
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -96,11 +87,11 @@ public final class _DefaultCache<ID: _DefaultID>: _Cache {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: _Bounds<Input> {
+    @inlinable var bounds: Bounds<Input> {
         style.bounds ?? preferences.bounds
     }
 
-    @inlinable var precision: _Precision<Input> {
+    @inlinable var precision: Precision<Input> {
         style.precision ?? preferences.precision
     }
 }
@@ -202,7 +193,8 @@ extension _DefaultCache {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
 
-    @inlinable func commit(_ adapter: inout Adapter, _ value: Input, _ number: Number) -> Commit<Input> {
+    @inlinable func commit(_ adapter: inout Adapter<ID.Format>,
+    _ value: Input, _ number: Number) -> Commit<Input> {
         Commit(value, snapshot(characters(&adapter, value, number)))
     }
     
@@ -212,7 +204,8 @@ extension _DefaultCache {
         adjustments?(&snapshot); return snapshot
     }
     
-    @inlinable func characters(_ adapter: inout Adapter, _ value: Input, _ number: Number) -> String {
+    @inlinable func characters(_ adapter: inout Adapter<ID.Format>,
+    _ value: Input, _ number: Number) -> String {
         adapter.transform(number.sign)
         adapter.transform(number.separator)
         var characters = adapter.format(value)

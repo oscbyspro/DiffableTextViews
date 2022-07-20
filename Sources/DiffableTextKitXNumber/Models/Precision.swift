@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Precision
 //*============================================================================*
 
-@usableFromInline struct _Precision<Input: _Input>: Equatable {
+@usableFromInline struct Precision<Input: _Input>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -118,7 +118,7 @@ import Foundation
 // MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
-extension _Precision {
+extension Precision {
     
     //=------------------------------------------------------------------------=
     // MARK: Number
@@ -135,7 +135,7 @@ extension _Precision {
 // MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
-extension _Precision {
+extension Precision {
     
     //=------------------------------------------------------------------------=
     // MARK: Number

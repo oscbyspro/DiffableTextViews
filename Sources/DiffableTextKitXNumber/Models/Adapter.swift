@@ -11,7 +11,7 @@
 // MARK: * Adapter
 //*============================================================================*
 
-@usableFromInline struct _Adapter<Format: _Format> {
+@usableFromInline struct Adapter<Format: _Format> {
     @usableFromInline typealias Parser = Format.Strategy
     
     //=------------------------------------------------------------------------=

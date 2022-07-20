@@ -13,22 +13,20 @@ import Foundation
 // MARK: * Preferences
 //*============================================================================*
 
-@usableFromInline struct _Preferences<Input> where Input: _Input {
-    @usableFromInline typealias Bounds = _Bounds<Input>
-    @usableFromInline typealias Precision = _Precision<Input>
+@usableFromInline struct Preferences<Input> where Input: _Input {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let bounds: Bounds
-    @usableFromInline let precision: Precision
+    @usableFromInline let bounds:    Bounds<Input>
+    @usableFromInline let precision: Precision<Input>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(bounds: Bounds, precision: Precision) {
+    @inlinable init(bounds: Bounds<Input>, precision: Precision<Input>) {
         self.bounds = bounds; self.precision = precision
     }
     
@@ -46,7 +44,7 @@ import Foundation
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .currency)
         
-        let precision = Precision(fraction:
+        let precision = Precision<Input>(fraction:
         formatter.minimumFractionDigits ...
         formatter.maximumFractionDigits)
         

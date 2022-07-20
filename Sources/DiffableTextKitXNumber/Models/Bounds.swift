@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Bounds
 //*============================================================================*
 
-@usableFromInline struct _Bounds<Input: _Input>: CustomStringConvertible, Equatable {
+@usableFromInline struct Bounds<Input: _Input>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -93,7 +93,7 @@ import DiffableTextKit
 // MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
-extension _Bounds {
+extension Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Input
@@ -129,7 +129,7 @@ extension _Bounds {
 // MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
-extension _Bounds {
+extension Bounds {
 
     //=------------------------------------------------------------------------=
     // MARK: Number

@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Separator
 //*============================================================================*
 
-@usableFromInline struct Separator: _Token {
+@usableFromInline struct Separator: Token {
     @usableFromInline static let allCases = [grouping, fraction]
     
     //=------------------------------------------------------------------------=

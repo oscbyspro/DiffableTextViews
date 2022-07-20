@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 /// A single ASCII-encoded character.
-@usableFromInline protocol _Token: CaseIterable, CustomStringConvertible, Hashable {
+@usableFromInline protocol Token: CaseIterable, CustomStringConvertible, Hashable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -35,7 +35,7 @@ import Foundation
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _Token {
+extension Token {
     
     //=------------------------------------------------------------------------=
     // MARK: Unicodeable
@@ -67,7 +67,7 @@ extension _Token {
 //*============================================================================*
 
 /// A collection of ASCII-encoded characters.
-@usableFromInline protocol _Tokens: CustomStringConvertible {
+@usableFromInline protocol Tokens: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -80,7 +80,7 @@ extension _Token {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _Tokens {
+extension Tokens {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

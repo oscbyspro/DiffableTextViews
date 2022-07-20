@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Digit
 //*============================================================================*
 
-@usableFromInline struct Digit: _Token {
+@usableFromInline struct Digit: Token {
     @usableFromInline static let allCases = [
     zero, one, two,   three, four,
     five, six, seven, eight, nine]

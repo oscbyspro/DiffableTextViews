@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 /// A mapping model between components and characters.
-@usableFromInline struct Links<Token: _Token> {
+@usableFromInline struct Links<Token: DiffableTextKitXNumber.Token> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
