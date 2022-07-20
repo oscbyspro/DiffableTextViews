@@ -12,32 +12,38 @@
 //*============================================================================*
 
 public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.Value {
-    public typealias Input = Graph.Value
+    public typealias Input = Graph.Input
     public typealias Value = Graph.Value?
-
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let graph: Graph
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init() { }
+    @inlinable @inline(__always) init(_ graph: Graph) { self.graph = graph }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public var min:  Input { Input.min  }
+    @inlinable @inline(__always) public var min:  Input { graph.min  }
     
-    @inlinable @inline(__always) public var max:  Input { Input.max  }
+    @inlinable @inline(__always) public var max:  Input { graph.max  }
     
-    @inlinable @inline(__always) public var zero: Input { Input.zero }
+    @inlinable @inline(__always) public var zero: Input { graph.zero }
     
-    @inlinable @inline(__always) public var precision: Int { Input.precision }
+    @inlinable @inline(__always) public var precision: Int { graph.precision }
     
     @inlinable @inline(__always) public var optional: Bool { true            }
     
-    @inlinable @inline(__always) public var unsigned: Bool { Input.unsigned  }
+    @inlinable @inline(__always) public var unsigned: Bool { graph.unsigned  }
     
-    @inlinable @inline(__always) public var integer:  Bool { Input.integer   }
+    @inlinable @inline(__always) public var integer:  Bool { graph.integer   }
 }
 
 //=----------------------------------------------------------------------------=
@@ -66,7 +72,6 @@ extension Optional: _Value where Wrapped: _Input {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public static var _NumberTextGraph: _OptionalGraph
-    <Wrapped.NumberTextGraph> { .init() }
+    @inlinable public static var _NumberTextGraph: _OptionalGraph
+    <Wrapped.NumberTextGraph> { .init(Wrapped._NumberTextGraph) }
 }

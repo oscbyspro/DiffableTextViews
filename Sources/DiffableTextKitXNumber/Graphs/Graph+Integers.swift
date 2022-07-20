@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Integer
 //*============================================================================*
 
-public struct _IntegerGraph<Value>: _Graph, _Numberable, _Currencyable
+public final class _IntegerGraph<Value>: _Graph, _Numberable, _Currencyable
 where Value: _Input & FixedWidthInteger {
     
     //=------------------------------------------------------------------------=

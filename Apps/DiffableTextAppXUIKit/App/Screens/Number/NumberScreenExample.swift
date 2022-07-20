@@ -109,12 +109,12 @@ struct NumberScreenExample: View {
 //*============================================================================*
 
 struct NumberScreenExampleX<Style>: View
-where Style: DiffableTextKitXNumber._Style,
+where Style: _Style, Style.Value: _Value,
 Style.Input == Decimal {
-    typealias Value = Style.Value
-    typealias Input = Style.Input
-    typealias Source = Observable<Twins<Input>>
-    typealias Member = Source.KeyPath<Value>
+    typealias Value   = Style.Value
+    typealias Input   = Style.Input
+    typealias Source  = Observable<Twins<Input>>
+    typealias Member  = Source.KeyPath<Value>
     typealias Context = NumberScreenContext
     
     //=------------------------------------------------------------------------=

@@ -12,8 +12,8 @@
 //*============================================================================*
 
 public protocol _Graph {
-    associatedtype Input: _Input = Value
-    associatedtype Value: _Value = Input
+    associatedtype Value
+    associatedtype Input: Comparable
     
     //=------------------------------------------------------------------------=
     // MARK: State

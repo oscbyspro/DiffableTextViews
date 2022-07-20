@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Float
 //*============================================================================*
 
-public struct _FloatGraph<Value>: _Graph, _Numberable, _Percentable, _Currencyable
+public final class _FloatGraph<Value>: _Graph, _Numberable, _Percentable, _Currencyable
 where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     
     //=------------------------------------------------------------------------=
