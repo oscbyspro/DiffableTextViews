@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatOutput == String {
+public protocol _Format: ParseableFormatStyle where FormatOutput == String {
     
     associatedtype _Increment
     
@@ -37,19 +37,19 @@ public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatO
 //*============================================================================*
 
 extension      Decimal.FormatStyle: _Format & _Standard { }
-extension FloatingPointFormatStyle: _Format & _Standard where FormatInput: _Input { }
-extension       IntegerFormatStyle: _Format & _Standard where FormatInput: _Input { }
+extension FloatingPointFormatStyle: _Format & _Standard { }
+extension       IntegerFormatStyle: _Format & _Standard { }
 
 extension      Decimal.FormatStyle.Percent: _Format & _Standard { }
-extension FloatingPointFormatStyle.Percent: _Format & _Standard where FormatInput: _Input { }
+extension FloatingPointFormatStyle.Percent: _Format & _Standard { }
 
 //*============================================================================*
 // MARK: * Format x Currency
 //*============================================================================*
 
 extension      Decimal.FormatStyle.Currency: _Format & _Currency { }
-extension FloatingPointFormatStyle.Currency: _Format & _Currency where FormatInput: _Input { }
-extension       IntegerFormatStyle.Currency: _Format & _Currency where FormatInput: _Input { }
+extension FloatingPointFormatStyle.Currency: _Format & _Currency { }
+extension       IntegerFormatStyle.Currency: _Format & _Currency { }
 
 //*============================================================================*
 // MARK: * Format x Strategies x Sign
