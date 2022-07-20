@@ -23,15 +23,26 @@ final class GraphTests: XCTestCase {
     // MARK: Tests x Bounds
     //=------------------------------------------------------------------------=
     
+    func testDecimalBounds() {
+        let abs = Decimal(string: String(repeating: "9", count: 38))!
+        XCTAssertEqual(Decimal._NumberTextGraph.min, -abs)
+        XCTAssertEqual(Decimal._NumberTextGraph.max, +abs)
+    }
+    
+    func testDoubleBounds() {
+        let abs = Double(String(repeating: "9", count: 15))!
+        XCTAssertEqual(Double._NumberTextGraph.min, -abs)
+        XCTAssertEqual(Double._NumberTextGraph.max, +abs)
+    }
+    
     func testIntBounds() {
         XCTAssertEqual(Int._NumberTextGraph.min, Int.min)
         XCTAssertEqual(Int._NumberTextGraph.max, Int.max)
     }
     
-    func testDecimalBounds() {
-        let abs = Decimal(string: String(repeating: "9", count: 38))!
-        XCTAssertEqual(Decimal._NumberTextGraph.min, -abs)
-        XCTAssertEqual(Decimal._NumberTextGraph.max, +abs)
+    func testUIntBounds() {
+        XCTAssertEqual(UInt._NumberTextGraph.min, 0)
+        XCTAssertEqual(UInt._NumberTextGraph.max, UInt(Int.max))
     }
 }
 
