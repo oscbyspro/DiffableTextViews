@@ -74,7 +74,7 @@ import Foundation
         // Keystroke
         //=--------------------------------------=
         if  proposal.replacement.count == 1 {
-            var keystroke = proposal.replacement.first!
+            var  keystroke = proposal.replacement.first!
             translator.keystroke(  &keystroke.character)
             proposal.replacement = Snapshot([keystroke])
         //=--------------------------------------=
@@ -88,7 +88,7 @@ import Foundation
         // Keystroke
         //=--------------------------------------=
         if  proposal.replacement.count == 1 {
-            let keystroke = proposal.replacement.first!
+            let  keystroke = proposal.replacement.first!
             guard let sign = components.signs[keystroke.character] else { return nil }
             proposal.replacement = Snapshot(); return sign
         //=--------------------------------------=

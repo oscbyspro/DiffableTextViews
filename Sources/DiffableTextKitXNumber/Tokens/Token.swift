@@ -42,15 +42,11 @@ extension Token {
     //=------------------------------------------------------------------------=
     
     @inlinable var description: String {
-        String(unicode)
+        String(Unicode.Scalar(ascii))
     }
     
     @inlinable var character: Character {
-        Character(unicode)
-    }
-    
-    @inlinable var unicode: Unicode.Scalar {
-        Unicode.Scalar(ascii)
+        Character(Unicode.Scalar(ascii))
     }
 }
 

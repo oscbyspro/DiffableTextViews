@@ -101,9 +101,9 @@ import DiffableTextKit
         // Optional
         //=--------------------------------------=
         if optional,
-        self.integer.digits.isEmpty,
+        self.integer.count == 0,
         self.separator == nil,
-        self.fraction.digits.isEmpty {
+        self.fraction.count == 0 {
             return nil
         }
         //=--------------------------------------=
@@ -165,7 +165,7 @@ import DiffableTextKit
     }
     
     @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        let hasSeparatorAsSuffix = fraction.digits.isEmpty   && separator != nil;
-        if  hasSeparatorAsSuffix { separator = nil }; return hasSeparatorAsSuffix
+        let remove = fraction.count == 0 && separator != nil
+        if  remove { separator = nil }; return remove
     }
 }

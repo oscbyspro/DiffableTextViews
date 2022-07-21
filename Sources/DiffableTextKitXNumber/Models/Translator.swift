@@ -19,7 +19,6 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    /// A translation map for singular input characters.
     @usableFromInline private(set) var singular = [Character: Character]()
     @usableFromInline private(set) var fraction = [Character: Character]()
     
@@ -63,7 +62,7 @@ import DiffableTextKit
     /// Translates a single keystroke.
     ///
     /// - Use it only to translate single character entries.
-    /// - Each separator in source and target translates to the target's fraction separator.
+    /// - Separators in source and target translate to target's fraction separator.
     ///
     @inlinable func keystroke(_ character: inout Character) {
         character = singular[character] ?? character

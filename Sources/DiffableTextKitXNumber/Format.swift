@@ -29,7 +29,7 @@ public protocol _Format: ParseableFormatStyle where FormatOutput == String {
     
     @inlinable func decimalSeparator(strategy: _NFSC_SeparatorDS) -> Self
     
-    @inlinable func rounded(rule: _FPRR, increment: _Increment?) -> Self
+    @inlinable func rounded(rule: _FPRR,  increment: _Increment?) -> Self
 }
 
 //*============================================================================*
@@ -52,7 +52,7 @@ extension FloatingPointFormatStyle.Currency: _Format & _Currency { }
 extension       IntegerFormatStyle.Currency: _Format & _Currency { }
 
 //*============================================================================*
-// MARK: * Format x Strategies x Sign
+// MARK: * Format x Strategy x Sign
 //*============================================================================*
 
 public enum     _SignDS      { case always, automatic }
@@ -63,13 +63,15 @@ public protocol _SignDS_Init { init(_ value: _SignDS) }
 //=----------------------------------------------------------------------------=
 
 extension _NFSC_SignDS: _SignDS_Init {
-    @inlinable public init(_ value: _SignDS) {
-        switch value { case .always: self = .always(); case .automatic: self = .automatic }
+    @inlinable public init(_ value: _SignDS) { switch value {
+        case .always:    self = .always()
+        case .automatic: self = .automatic }
     }
 }
 
 extension _CFSC_SignDS: _SignDS_Init {
-    @inlinable public init(_ value: _SignDS) {
-        switch value { case .always: self = .always(); case .automatic: self = .automatic }
+    @inlinable public init(_ value: _SignDS) { switch value {
+        case .always:    self = .always()
+        case .automatic: self = .automatic }
     }
 }

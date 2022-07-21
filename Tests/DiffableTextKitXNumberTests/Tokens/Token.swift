@@ -80,7 +80,7 @@ final class TokenTestsOnString: XCTestCase {
             //=--------------------------------------=
             for _ in 0 ..< iterations {
                 for digit in digits {
-                    digit.unicode.write(to: &string)
+                    Unicode.Scalar(digit.ascii).write(to: &string)
                 }
             }
         }
@@ -95,19 +95,19 @@ final class TokenTestsOnString: XCTestCase {
     /// - 1000000 digits and 1 iterations: 0.081 seconds.
     func test_Digits_ForEachRawValueUInt8_String() {
         measure {
-            var bytes: [UInt8] = collection()
+            var ascii: [UInt8] = collection()
             //=----------------------------------=
             // Insert
             //=----------------------------------=
             for _ in 0 ..< iterations {
                 for digit in digits {
-                    bytes.append(digit.ascii)
+                    ascii.append(digit.ascii)
                 }
             }
             //=----------------------------------=
             // Result
             //=----------------------------------=
-            let _ = String(bytes: bytes, encoding: .utf8)
+            let _ = String(bytes: ascii, encoding: .ascii)
         }
     }
     
@@ -120,17 +120,17 @@ final class TokenTestsOnString: XCTestCase {
     /// - 1000000 digits and 1 iterations: 0.000 seconds.
     func test_Digits_UnsafeBitCastToBytes_String() {
         measure {
-            var bytes: [UInt8] = collection()
+            var ascii: [UInt8] = collection()
             //=----------------------------------=
             // Insert
             //=----------------------------------=
             for _ in 0 ..< iterations {
-                bytes.append(contentsOf: unsafeBitCast(digits, to: [UInt8].self))
+                ascii.append(contentsOf: unsafeBitCast(digits, to: [UInt8].self))
             }
             //=----------------------------------=
             // Result
             //=----------------------------------=
-            let _ = String(bytes: bytes, encoding: .utf8)
+            let _ = String(bytes: ascii, encoding: .ascii)
         }
     }
 }

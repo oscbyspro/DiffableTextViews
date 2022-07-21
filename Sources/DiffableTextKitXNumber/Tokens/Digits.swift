@@ -19,32 +19,32 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var digits: [Digit]
+    @usableFromInline private(set) var tokens: [Digit]
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(digits: [Digit] = []) { self.digits = digits }
+    @inlinable init(tokens: [Digit] = []) { self.tokens = tokens }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var ascii: [UInt8] {
-        Swift.unsafeBitCast(digits, to: [UInt8].self)
+        Swift.unsafeBitCast(tokens, to: [UInt8].self)
     }
     
     @inlinable var count: Int {
-        digits.count
+        tokens.count // is O(1)
     }
     
     @inlinable func count(prefix predicate: (Digit) -> Bool) -> Int {
-        digits.count(while: predicate)
+        tokens.count(while: predicate)
     }
     
     @inlinable func count(suffix predicate: (Digit) -> Bool) -> Int {
-        digits.reversed().count(while: predicate)
+        tokens.reversed().count(while: predicate)
     }
     
     //=------------------------------------------------------------------------=
@@ -52,31 +52,31 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func append(_ digit: Digit) {
-        digits.append(digit)
+        tokens.append(digit)
     }
         
     @inlinable mutating func atLeastZero() {
-        guard digits.isEmpty else { return }
-        digits.append(.zero)
+        guard tokens.isEmpty else { return }
+        tokens.append(.zero)
     }
     
     @inlinable mutating func resize(prefix length: Int) -> Bool {
         guard length < count else { return false }
-        digits.removeSubrange(digits.prefix(length).endIndex...)
+        tokens.removeSubrange(tokens.prefix(length).endIndex...)
         return true
     }
     
     @inlinable mutating func resize(suffix length: Int) -> Bool {
         guard length < count else { return false }
-        digits.removeSubrange(..<digits.suffix(length).startIndex)
+        tokens.removeSubrange(..<tokens.suffix(length).startIndex)
         return true
     }
 
     @inlinable mutating func trim(prefix predicate: (Digit) -> Bool) {
-        digits.removeSubrange(..<digits.prefix(while: predicate).endIndex)
+        tokens.removeSubrange(..<tokens.prefix(while: predicate).endIndex)
     }
 
     @inlinable mutating func trim(suffix predicate: (Digit) -> Bool) {
-        digits.removeSubrange(digits.suffix(while: predicate).startIndex...)
+        tokens.removeSubrange(tokens.suffix(while: predicate).startIndex...)
     }
 }
