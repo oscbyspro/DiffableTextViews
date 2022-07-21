@@ -65,7 +65,11 @@ import DiffableTextKit
     /// - Separators in source and target translate to target's fraction separator.
     ///
     @inlinable func keystroke(_ character: inout Character) {
-        character = singular[character] ?? character
-        character = fraction[character] ?? character
+        character = singular[character, default: character]
+        character = fraction[character, default: character]
+    }
+    
+    @inlinable func keystroke(_ character: Character) -> Character {
+        var character = character; keystroke(&character); return character
     }
 }

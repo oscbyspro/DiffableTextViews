@@ -59,40 +59,38 @@ import Foundation
     }
     
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
-        var proposal = proposal; _translate(&proposal)
-        let sign  = _consumeSingleSignInput(&proposal)
-        guard var number = try number(proposal.merged(), as: value) else { return nil }
-        if let sign { number.sign = sign }; return number
+        var proposal = proposal;translate(&proposal.replacement)
+        let sign = consumeSingleSignInput(&proposal.replacement)
+
+        var number = try number(proposal.merged(), as: value)
+        if let sign {  number?.sign = sign  };  return number
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable func _translate(_ proposal: inout Proposal) {
+    @inlinable func translate(_ replacement: inout Snapshot) {
         //=--------------------------------------=
         // Keystroke
         //=--------------------------------------=
-        if  proposal.replacement.count == 1 {
-            var  keystroke = proposal.replacement.first!
-            translator.keystroke(  &keystroke.character)
-            proposal.replacement = Snapshot([keystroke])
+        if  replacement.count == 1, let keystroke = replacement.first {
+            replacement = Snapshot([translator.keystroke(keystroke.character)])
         //=--------------------------------------=
-        // Paste, Delete
+        // Paste, Backspace
         //=--------------------------------------=
-        } else { /* paste not yet implemented */ }
+        } else { return }
     }
     
-    @inlinable func _consumeSingleSignInput(_ proposal: inout Proposal) -> Sign? {
+    @inlinable func consumeSingleSignInput(_ replacement: inout Snapshot) -> Sign? {
         //=--------------------------------------=
         // Keystroke
         //=--------------------------------------=
-        if  proposal.replacement.count == 1 {
-            let  keystroke = proposal.replacement.first!
-            guard let sign = components.signs[keystroke.character] else { return nil }
-            proposal.replacement = Snapshot(); return sign
+        if  replacement.count == 1, let keystroke = replacement.first {
+            let sign = components.signs[keystroke.character]
+            if sign != nil { replacement = [] }; return sign
         //=--------------------------------------=
-        // Paste, Delete
+        // Paste, Backspace
         //=--------------------------------------=
         } else { return nil }
     }
