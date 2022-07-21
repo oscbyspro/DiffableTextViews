@@ -55,4 +55,8 @@ import Foundation
         case .positive: return formatter .plusSign.first{ $0.isPunctuation || $0.isMathSymbol }
         default:        return formatter.minusSign.first{ $0.isPunctuation || $0.isMathSymbol } }
     }
+    
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
+        self.standard(formatter)
+    }
 }

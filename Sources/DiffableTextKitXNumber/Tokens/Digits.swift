@@ -55,7 +55,7 @@ import DiffableTextKit
         digits.append(digit)
     }
         
-    @inlinable mutating func replaceEmptyWithZero() {
+    @inlinable mutating func atLeastZero() {
         guard digits.isEmpty else { return }
         digits.append(.zero)
     }

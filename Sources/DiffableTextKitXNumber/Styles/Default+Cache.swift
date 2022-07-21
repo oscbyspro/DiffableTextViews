@@ -40,6 +40,8 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable func compatible(_ style: Style) -> Bool
+    
     @inlinable func snapshot(_  characters: String) -> Snapshot
 }
 

@@ -26,7 +26,6 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     
     public var locale: Locale
     public var currencyCode: String
-    
     @usableFromInline var bounds: Bounds<Input>?
     @usableFromInline var precision: Precision<Input>?
     
@@ -38,27 +37,20 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         self.locale = locale; self.currencyCode = code
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-
-    @inlinable func similar(to other: Self) -> Bool {
-        locale == other.locale && currencyCode == other.currencyCode
-    }
-    
     //*========================================================================*
     // MARK: * Cache
     //*========================================================================*
     
     public final class Cache: _DefaultCache {
+        public typealias Style = _CurrencyStyle
         public typealias Input = Format.FormatInput
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style: _CurrencyStyle
-        @usableFromInline let adapter: Adapter<Format>
+        @usableFromInline var style:       Style
+        @usableFromInline let adapter:     Adapter<Format>
         @usableFromInline let preferences: Preferences<Input>
         @usableFromInline let interpreter: Interpreter
         @usableFromInline let adjustments: Label?
@@ -98,6 +90,11 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         //=--------------------------------------------------------------------=
         // MARK: Utilities
         //=--------------------------------------------------------------------=
+        
+        @inlinable func compatible(_ style: Style) -> Bool {
+            self.style.locale == style.locale &&
+            self.style.currencyCode == style.currencyCode
+        }
         
         @inlinable func snapshot(_ characters: String) -> Snapshot {
             var snapshot = Snapshot(characters,

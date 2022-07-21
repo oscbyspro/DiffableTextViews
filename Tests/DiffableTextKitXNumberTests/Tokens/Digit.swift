@@ -24,8 +24,7 @@ final class DigitTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func XCTAssertASCII(_ digit: Digit, _ value: UInt8) {
-         XCTAssertEqual(digit.numericValue, value)
-         XCTAssertEqual(digit.character, Character(String(value)))
+        XCTAssertEqual(digit.character, Character(String(value)))
     }
     
     //=------------------------------------------------------------------------=

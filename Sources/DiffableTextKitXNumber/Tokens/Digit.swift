@@ -14,9 +14,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Digit: Token {
-    @usableFromInline static let allCases = [
-    zero, one, two,   three, four,
-    five, six, seven, eight, nine]
+    @usableFromInline static let allCases = (48 ..< 58).map(Self.init)
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -46,24 +44,14 @@ import Foundation
     @inlinable init(ascii: UInt8) { self.ascii = ascii }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var isZero: Bool {
-        self == Self.zero
-    }
-    
-    @inlinable var numericValue: UInt8 {
-        ascii - Self.zero.ascii
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Requires that formatter.numberStyle == .none.
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        assert(formatter.numberStyle == .none)
-        return formatter.string(from: numericValue as NSNumber)!.first
+        formatter.string(from: ascii - Self.zero.ascii as NSNumber)!.first
+    }
+    
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
+        self.standard(formatter)
     }
 }

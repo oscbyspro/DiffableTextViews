@@ -38,27 +38,19 @@ import Foundation
 extension Token {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unicodeable
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var unicode: Unicode.Scalar {
-        Unicode.Scalar(ascii)
+    @inlinable var description: String {
+        String(unicode)
     }
     
     @inlinable var character: Character {
         Character(unicode)
     }
     
-    @inlinable var description: String {
-        String(unicode)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        standard(formatter)
+    @inlinable var unicode: Unicode.Scalar {
+        Unicode.Scalar(ascii)
     }
 }
 

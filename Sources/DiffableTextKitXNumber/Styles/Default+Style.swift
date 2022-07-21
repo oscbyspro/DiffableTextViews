@@ -7,15 +7,11 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
-// MARK: * Default x Style
-//*============================================================================*
-
 import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Style
+// MARK: * Default x Style
 //*============================================================================*
 
 @usableFromInline protocol _DefaultStyle<Value>: _Style
@@ -35,13 +31,11 @@ Cache: _DefaultCache, Cache.Style == Self, Value == Input {
     @inlinable var bounds: Bounds<Input>? { get set }
     
     @inlinable var precision: Precision<Input>? { get set }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func similar(to other: Self) -> Bool    
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
 
 extension _DefaultStyle {
     
@@ -62,7 +56,10 @@ extension _DefaultStyle {
     }
     
     @inlinable public func update(_ cache: inout Cache) {
-        similar(to: cache.style) ? (cache.style = self) : (cache = self.cache())
+        switch cache.compatible(self) {
+        case  true: cache.style = self
+        case false: cache = self.cache()
+        }
     }
     
     //=------------------------------------------------------------------------=

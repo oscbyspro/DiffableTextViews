@@ -25,7 +25,6 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
     //=------------------------------------------------------------------------=
     
     public var locale: Locale
-    
     @usableFromInline var bounds: Bounds<Input>?
     @usableFromInline var precision: Precision<Input>?
     
@@ -35,14 +34,6 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func similar(to other: Self) -> Bool {
-        locale == other.locale
     }
     
     //*========================================================================*
@@ -80,6 +71,14 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
             //=--------------------------------------=
             assert(formatter.numberStyle == .none)
             self.interpreter = Interpreter.standard(formatter)
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func compatible(_ style: Style) -> Bool {
+            self.style.locale == style.locale
         }
     }
 }

@@ -109,8 +109,8 @@ import DiffableTextKit
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        self.integer.trim(prefix: \.isZero)
-        self.integer.replaceEmptyWithZero()
+        self.integer.trim(prefix:{ $0 == .zero })
+        self.integer.atLeastZero()
     }
     
     //=------------------------------------------------------------------------=
@@ -127,22 +127,14 @@ import DiffableTextKit
         $0.append(contentsOf: fraction.ascii)}
     }
     
-    @inlinable var hasSeparatorAsSuffix: Bool {
-        fraction.digits.isEmpty && separator != nil
-    }
-    
-    @inlinable func count() -> Count {
-        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
-        return Count(value: value, integer: integer.count, fraction: fraction.count)
+    @inlinable func count() -> Count { // see prefix rule
+        Count.init(value: integer.count + fraction.count,
+        integer: integer.count, fraction: fraction.count)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
-    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        let remove = hasSeparatorAsSuffix; if remove { separator = nil }; return remove
-    }
     
     @inlinable mutating func trim(to precision: Count) -> Bool {
         let trimmed: (integer: Bool,  fraction:  Bool)
@@ -158,17 +150,22 @@ import DiffableTextKit
         // Autocorrect
         //=--------------------------------------=
         if  trimmed.integer {
-            self.integer.trim(prefix: \.isZero)
-            self.integer.replaceEmptyWithZero()
+            self.integer.trim(prefix:{ $0 == .zero })
+            self.integer.atLeastZero()
         }
         
         if  trimmed.fraction {
-            self.fraction.trim(suffix:\.isZero)
+            self.fraction.trim(suffix:{ $0 == .zero })
             self.removeSeparatorAsSuffix()
         }
         //=--------------------------------------=
         // Done
         //=--------------------------------------=
         return trimmed.integer || trimmed.fraction
+    }
+    
+    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
+        let hasSeparatorAsSuffix = fraction.digits.isEmpty   && separator != nil;
+        if  hasSeparatorAsSuffix { separator = nil }; return hasSeparatorAsSuffix
     }
 }

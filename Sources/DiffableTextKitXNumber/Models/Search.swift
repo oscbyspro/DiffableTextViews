@@ -35,19 +35,18 @@ Target: BidirectionalCollection, Target.Element == Character {
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
-    @inlinable static func forwards(
-    search source: Source,
+    @inlinable static func forwards(search source: Source,
     locate target: Target) -> Range<Source.Index>? {
         //=--------------------------------------=
         // Search
         //=--------------------------------------=
-        haystack: for start in source.indices {
+        search: for start in source.indices {
             var end = start
             
-            needle: for character in target {
+            for character in target {
                 guard end != source.endIndex,
                 character == source[end].character
-                else { continue haystack }
+                else { continue search }
                 
                 source.formIndex(after: &end)
             }
@@ -66,8 +65,7 @@ Target: BidirectionalCollection, Target.Element == Character {
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    @inlinable static func backwards(
-    search source: Source,
+    @inlinable static func backwards(search source: Source,
     locate target: Target) -> Range<Source.Index>? {
         typealias R = Search<
         ReversedCollection<Source>,
