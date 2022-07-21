@@ -58,14 +58,4 @@ import Foundation
         digits:     .currency(formatter),
         separators: .currency(formatter))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func consumeSingleSign(in snapshot: inout Snapshot) -> Sign? {
-        guard snapshot.count == 1, let sign =
-        signs[snapshot.first!.character] else { return nil }
-        snapshot = Snapshot();  return sign
-    }
 }

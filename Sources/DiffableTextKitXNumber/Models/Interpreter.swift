@@ -28,10 +28,10 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ components: Components) {
+    @inlinable init(local components: Components) {
         self.components = components
         self.attributes = Attributes(components)
-        self.translator = Translator(components)
+        self.translator = Translator(from: .ascii, to: components)
     }
     
     //=------------------------------------------------------------------------=
@@ -40,12 +40,12 @@ import Foundation
     
     /// - Requires that formatter.numberStyle == .none.
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
-        assert(formatter.numberStyle == .none); return Self(.standard(formatter))
+        assert(formatter.numberStyle == .none); return Self(local: .standard(formatter))
     }
     
     /// - Requires that formatter.numberStyle == .none.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
-        assert(formatter.numberStyle == .none); return Self(.currency(formatter))
+        assert(formatter.numberStyle == .none); return Self(local: .currency(formatter))
     }
     
     //=------------------------------------------------------------------------=
@@ -59,9 +59,41 @@ import Foundation
     }
     
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
-        var proposal = proposal; translator.translateSingleSymbol(in: &proposal.replacement)
-        let sign = components.consumeSingleSign(in: &proposal.replacement)
-        guard var number = try self.number(proposal.merged(), as: value) else { return nil }
+        var proposal = proposal; _translate(&proposal)
+        let sign  = _consumeSingleSignInput(&proposal)
+        guard var number = try number(proposal.merged(), as: value) else { return nil }
         if let sign { number.sign = sign }; return number
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func _translate(_ proposal: inout Proposal) {
+        //=--------------------------------------=
+        // Keystroke
+        //=--------------------------------------=
+        if  proposal.replacement.count == 1 {
+            var keystroke = proposal.replacement.first!
+            translator.keystroke(  &keystroke.character)
+            proposal.replacement = Snapshot([keystroke])
+        //=--------------------------------------=
+        // Paste, Delete
+        //=--------------------------------------=
+        } else { /* paste not yet implemented */ }
+    }
+    
+    @inlinable func _consumeSingleSignInput(_ proposal: inout Proposal) -> Sign? {
+        //=--------------------------------------=
+        // Keystroke
+        //=--------------------------------------=
+        if  proposal.replacement.count == 1 {
+            let keystroke = proposal.replacement.first!
+            guard let sign = components.signs[keystroke.character] else { return nil }
+            proposal.replacement = Snapshot(); return sign
+        //=--------------------------------------=
+        // Paste, Delete
+        //=--------------------------------------=
+        } else { return nil }
     }
 }

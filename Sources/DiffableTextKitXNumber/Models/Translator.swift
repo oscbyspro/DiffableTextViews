@@ -21,41 +21,38 @@ import DiffableTextKit
     
     /// A translation map for singular input characters.
     @usableFromInline private(set) var singular = [Character: Character]()
+    @usableFromInline private(set) var fraction = [Character: Character]()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ local: Components) {
-        self.insert(\.signs,      from: .ascii, to: local, as: { $0 })
-        self.insert(\.digits,     from: .ascii, to: local, as: { $0 })
-        self.insert(\.separators, from: .ascii, to: local, as: { _ in .fraction })
-        self.insert(\.separators, from:  local, to: local, as: { _ in .fraction })
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(symbol: Symbol) -> Symbol {
-        Symbol(self[symbol.character], as: symbol.attribute)
-    }
-    
-    @inlinable subscript(character: Character) -> Character {
-        singular[character] ?? character
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func insert<T>(_ links: (Components)  ->  Links<T>,
-    from source: Components, to destination: Components, as key: (T) -> T) {
-        let source      = links(source)     .characters
-        let destination = links(destination).characters
+    @inlinable init(from source: Components, to target: Components) {
+        //=--------------------------------------=
+        // Singular
+        //=--------------------------------------=
+        for (token,  character) in source.signs.characters {
+            self.singular[character] = target.signs[token]
+        }
         
-        for (token, character) in source {
-            singular[character] = destination[key(token)]
+        for (token,  character) in source.digits.characters {
+            self.singular[character] = target.digits[token]
+        }
+        
+        for (token,  character) in source.separators.characters {
+            self.singular[character] = target.separators[token]
+        }
+        //=--------------------------------------=
+        // Fraction
+        //=--------------------------------------=
+        let fraction = target.separators.characters[.fraction]
+
+        for character in source.separators.characters.values {
+            self.fraction[character] = fraction
+        }
+        
+        for character in target.separators.characters.values {
+            self.fraction[character] = fraction
         }
     }
     
@@ -63,8 +60,13 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func translateSingleSymbol(in snapshot: inout Snapshot) {
-        guard snapshot.count == 1 else { return }
-        snapshot = snapshot.reduce(into: .init()) { $0.append(self[$1]) }
+    /// Translates a single keystroke.
+    ///
+    /// - Use it only to translate single character entries.
+    /// - Each separator in source and target translates to the target's fraction separator.
+    ///
+    @inlinable func keystroke(_ character: inout Character) {
+        character = singular[character] ?? character
+        character = fraction[character] ?? character
     }
 }
