@@ -116,7 +116,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Downstream
             //=----------------------------------=
             self.downstream.delegate = self
-            self.downstream.textFeldStyle(environment)
+            self.downstream.textFieldStyle(environment)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=

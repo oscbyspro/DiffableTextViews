@@ -114,7 +114,7 @@ extension Downstream {
     }
         
     @inlinable @inline(__always)
-    func textFeldStyle(_ environment: EnvironmentValues) {
+    func textFieldStyle(_ environment: EnvironmentValues) {
         self.view.borderStyle = environment.diffableTextViews_textFieldStyle
     }
     
