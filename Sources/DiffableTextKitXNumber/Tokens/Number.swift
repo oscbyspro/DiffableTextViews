@@ -127,9 +127,9 @@ import DiffableTextKit
         $0.append(contentsOf: fraction.ascii)}
     }
     
-    @inlinable func count() -> Count { // see prefix rule
-        Count.init(value: integer.count + fraction.count,
-        integer: integer.count, fraction: fraction.count)
+    @inlinable func count() -> Count {
+        let value = integer.count+fraction.count-integer.count(prefix:{$0 == .zero})
+        return Count(value: value, integer: integer.count, fraction: fraction.count)
     }
     
     //=------------------------------------------------------------------------=
