@@ -41,12 +41,12 @@ extension Token {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var description: String {
-        String(Unicode.Scalar(ascii))
-    }
-    
     @inlinable var character: Character {
         Character(Unicode.Scalar(ascii))
+    }
+    
+    @inlinable var description: String {
+        String(Unicode.Scalar(ascii))
     }
 }
 

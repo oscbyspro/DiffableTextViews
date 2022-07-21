@@ -36,7 +36,7 @@ where Value: _Input & FixedWidthInteger {
     //=------------------------------------------------------------------------=
     
     /// - Max `Int.precision` due to `IntegerFormatStyle`.
-    init() {
+    fileprivate init() {
         let large = Value.bitWidth >= Int.bitWidth
         self.max = large  ? Value(Int.max) : Value.max
         self.min = large && Value.isSigned ? Value(Int.min) : Value.min
