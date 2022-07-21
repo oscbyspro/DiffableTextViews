@@ -62,12 +62,6 @@ extension _DefaultCache {
     @inlinable var precision: Precision<Input> {
         style.precision ?? preferences.precision
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Defaults
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
 }
 
 //=----------------------------------------------------------------------------=
@@ -137,8 +131,8 @@ extension _DefaultCache {
     //=------------------------------------------------------------------------=
     
     @inlinable func resolve(_ number: Number) throws -> Commit<Input> {
-        let count  = number.count()
         var number = number
+        let count  = number.count
         //=--------------------------------------=
         // Adapter
         //=--------------------------------------=

@@ -31,7 +31,7 @@ import Foundation
     @inlinable init(local components: Components) {
         self.components = components
         self.attributes = Attributes(components)
-        self.translator = Translator(from: .ascii, to: components)
+        self.translator = Translator(from:.ascii, to: components)
     }
     
     //=------------------------------------------------------------------------=
@@ -61,9 +61,8 @@ import Foundation
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
         var proposal = proposal;translate(&proposal.replacement)
         let sign = consumeSingleSignInput(&proposal.replacement)
-
-        var number = try number(proposal.merged(), as: value)
-        if let sign {  number?.sign = sign  };  return number
+        var number = try number(proposal.merged(), as:    value)
+        if  sign  != nil { number?.sign = sign! }; return number
     }
     
     //=------------------------------------------------------------------------=

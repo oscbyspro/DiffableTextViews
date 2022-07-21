@@ -49,7 +49,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable static func ascii() -> Self {
-        Self(character: \.character)
+        Self(character: { $0.character })
     }
     
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
@@ -64,7 +64,6 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    /// All tokens map to a character; unwrapping is OK.
     @inlinable subscript(token: Token) -> Character {
         characters[token]!
     }

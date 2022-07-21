@@ -25,7 +25,6 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// - Requires that the format has only been initialized.
     @inlinable init(unchecked: Format) {
         self.format = unchecked.rounded(rule: .towardZero, increment: nil)
         self.parser = self.format.locale(.en_US_POSIX).parseStrategy

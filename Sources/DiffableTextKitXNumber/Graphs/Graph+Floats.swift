@@ -37,8 +37,8 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     //=------------------------------------------------------------------------=
     
     /// - Max `Double.precision` due to `FloatingPointFormatStyle`.
-    @inlinable init() where Value: LosslessStringConvertible {
-        let size = Swift.min(Double.significandBitCount, Value.significandBitCount)
+    init() where Value: LosslessStringConvertible {
+        let size = Swift.min(Value.significandBitCount, Double.significandBitCount)
         self.precision = Int(log10(pow(2, Double(size))))
         self.max = Value(String(repeating: "9", count: precision))!
         self.min = -(max)

@@ -36,8 +36,8 @@ public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyab
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @inlinable init() {
+    
+    init() {
         self.precision = 38
         self.max = Value(string: String(repeating: "9", count: precision))!
         self.min = -(max)
