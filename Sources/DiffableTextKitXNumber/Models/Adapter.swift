@@ -14,14 +14,13 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Adapter<Format: _Format> {
-    @usableFromInline typealias  Parser = Format.Strategy
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let format: Format
-    @usableFromInline let parser: Parser
+    @usableFromInline let parser: Format.Strategy
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -40,7 +39,7 @@ import Foundation
         self.format.precision(precision)
     }
     
-    @inlinable func parse(_ number: Number) throws -> Format.FormatInput {
-        try self.parser.parse(number.description)
+    @inlinable func parse(_  number: Number) throws -> Format.FormatInput {
+        try parser.parse(number.description)
     }
 }

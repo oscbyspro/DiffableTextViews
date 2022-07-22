@@ -23,7 +23,7 @@ final class StyleTestsOnNumber: StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssertLocales<T: _Value>(_ value: T) {
+    func XCTAssertLocales<T: _Value>(_ value: T) where T.NumberTextGraph: _Numberable {
         XCTAssertLocales(value, with: T.NumberTextGraph.Number.init)
     }
 }

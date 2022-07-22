@@ -100,8 +100,8 @@ extension _DefaultCache {
         // Number
         //=--------------------------------------=
         let format = adapter.format(precision.active())
-        let parseable = snapshot(format .format(input))
-        var number = try! interpreter.number(parseable, as: Input.self)!
+        let numberable = snapshot(format.format(input))
+        var number = try! interpreter.number(numberable, as: Input.self)!
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -177,4 +177,3 @@ extension _DefaultCache {
         return Commit(input, snapshot(characters))
     }
 }
-

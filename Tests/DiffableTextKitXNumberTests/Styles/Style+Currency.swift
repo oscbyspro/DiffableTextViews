@@ -45,7 +45,7 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-        
+    
     func testDefaultFractionLimits_JPY_USD_BHD() {
         XCTAssertDefaultPrecisionLimits(0...0, code: "JPY")
         XCTAssertDefaultPrecisionLimits(2...2, code: "USD")
