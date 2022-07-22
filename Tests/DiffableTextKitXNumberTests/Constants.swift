@@ -26,8 +26,8 @@ let locales: [Locale] = Locale
     .availableIdentifiers.lazy.map(Locale.init)
     .sorted(by: { $0.identifier < $1.identifier })
 
-let numbers: [(style: Standard, cache: Standard.Cache)] = locales
-    .lazy.map(NumberTextStyle<Decimal>.init).map({($0, $0.cache())})
+let numbers: [Standard.Cache] = locales.lazy
+    .map(NumberTextStyle<Decimal>.init).map({ $0.cache() })
 
 //=----------------------------------------------------------------------------=
 // MARK: + Aliases

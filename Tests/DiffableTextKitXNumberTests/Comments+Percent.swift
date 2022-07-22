@@ -24,18 +24,17 @@ final class CommentsOnPercent: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testPercentLabelsAreAlwaysVirtual() {
-        //=--------------------------------------=
-        // Locales
-        //=--------------------------------------=
-        for (style, cache) in numbers {
-            func nonvirtual(_ character: Character) -> Bool {
-                cache.interpreter.components.signs     [character] !=  nil ||
-                cache.interpreter.components.digits    [character] !=  nil ||
-                cache.interpreter.components.separators[character] == .fraction
+        for cache in numbers {
+            let  components = cache.interpreter.components
+            func nonvirtual(character:Character) -> Bool {
+                components.signs     [character] !=  nil ||
+                components.digits    [character] !=  nil ||
+                components.separators[character] == .fraction
             }
             
-            let zero = IntegerFormatStyle<Int>.Percent(locale:style.locale).format(0)
-            XCTAssert(zero.count(where: nonvirtual) == 1, "\(zero), \(style.locale)")
+            let locale  = cache.style.locale
+            let percent = IntegerFormatStyle<Int>.Percent(locale: locale)
+            XCTAssertEqual(1, percent.format(0).filter(nonvirtual).count)
         }
     }
 }
