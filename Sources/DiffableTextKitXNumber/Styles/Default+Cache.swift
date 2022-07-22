@@ -24,7 +24,7 @@ import Foundation
     
     @inlinable var style: Style { get set }
     
-    @inlinable var adapter: Adapter<Style.Format> { get }
+    @inlinable var adapter:  Adapter<Style.Format> { get }
     
     @inlinable var preferences: Preferences<Input> { get }
     
@@ -62,6 +62,14 @@ extension _DefaultCache {
     @inlinable var precision: Precision<Input> {
         style.precision ?? preferences.precision
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        Snapshot(characters, as: { interpreter.attributes[$0] })
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -74,8 +82,8 @@ extension _DefaultCache {
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Input) -> String {
-        adapter.format.precision(precision.inactive()).format(value)
+    @inlinable public func format(_ input: Input) -> String {
+        self.adapter.format(precision.inactive()).format(input)
     }
     
     //=------------------------------------------------------------------------=
@@ -85,17 +93,14 @@ extension _DefaultCache {
     @inlinable public func interpret(_ input: Input) -> Commit<Input> {
         var input = input
         //=--------------------------------------=
-        // Adapter
-        //=--------------------------------------=
-        var adapter = adapter; adapter.transform(precision.active())
-        //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         bounds.autocorrect(&input)
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        let parseable = snapshot(adapter.format(input))
+        let format = adapter.format(precision.active())
+        let parseable = snapshot(format .format(input))
         var number = try! interpreter.number(parseable, as: Input.self)!
         //=--------------------------------------=
         // Autocorrect
@@ -109,7 +114,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(&adapter, input, number)
+        return commit(input, number, with: format)
     }
     
     //=------------------------------------------------------------------------=
@@ -126,17 +131,8 @@ extension _DefaultCache {
         return try number.map({ try Commit(resolve($0)) }) ?? Commit()
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Interactive x Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func resolve(_ number: Number) throws -> Commit<Input> {
-        var number = number
-        let count  = number.count
-        //=--------------------------------------=
-        // Adapter
-        //=--------------------------------------=
-        var adapter = adapter
+    @inlinable func resolve( _ number: Number) throws -> Commit<Input> {
+        var number = number; let count = number.count
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
@@ -153,41 +149,32 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        adapter.transform(precision.interactive(count))
-        return commit(&adapter, input, number)
+        let format = adapter.format(precision.interactive(count))
+        return commit(input, number, with: format)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
-
-    @inlinable func commit(_ adapter: inout Adapter<Style.Format>,
-    _ value: Input, _ number: Number) -> Commit<Input> {
-        Commit(value, snapshot(characters(&adapter, value, number)))
-    }
     
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        Snapshot(characters, as: { interpreter.attributes[$0] })
-    }
-    
-    @inlinable func characters(_ adapter: inout Adapter<Style.Format>,
-    _ value: Input, _ number: Number) -> String {
-        adapter.transform(number.sign)
-        adapter.transform(number.separator)
-        var characters = adapter.format(value)
+    @inlinable func commit(_ input: Input, _ number: Number, with format: Style.Format) -> Commit<Input> {
+        var characters = format.number(number).format(input)
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if  number.sign == .negative, value == .zero,
-        let position = characters.firstIndex(
-        of: interpreter.components.signs[.positive]) {
+        if  number.sign == .negative, input == .zero,
+        let position = characters.firstIndex(of:
+        interpreter.components.signs[.positive]) {
             //=----------------------------------=
             // Make Positive Zero Negative
             //=----------------------------------=
             let replacement = String(interpreter.components.signs[.negative])
             characters.replaceSubrange(position...position, with:replacement)
         }
-        
-        return characters
+        //=--------------------------------------=
+        // Commit
+        //=--------------------------------------=
+        return Commit(input, snapshot(characters))
     }
 }
+

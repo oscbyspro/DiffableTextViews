@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Interpreter
 //*============================================================================*
 
-@usableFromInline struct Interpreter {
+@usableFromInline final class Interpreter {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -32,6 +32,23 @@ public protocol _Format: ParseableFormatStyle where FormatOutput == String {
     @inlinable func rounded(rule: _FPRR,  increment: _Increment?) -> Self
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _Format {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func number(_ number: Number) -> Self {
+        let sign = _SignDS(number.sign == .negative ?  .always : .automatic)
+        let separator = number.separator != nil ? _NFSC_SeparatorDS.always : .automatic
+        return decimalSeparator(strategy: separator).sign(strategy: sign)
+    }
+}
+
 //*============================================================================*
 // MARK: * Format x Standard
 //*============================================================================*
