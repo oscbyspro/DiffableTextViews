@@ -17,7 +17,7 @@ import Foundation
 @usableFromInline protocol _DefaultStyle<Value>: _Style
 where Graph == Input.NumberTextGraph, Value == Input,
 Cache: _DefaultCache, Cache.Style == Self, Value == Input {
-        
+    
     associatedtype Format: _Format
     
     typealias Input = Format.FormatInput

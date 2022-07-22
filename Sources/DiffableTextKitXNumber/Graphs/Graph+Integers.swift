@@ -47,7 +47,7 @@ where Value: _Input & FixedWidthInteger {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public var zero: Value { .zero }
+    @inlinable @inline(__always) public var zero:    Value { .zero }
     
     @inlinable @inline(__always) public var optional: Bool { false }
     

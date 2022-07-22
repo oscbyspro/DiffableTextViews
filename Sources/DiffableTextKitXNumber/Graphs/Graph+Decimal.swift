@@ -42,17 +42,17 @@ public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyab
         self.max = Value(string: String(repeating: "9", count: precision))!
         self.min = -(max)
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-
-    @inlinable @inline(__always) public var zero: Value { .zero }
-
+    
+    @inlinable @inline(__always) public var zero:    Value { .zero }
+    
     @inlinable @inline(__always) public var optional: Bool { false }
-
+    
     @inlinable @inline(__always) public var unsigned: Bool { false }
-
+    
     @inlinable @inline(__always) public var integer:  Bool { false }
 }
 

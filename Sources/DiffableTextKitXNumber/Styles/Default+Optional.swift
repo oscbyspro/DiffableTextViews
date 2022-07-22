@@ -150,6 +150,6 @@ extension _OptionalStyle: _Currency where Style: _Currency {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
-        self.style = Style(code: code,   locale: locale)
+        self.style = Style(code:   code, locale: locale)
     }
 }
