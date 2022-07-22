@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Default x Cache
 //*============================================================================*
 
-@usableFromInline protocol _DefaultCache: _Cache where Input == Style.Input {
+@usableFromInline protocol _DefaultCache<Style>: _Cache where Input == Style.Input {
     
     associatedtype Style: _DefaultStyle
     
