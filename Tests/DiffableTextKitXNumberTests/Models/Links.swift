@@ -13,40 +13,22 @@
 
 import XCTest
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
+//*============================================================================*
+// MARK: * Links x Tests
+//*============================================================================*
 
-////*============================================================================*
-//// MARK: * Links x Tests
-////*============================================================================*
-//
-//final class LinksTests: XCTestCase {
-//
-//    //=------------------------------------------------------------------------=
-//    // MARK: Assertions
-//    //=------------------------------------------------------------------------=
-//
-//    func XCTAssertEachIsBidirectionallyLinked<T>(_ links: Links<T>) {
-//        for component in T.allCases {
-//            XCTAssertEqual(component, links[links[component]])
-//        }
-//    }
-//
-//    //=------------------------------------------------------------------------=
-//    // MARK: Tests
-//    //=------------------------------------------------------------------------=
-//
-//    func testEachIsBidirectionallyLinked() {
-//        //=--------------------------------------=
-//        // Components
-//        //=--------------------------------------=
-//        for components in standards.lazy.map(\.reader.components) {
-//            XCTAssertEachIsBidirectionallyLinked(components.signs)
-//            XCTAssertEachIsBidirectionallyLinked(components.digits)
-//            XCTAssertEachIsBidirectionallyLinked(components.separators)
-//        }
-//    }
-//}
+final class LinksTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+
+    func testIsBidirectional() {
+        let links  = Links<Digit>.ascii()
+        for token in Digit.allCases {
+            XCTAssertEqual(token, links[links[token]])
+        }
+    }
+}
 
 #endif

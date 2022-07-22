@@ -85,9 +85,9 @@ import Foundation
         //=--------------------------------------=
         // Keystroke
         //=--------------------------------------=
-        if  replacement.count == 1, let keystroke = replacement.first {
-            let sign = components.signs[keystroke.character]
-            if sign != nil { replacement = [] }; return sign
+        if  replacement.count == 1, let  keystroke = replacement.first {
+            let sign  = components.signs[keystroke.character]
+            if  sign != nil { replacement = [] }; return sign
         //=--------------------------------------=
         // Paste, Backspace
         //=--------------------------------------=

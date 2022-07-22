@@ -12,6 +12,12 @@ import DiffableTextKitXNumber
 import Foundation
 
 //*============================================================================*
+// MARK: * Aliases
+//*============================================================================*
+
+typealias Standard = NumberTextStyle<Decimal>
+
+//*============================================================================*
 // MARK: * Constants
 //*============================================================================*
 
@@ -25,3 +31,6 @@ let currencyCodes: [String] = Locale
 let locales: [Locale] = Locale
     .availableIdentifiers.lazy.map(Locale.init)
     .sorted(by: { $0.identifier < $1.identifier })
+
+let numbers: [(style: Standard, cache: Standard.Cache)] = locales
+    .lazy.map(NumberTextStyle<Decimal>.init).map({($0, $0.cache())})
