@@ -12,8 +12,8 @@
 //*============================================================================*
 
 public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.Value {
-    public typealias Input = Graph.Input
     public typealias Value = Graph.Value?
+    public typealias Input = Graph.Input
     
     //=------------------------------------------------------------------------=
     // MARK: State
