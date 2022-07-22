@@ -21,7 +21,7 @@ final class CommentsOnCurrency: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testCurrencySymbolsAreSometimesReal() throws {
+    func testCurrencySymbolsAreSometimesReal() {
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
@@ -29,7 +29,7 @@ final class CommentsOnCurrency: XCTestCase {
         XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains a fraction separator
     }
     
-    func testCurrencySymbolsDoNotContainNumbers() throws {
+    func testCurrencySymbolsDoNotContainNumbers() {
         //=--------------------------------------=
         // Locales, Currencies
         //=--------------------------------------=

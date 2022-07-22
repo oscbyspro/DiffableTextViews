@@ -38,7 +38,7 @@ extension StyleTestsOnPercent {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testDecimal() throws {
+    func testDecimal() {
         XCTAssertLocales(-1.23 as Decimal)
     }
 }
@@ -53,7 +53,7 @@ extension StyleTestsOnPercent {
     // MARK: Tests
     //=------------------------------------------------------------------------=
         
-    func testFloat64_aka_Double() throws {
+    func testFloat64_aka_Double() {
         XCTAssertLocales(-1.23 as Float64)
     }
 }

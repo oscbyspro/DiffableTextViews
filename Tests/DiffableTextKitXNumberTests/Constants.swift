@@ -12,12 +12,6 @@ import DiffableTextKitXNumber
 import Foundation
 
 //*============================================================================*
-// MARK: * Aliases
-//*============================================================================*
-
-typealias Standard = NumberTextStyle<Decimal>
-
-//*============================================================================*
 // MARK: * Constants
 //*============================================================================*
 
@@ -34,3 +28,9 @@ let locales: [Locale] = Locale
 
 let numbers: [(style: Standard, cache: Standard.Cache)] = locales
     .lazy.map(NumberTextStyle<Decimal>.init).map({($0, $0.cache())})
+
+//=----------------------------------------------------------------------------=
+// MARK: + Aliases
+//=----------------------------------------------------------------------------=
+
+typealias Standard = NumberTextStyle<Decimal>

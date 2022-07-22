@@ -38,7 +38,7 @@ extension StyleTestsOnNumber {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testDecimal() throws {
+    func testDecimal() {
         XCTAssertLocales(-1.23 as Decimal)
     }
 }
@@ -53,7 +53,7 @@ extension StyleTestsOnNumber {
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testFloat64_aka_Double() throws {
+    func testFloat64_aka_Double() {
         XCTAssertLocales(-1.23 as Float64)
     }
 }
@@ -68,23 +68,23 @@ extension StyleTestsOnNumber {
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testInt() throws {
+    func testInt() {
         XCTAssertLocales(-123 as Int)
     }
     
-    func testInt8() throws {
+    func testInt8() {
         XCTAssertLocales(-123 as Int8)
     }
     
-    func testInt16() throws {
+    func testInt16() {
         XCTAssertLocales(-123 as Int16)
     }
     
-    func testInt32() throws {
+    func testInt32() {
         XCTAssertLocales(-123 as Int32)
     }
     
-    func testInt64() throws {
+    func testInt64() {
         XCTAssertLocales(-123 as Int64)
     }
 }
@@ -99,23 +99,23 @@ extension StyleTestsOnNumber {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testUInt() throws {
+    func testUInt() {
         XCTAssertLocales(123 as UInt)
     }
     
-    func testUInt8() throws {
+    func testUInt8() {
         XCTAssertLocales(123 as UInt8)
     }
     
-    func testUInt16() throws {
+    func testUInt16() {
         XCTAssertLocales(123 as UInt16)
     }
     
-    func testUInt32() throws {
+    func testUInt32() {
         XCTAssertLocales(123 as UInt32)
     }
     
-    func testUInt64() throws {
+    func testUInt64() {
         XCTAssertLocales(123 as UInt64)
     }
 }

@@ -63,7 +63,7 @@ extension StyleTestsOnCurrency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testDecimal() throws {
+    func testDecimal() {
         XCTAssertCurrencies(-1.23 as Decimal)
     }
 }
@@ -78,7 +78,7 @@ extension StyleTestsOnCurrency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testFloat64_aka_Double() throws {
+    func testFloat64_aka_Double() {
         XCTAssertCurrencies(-1.23 as Float64)
     }
 }
@@ -93,23 +93,23 @@ extension StyleTestsOnCurrency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testInt() throws {
+    func testInt() {
         XCTAssertCurrencies(-123 as Int)
     }
     
-    func testInt8() throws {
+    func testInt8() {
         XCTAssertCurrencies(-123 as Int8)
     }
     
-    func testInt16() throws {
+    func testInt16() {
         XCTAssertCurrencies(-123 as Int16)
     }
     
-    func testInt32() throws {
+    func testInt32() {
         XCTAssertCurrencies(-123 as Int32)
     }
     
-    func testInt64() throws {
+    func testInt64() {
         XCTAssertCurrencies(-123 as Int64)
     }
 }
@@ -124,23 +124,23 @@ extension StyleTestsOnCurrency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testUInt() throws {
+    func testUInt() {
         XCTAssertCurrencies(123 as UInt)
     }
     
-    func testUInt8() throws {
+    func testUInt8() {
         XCTAssertCurrencies(123 as UInt8)
     }
     
-    func testUInt16() throws {
+    func testUInt16() {
         XCTAssertCurrencies(123 as UInt16)
     }
     
-    func testUInt32() throws {
+    func testUInt32() {
         XCTAssertCurrencies(123 as UInt32)
     }
     
-    func testUInt64() throws {
+    func testUInt64() {
         XCTAssertCurrencies(123 as UInt64)
     }
 }
