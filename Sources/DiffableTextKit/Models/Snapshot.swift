@@ -20,9 +20,9 @@
 ///
 /// **Anchor**
 ///
-/// Set the anchor to select the caret represented by its index. It may be desirable
-/// on snapshots containing only formatting characters. A pattern text style, bound to
-/// an empty value, may anchor at the pattern's first placeholder character, for example.
+/// Set the anchor index to select the caret represented by it. This can be
+/// desirable on snapshots containing only formatting characters. A pattern
+/// style may set the anchor at its first placeholder character, for example.
 ///
 /// ```
 ///    ↓ == anchor
@@ -32,11 +32,10 @@
 ///
 /// **Attributes & Characters**
 ///
-/// The number of attributes must always equal the number of joint characters in the
-/// snapshot. An inability to maintain this invariant will result in an invalid state
-/// and may crash the application. In most cases, this is a trivial constraint because
-/// the most straight forward way to create a snapshot is to loop over each character
-/// in an already composed character sequence.
+/// The number of attributes must equal the number of joint characters in the
+/// snapshot. A failure to maintain this invariant may crash the application.
+/// In most cases, it is a trivial constraint because the easiest way to make
+/// a snapshot is to loop over each character in a composed character sequence.
 ///
 /// ```
 /// |🇸🇪|   |🇺🇸|    |🇸🇪|🇺🇸|~

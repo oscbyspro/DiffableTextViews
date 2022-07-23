@@ -45,7 +45,7 @@ import DiffableTextKit
         var iterator = unformatted.makeIterator()
         var next = iterator.next()
         //=--------------------------------------=
-        // Utilities
+        // Transformations
         //=--------------------------------------=
         func sign() {
             if signable, let character = next, let sign = signs[character] {
@@ -66,9 +66,7 @@ import DiffableTextKit
             while let character = next, let digit = digits[character] {
                 self.integer.append(digit); next = iterator.next()
             }
-            //=----------------------------------=
-            // Integer
-            //=----------------------------------=
+            
             if integer { break body }
             //=----------------------------------=
             // Separator
@@ -76,9 +74,7 @@ import DiffableTextKit
             if let character = next, let separator = separators[character], separator == .fraction {
                 self.separator = separator; next = iterator.next()
             }
-            //=----------------------------------=
-            // Separator
-            //=----------------------------------=
+            
             if separator == nil { break body }
             //=----------------------------------=
             // Fraction
