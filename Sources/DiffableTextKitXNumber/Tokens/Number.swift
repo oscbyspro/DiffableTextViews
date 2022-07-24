@@ -17,7 +17,7 @@ import DiffableTextKit
 ///
 /// - Its integer digits MUST contain at least one digit.
 /// - Its integer digits MUST NOT contain redundant prefix zeros.
-/// - It MUST NOT contain fraction digits without containing a fraction separator.
+/// - It MUST NOT contain fraction digits without a fraction separator.
 ///
 @usableFromInline struct Number: Tokens {
     

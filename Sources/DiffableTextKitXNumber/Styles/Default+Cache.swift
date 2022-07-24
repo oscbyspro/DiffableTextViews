@@ -158,7 +158,10 @@ extension _DefaultCache {
     //=------------------------------------------------------------------------=
     
     @inlinable func commit(_ input: Input, _ number: Number, with format: Style.Format) -> Commit<Input> {
-        var characters = format.number(number).format(input)
+        let separator = number.separator != nil ? _NFSC_SeparatorDS.always : .automatic
+        let sign = Style.Format._SignDS(number.sign == .negative ? .always : .automatic)
+        let format = format.decimalSeparator(strategy:  separator).sign(strategy:  sign)
+        var characters = format.format(input)
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=

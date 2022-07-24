@@ -31,7 +31,7 @@ import DiffableTextKit
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(_ storage: SIMD) {
+    @inlinable init( _ storage: SIMD) {
         self.storage = storage
     }
     

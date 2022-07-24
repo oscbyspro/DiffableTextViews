@@ -43,14 +43,13 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     //*========================================================================*
     
     public final class Cache: _DefaultCache {
-        public typealias Style = _CurrencyStyle
         public typealias Input = Format.FormatInput
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style:       Style
+        @usableFromInline var style:       _CurrencyStyle
         @usableFromInline let adapter:     Adapter<Format>
         @usableFromInline let preferences: Preferences<Input>
         @usableFromInline let interpreter: Interpreter
