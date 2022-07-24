@@ -177,7 +177,7 @@ public extension DiffableTextStyleWrapper {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Style == Style.Cache
+// MARK: + Details where Cache == Style.Cache
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyleWrapper where Cache == Style.Cache {
@@ -198,7 +198,7 @@ public extension DiffableTextStyleWrapper where Cache == Style.Cache {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Style == Style.Cache, Value == Style.Value
+// MARK: + Details where Cache == Style.Cache, Value == Style.Value
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyleWrapper where Cache == Style.Cache, Value == Style.Value {

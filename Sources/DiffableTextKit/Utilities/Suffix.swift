@@ -11,29 +11,24 @@
 // MARK: * Suffix
 //*============================================================================*
 
-public extension BidirectionalCollection {
+extension BidirectionalCollection {
     
     //=------------------------------------------------------------------------=
     // MARK: While
     //=------------------------------------------------------------------------=
     
-    @inlinable func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
+    @inlinable public func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
         try self[startOfSuffix(while: predicate)...]
     }
     
-    @inlinable internal func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
-        var index = endIndex
-        //=--------------------------------------=
-        // Search
-        //=--------------------------------------=
-        while index != startIndex {
-            let after = index
-            formIndex(before: &index)
-            if try !predicate(self[index]) { return after }
+    @inlinable func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
+        var position = endIndex
+        
+        backwards: while position != startIndex {
+            let after = position; formIndex(before: &position)
+            if try !predicate(self[position]) { return after }
         }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return index
+        
+        return position
     }
 }

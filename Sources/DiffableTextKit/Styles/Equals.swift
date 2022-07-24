@@ -30,8 +30,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(_ style: Style, proxy: Proxy) {
+    @inlinable init(_ style: Style, proxy: Proxy) {
         self.style = style
         self.proxy = proxy
     }
@@ -40,8 +39,7 @@
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.proxy == rhs.proxy
     }
 }
@@ -60,8 +58,7 @@ extension DiffableTextStyle {
     ///
     /// Use this style to optimize the comparison on view update, for example.
     ///
-    @inlinable @inline(__always)
-    public func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
+    @inlinable public func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
         Equals(self, proxy: _Void())
     }
     
@@ -69,8 +66,7 @@ extension DiffableTextStyle {
     ///
     /// Use this style to optimize the comparison on view update, for example.
     ///
-    @inlinable @inline(__always)
-    public func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
+    @inlinable public func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
         Equals(self, proxy: proxy)
     }
 }

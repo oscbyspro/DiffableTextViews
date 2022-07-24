@@ -29,49 +29,24 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(_ style: Style) {
-        self.style = style; self.shared = Storage(style.cache())
+    @inlinable init(_ style: Style) {
+        self.style  = style; self.shared = Storage(style.cache())
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func format(_ value: Value, with cache: inout Void) -> String {
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        style.update(&self.shared.cache)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return style.format(value, with: &self.shared.cache)
+    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
+        style.update(&shared.cache); return style.format(value, with: &shared.cache)
     }
     
-    @inlinable @inline(__always)
-    public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        style.update(&self.shared.cache)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return style.interpret(value, with: &self.shared.cache)
+    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
+        style.update(&shared.cache); return style.interpret(value, with: &shared.cache)
     }
     
-    @inlinable @inline(__always)
-    public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        style.update(&self.shared.cache)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return try style.resolve(proposal, with: &self.shared.cache)
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
+        style.update(&shared.cache); return try style.resolve(proposal, with: &shared.cache)
     }
     
     //*========================================================================*
@@ -90,9 +65,8 @@
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always)
-        init(_ cache: Style.Cache) {
-            self.cache = cache
+        @inlinable init(_ cache: Style.Cache) {
+            self.cache  = cache
         }
     }
 }

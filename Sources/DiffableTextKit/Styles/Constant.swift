@@ -31,17 +31,15 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(_ style: Style) {
-        self.style = style
+    @inlinable init(_ style: Style) {
+        self.style  = style
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always)
-    public func locale(_ locale: Locale) -> Self { self }
+    @inlinable public func locale(_ locale: Locale) -> Self { self }
 }
 
 //*============================================================================*
@@ -58,8 +56,7 @@ extension DiffableTextStyle {
     ///
     /// Use this style to prevent changes via the environment, for example.
     ///
-    @inlinable @inline(__always)
-    public func constant() -> some DiffableTextStyle<Value> {
+    @inlinable public func constant() -> some DiffableTextStyle<Value> {
         Constant(self)
     }
 }
