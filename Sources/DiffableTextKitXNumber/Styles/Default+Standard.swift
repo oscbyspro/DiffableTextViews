@@ -48,7 +48,7 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style:      _StandardStyle
+        @usableFromInline var style:       _StandardStyle
         @usableFromInline let adapter:     Adapter<Format>
         @usableFromInline let preferences: Preferences<Input>
         @usableFromInline let interpreter: Interpreter

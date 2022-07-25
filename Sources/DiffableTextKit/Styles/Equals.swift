@@ -13,7 +13,7 @@
 
 /// Binds the style's equality to a proxy value.
 ///
-/// Use this style to optimize the comparison on view update, for example.
+/// Use this modifier to optimize the comparison on view update.
 ///
 @usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: DiffableTextStyleWrapper {
     public typealias Cache = Style.Cache
@@ -54,9 +54,9 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's comparison to a proxy value.
+    /// Binds the style's equality to a proxy value.
     ///
-    /// Use this style to optimize the comparison on view update, for example.
+    /// Use this modifier to optimize the comparison on view update.
     ///
     @inlinable public func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
         Equals(self, proxy: _Void())
@@ -64,7 +64,7 @@ extension DiffableTextStyle {
     
     /// Binds the style's equality to a proxy value.
     ///
-    /// Use this style to optimize the comparison on view update, for example.
+    /// Use this modifier to optimize the comparison on view update.
     ///
     @inlinable public func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
         Equals(self, proxy: proxy)

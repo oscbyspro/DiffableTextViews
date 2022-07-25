@@ -27,8 +27,16 @@ final class GraphTestsOnFloats: XCTestCase {
     let floats: [any Float.Type] = [Double.self]
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Bounds
+    // MARK: Tests
     //=------------------------------------------------------------------------=
+    
+    func testMetaData() {
+        for float in floats {
+            XCTAssertEqual(float.optional, false)
+            XCTAssertEqual(float.unsigned, false)
+            XCTAssertEqual(float.integer,  false)
+        }
+    }
     
     func testMaxIsLessThanOrEqualToDouble() {
         for float in floats {

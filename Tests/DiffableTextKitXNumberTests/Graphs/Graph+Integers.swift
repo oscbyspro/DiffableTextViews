@@ -30,8 +30,16 @@ final class GraphTestsOnIntegers: XCTestCase {
     ]
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Bounds
+    // MARK: Tests
     //=------------------------------------------------------------------------=
+    
+    func testMetaData() {
+        for integer in integers {
+            XCTAssertEqual(integer.optional, false)
+            XCTAssertEqual(integer.unsigned, !integer.isSigned)
+            XCTAssertEqual(integer.integer,   true)
+        }
+    }
     
     func testMaxIsLessThanOrEqualToInt() {
         for integer in integers {

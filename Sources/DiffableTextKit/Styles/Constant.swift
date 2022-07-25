@@ -15,7 +15,7 @@ import Foundation
 
 /// Prevents style transformations.
 ///
-/// Use this style to prevent changes via the environment, for example.
+/// Use this modifier to ignore the environment.
 ///
 @usableFromInline struct Constant<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
     public typealias Cache = Style.Cache
@@ -54,7 +54,7 @@ extension DiffableTextStyle {
     
     /// Prevents style transformations.
     ///
-    /// Use this style to prevent changes via the environment, for example.
+    /// Use this modifier to ignore the environment.
     ///
     @inlinable public func constant() -> some DiffableTextStyle<Value> {
         Constant(self)
