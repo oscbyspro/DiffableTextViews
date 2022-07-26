@@ -100,7 +100,7 @@ public extension DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details x Cache == Void
+// MARK: + Details where Cache == Void
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle where Cache == Void {
@@ -129,6 +129,33 @@ public extension DiffableTextStyle where Cache == Void {
     @inlinable @inline(__always)
     func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var cache: Void = (); return try resolve(proposal, with: &cache)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details where Cache: DiffableTextStyle
+//=----------------------------------------------------------------------------=
+
+public extension DiffableTextStyle where Cache: DiffableTextStyle,
+Cache.Value == Value, Cache.Cache == Void {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    func format(_ value: Value, with cache: inout Cache) -> String {
+        cache.format(value)
+    }
+    
+    @inlinable @inline(__always)
+    func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+        cache.interpret(value)
+    }
+    
+    @inlinable @inline(__always)
+    func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+        try cache.resolve(proposal)
     }
 }
 
