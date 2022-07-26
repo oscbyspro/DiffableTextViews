@@ -63,7 +63,11 @@
     
     @usableFromInline struct Some: Equatable {
         
+        //=--------------------------------------------------------------------=
+        
         @usableFromInline let elements: (Character, (Character) -> Bool)
+        
+        //=--------------------------------------------------------------------=
         
         @inlinable init(_ elements: (Character, (Character) -> Bool)) {
             self.elements = elements
@@ -84,7 +88,11 @@
     
     @usableFromInline struct Many: Equatable {
         
+        //=--------------------------------------------------------------------=
+        
         @usableFromInline let elements: [Character: (Character) -> Bool]
+        
+        //=--------------------------------------------------------------------=
         
         @inlinable init(_ elements: [Character: (Character) -> Bool]) {
             self.elements = elements

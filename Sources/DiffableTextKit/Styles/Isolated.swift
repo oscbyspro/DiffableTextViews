@@ -62,7 +62,11 @@
     
     @usableFromInline final class Storage {
         
+        //=--------------------------------------------------------------------=
+        
         @usableFromInline var cache: Style.Cache
+        
+        //=--------------------------------------------------------------------=
         
         @inlinable init(_ cache: Style.Cache) { self.cache = cache }
     }
