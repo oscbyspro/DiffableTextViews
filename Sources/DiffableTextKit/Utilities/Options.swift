@@ -14,6 +14,14 @@
 public extension OptionSet {
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static prefix func !(instance: Self) -> Bool {
+        instance.isEmpty
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -23,13 +31,5 @@ public extension OptionSet {
     
     @inlinable static func += (lhs: inout Self, rhs: Self) {
         lhs.formUnion(rhs)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static prefix func !(instance: Self) -> Bool {
-        instance.isEmpty
     }
 }

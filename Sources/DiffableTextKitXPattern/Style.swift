@@ -66,7 +66,8 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are separated.
-    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
+    @inlinable public func format(_ value: Value,
+    with cache: inout Void) -> String {
         reduce(with: value, into: String()) {
             characters, virtuals, nonvirtual in
             characters.append(contentsOf: virtuals)
@@ -97,8 +98,9 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are removed.
-    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        reduce(with: value, into: Commit()) {
+    @inlinable public func interpret(_ value: Value,
+    with cache: inout Void) -> Commit<Value> {
+        reduce(with: value, into:  Commit()) {
             commit, virtuals, nonvirtual in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
             commit.snapshot.append(nonvirtual)
@@ -175,8 +177,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(never) func reduce<Result>(
-    with value:  Value,
-    into result: Result,
+    with  value: Value,  into result: Result,
     some: (inout Result, Substring, Character) -> Void,
     none: (inout Result, Substring) -> Void,
     done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {

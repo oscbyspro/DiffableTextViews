@@ -48,7 +48,7 @@
 // MARK: * Equals x Style
 //*============================================================================*
 
-extension DiffableTextStyle {
+public extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -58,7 +58,7 @@ extension DiffableTextStyle {
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
-    @inlinable public func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
+    @inlinable func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
         Equals(self, proxy: _Void())
     }
     
@@ -66,7 +66,7 @@ extension DiffableTextStyle {
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
-    @inlinable public func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
-        Equals(self, proxy: proxy)
+    @inlinable func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
+        Equals(self, proxy:  proxy)
     }
 }

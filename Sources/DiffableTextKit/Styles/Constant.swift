@@ -31,9 +31,7 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) {
-        self.style  = style
-    }
+    @inlinable init(_ style: Style) { self.style = style }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -46,7 +44,7 @@ import Foundation
 // MARK: * Constant x Style
 //*============================================================================*
 
-extension DiffableTextStyle {
+public extension DiffableTextStyle {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -56,7 +54,7 @@ extension DiffableTextStyle {
     ///
     /// Use this modifier to ignore the environment.
     ///
-    @inlinable public func constant() -> some DiffableTextStyle<Value> {
+    @inlinable func constant() -> some DiffableTextStyle<Value> {
         Constant(self)
     }
 }

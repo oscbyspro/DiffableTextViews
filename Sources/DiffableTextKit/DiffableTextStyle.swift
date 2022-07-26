@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * DiffableTextStyle
+// MARK: * Style
 //*============================================================================*
 
 /// A protocol for styles capable of as-you-type formatting.
@@ -58,13 +58,15 @@ public protocol DiffableTextStyle<Value>: Equatable {
     ///
     /// This method is called in response to changes upstream while the view is idle.
     ///
-    @inlinable func format(_ value: Value, with cache: inout Cache) -> String
+    @inlinable func format(_ value: Value,
+    with cache: inout Cache) -> String
     
     /// Returns a value and a snapshot describing it.
     ///
     /// This method is called in response to changes upstream while the view is in focus.
     ///
-    @inlinable func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value>
+    @inlinable func interpret(_ value: Value,
+    with cache: inout Cache) -> Commit<Value>
     
     /// Returns a value and a snapshot describing it.
     ///
@@ -73,7 +75,8 @@ public protocol DiffableTextStyle<Value>: Equatable {
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
-    @inlinable func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value>
+    @inlinable func resolve(_ proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value>
 }
 
 //=----------------------------------------------------------------------------=
@@ -86,17 +89,13 @@ public extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func locale(_ locale: Locale) -> Self { self }
+    @inlinable func locale(_ locale: Locale) -> Self { self }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func update(_ cache: inout Cache) {
-        cache = self.cache()
-    }
+    @inlinable func update(_ cache: inout Cache) { cache = self.cache() }
 }
 
 //=----------------------------------------------------------------------------=
@@ -109,25 +108,21 @@ public extension DiffableTextStyle where Cache == Void {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func cache() -> Void { }
+    @inlinable func cache() -> Void { }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func format(_ value: Value) -> String {
+    @inlinable func format(_ value: Value) -> String {
         var cache: Void = (); return format(value, with: &cache)
     }
     
-    @inlinable @inline(__always)
-    func interpret(_ value: Value) -> Commit<Value> {
+    @inlinable func interpret(_ value: Value) -> Commit<Value> {
         var cache: Void = (); return interpret(value, with: &cache)
     }
     
-    @inlinable @inline(__always)
-    func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var cache: Void = (); return try resolve(proposal, with: &cache)
     }
 }
@@ -143,109 +138,18 @@ Cache.Value == Value, Cache.Cache == Void {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func format(_ value: Value, with cache: inout Cache) -> String {
+    @inlinable func format(_ value: Value,
+    with cache: inout Cache) -> String {
         cache.format(value)
     }
     
-    @inlinable @inline(__always)
-    func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+    @inlinable func interpret(_ value: Value,
+    with cache: inout Cache) -> Commit<Value> {
         cache.interpret(value)
     }
     
-    @inlinable @inline(__always)
-    func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+    @inlinable func resolve(_ proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value> {
         try cache.resolve(proposal)
-    }
-}
-
-//*============================================================================*
-// MARK: * DiffableTextStyle x Wrapper
-//*============================================================================*
-
-public protocol DiffableTextStyleWrapper: DiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Style: DiffableTextStyle
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-
-    @inlinable var style: Style { get set }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-public extension DiffableTextStyleWrapper {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    func locale(_ locale: Locale) -> Self {
-        var result = self; result.style = result.style.locale(locale); return result
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.style == rhs.style
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details where Cache == Style.Cache
-//=----------------------------------------------------------------------------=
-
-public extension DiffableTextStyleWrapper where Cache == Style.Cache {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    func cache() -> Cache {
-        style.cache()
-    }
-    
-    @inlinable @inline(__always)
-    func update(_ cache: inout Cache) {
-        style.update(&cache)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details where Cache == Style.Cache, Value == Style.Value
-//=----------------------------------------------------------------------------=
-
-public extension DiffableTextStyleWrapper where Cache == Style.Cache, Value == Style.Value {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    func format(_ value: Value, with cache: inout Cache) -> String {
-        style.format(value, with: &cache)
-    }
-    
-    @inlinable @inline(__always)
-    func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-        style.interpret(value, with: &cache)
-    }
-    
-    @inlinable @inline(__always)
-    func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        try style.resolve(proposal, with: &cache)
     }
 }

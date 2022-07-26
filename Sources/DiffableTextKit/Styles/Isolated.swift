@@ -24,50 +24,47 @@
     
     public var style: Style
     @usableFromInline let shared: Storage
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ style: Style) {
-        self.style  = style; self.shared = Storage(style.cache())
+        self.style  = style;
+        self.shared = Storage(style.cache())
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
-        style.update(&shared.cache); return style.format(value, with: &shared.cache)
+    @inlinable public func format(_ value: Value,
+    with cache: inout Void) -> String {
+        style.update(&shared.cache); return
+        style.format(value, with: &shared.cache)
     }
     
-    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        style.update(&shared.cache); return style.interpret(value, with: &shared.cache)
+    @inlinable public func interpret(_ value: Value,
+    with cache: inout Void) -> Commit<Value> {
+        style.update(&shared.cache); return
+        style.interpret(value, with: &shared.cache)
     }
     
-    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
-        style.update(&shared.cache); return try style.resolve(proposal, with: &shared.cache)
+    @inlinable public func resolve(_ proposal: Proposal,
+    with cache: inout Void) throws -> Commit<Value> {
+        style.update(&shared.cache); return
+        try style.resolve(proposal, with: &shared.cache)
     }
     
     //*========================================================================*
-    // MARK: * Storage
+    // MARK: * Storage [...]
     //*========================================================================*
     
     @usableFromInline final class Storage {
         
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
         @usableFromInline var cache: Style.Cache
         
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ cache: Style.Cache) {
-            self.cache  = cache
-        }
+        @inlinable init(_ cache: Style.Cache) { self.cache = cache }
     }
 }
 
@@ -75,7 +72,7 @@
 // MARK: * Isolated x Style
 //*============================================================================*
 
-extension DiffableTextStyle {
+public extension DiffableTextStyle {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -85,8 +82,7 @@ extension DiffableTextStyle {
     ///
     /// Use this modifier to control when the cache is created and destroyed.
     ///
-    @inlinable @inline(__always)
-    public func isolated() -> some DiffableTextStyle<Value> {
+    @inlinable func isolated() -> some DiffableTextStyle<Value> {
         Isolated(self)
     }
 }

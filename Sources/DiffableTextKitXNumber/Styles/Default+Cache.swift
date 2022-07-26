@@ -42,7 +42,7 @@ import Foundation
     
     @inlinable func compatible(_ style: Style) -> Bool
     
-    @inlinable func snapshot(_  characters: String) -> Snapshot
+    @inlinable func snapshot(_ characters: String) -> Snapshot
 }
 
 //=----------------------------------------------------------------------------=
