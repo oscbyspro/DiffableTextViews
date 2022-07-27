@@ -42,8 +42,8 @@ extension _DefaultStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func locale(_ locale:  Locale) -> Self {
-        var result = self; result.locale = locale; return self
+    @inlinable public func locale(_ locale: Locale) -> Self {
+        var result = self; result.locale = locale; return result
     }
     
     //=------------------------------------------------------------------------=

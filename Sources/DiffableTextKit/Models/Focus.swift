@@ -8,27 +8,18 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Focus
+// MARK: * Focus [...]
 //*============================================================================*
 
-/// A focused/unfocused model.
 @frozen public struct Focus: Equatable, ExpressibleByBooleanLiteral {
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
     //=------------------------------------------------------------------------=
     
     public let value: Bool
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ value: Bool) {
-        self.value = value
-    }
+    @inlinable public init(_ value: Bool) { self.value = value }
     
-    @inlinable public init(booleanLiteral value: Bool) {
-        self.value = value
-    }
+    @inlinable public init(booleanLiteral value: Bool) { self.value = value }
 }

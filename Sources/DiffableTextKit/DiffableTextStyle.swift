@@ -21,8 +21,9 @@ public protocol DiffableTextStyle<Value>: Equatable {
     //=------------------------------------------------------------------------=
     
     associatedtype Cache = Void
+    
     associatedtype Value: Equatable
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=

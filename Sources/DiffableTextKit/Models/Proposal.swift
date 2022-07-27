@@ -11,7 +11,7 @@
 // MARK: * Proposal
 //*============================================================================*
 
-/// A snapshot and some change that has not yet been applied to it.
+/// A snapshot and a proposed change that has not yet been applied to it.
 public struct Proposal {
     
     //=------------------------------------------------------------------------=

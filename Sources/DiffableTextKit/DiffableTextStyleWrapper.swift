@@ -15,10 +15,6 @@ import Foundation
 
 public protocol DiffableTextStyleWrapper: DiffableTextStyle {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
     associatedtype Style: DiffableTextStyle
     
     //=------------------------------------------------------------------------=
@@ -39,7 +35,7 @@ public extension DiffableTextStyleWrapper {
     //=------------------------------------------------------------------------=
     
     @inlinable func locale(_ locale: Locale) -> Self {
-        var copy = self; copy.style = copy.style.locale(locale); return copy
+        var result = self; result.style = result.style.locale(locale); return result
     }
     
     //=------------------------------------------------------------------------=
