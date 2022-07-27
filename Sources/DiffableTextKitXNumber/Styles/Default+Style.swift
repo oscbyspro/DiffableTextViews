@@ -27,9 +27,9 @@ where Cache: _DefaultCache<Self>, Value == Input {
         
     @inlinable var locale: Locale { get set }
     
-    @inlinable var bounds: Bounds<Input>? { get set }
+    @inlinable var bounds: Bounds<Value>? { get set }
     
-    @inlinable var precision: Precision<Input>? { get set }
+    @inlinable var precision: Precision<Value>? { get set }
 }
 
 //=----------------------------------------------------------------------------=
@@ -57,27 +57,7 @@ extension _DefaultStyle {
     @inlinable public func update(_ cache: inout Cache) {
         switch cache.compatible(self) {
         case  true: cache.style = self
-        case false: cache = self.cache()
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func format(_ value: Value,
-    with cache: inout Cache) -> String {
-        cache.format(value)
-    }
-    
-    @inlinable public func interpret(_ value: Value,
-    with cache: inout Cache) -> Commit<Value> {
-        cache.interpret(value)
-    }
-    
-    @inlinable public func resolve(_ proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value> {
-        try cache.resolve(proposal)
+        case false: cache = self.cache() }
     }
 }
 
@@ -91,15 +71,15 @@ extension _DefaultStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
+    @inlinable public func bounds(_ limits: ClosedRange<Value>) -> Self {
         self.bounds(Bounds(limits))
     }
     
-    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+    @inlinable public func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
         self.bounds(Bounds(limits))
     }
     
-    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+    @inlinable public func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
         self.bounds(Bounds(limits))
     }
     
@@ -107,7 +87,7 @@ extension _DefaultStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func bounds(_ bounds: Bounds<Input>) -> Self {
+    @inlinable @inline(__always) func bounds(_ bounds: Bounds<Value>) -> Self {
         var result = self; result.bounds = bounds; return result
     }
 }
@@ -141,7 +121,7 @@ extension _DefaultStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ precision: Precision<Input>) -> Self {
+    @inlinable @inline(__always) func precision(_ precision: Precision<Value>) -> Self {
         var result = self; result.precision = precision; return result
     }
 }

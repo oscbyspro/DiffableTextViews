@@ -14,9 +14,8 @@ import Foundation
 // MARK: * Style x Optional
 //*============================================================================*
 
-public struct _OptionalStyle<Style: _Style>:
-_Style, DiffableTextStyleWrapper
-where Style.Value == Style.Input {
+public struct _OptionalStyle<Style>: _Style, DiffableTextStyleWrapper
+where Style: _Style, Style.Value == Style.Input {
     public typealias Graph = _OptionalGraph<Style.Graph>
     
     public typealias Cache = Style.Cache
@@ -33,7 +32,7 @@ where Style.Value == Style.Input {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init(_ style: Style) { self.style = style }
+    @inlinable init(_ style: Style) { self.style = style }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -88,8 +87,8 @@ extension _OptionalStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision<I>(integer: I) -> Self where
-    I: RangeExpression, I.Bound == Int {
+    @inlinable public func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
         Self(style.precision(integer: integer))
     }
     

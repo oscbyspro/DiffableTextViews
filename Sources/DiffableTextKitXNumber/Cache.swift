@@ -13,19 +13,27 @@ import DiffableTextKit
 // MARK: * Cache
 //*============================================================================*
 
-public protocol _Cache {
-    
-    associatedtype Input: _Input
+public protocol _Cache: DiffableTextStyle where Cache == Void, Value: _Input {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(_ input: Input) -> String
+    @inlinable func resolve(_ proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value?>
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _Cache where Cache == Void {
     
-    @inlinable func interpret(_ input: Input) -> Commit<Input>
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
     
-    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Input>
-    
-    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Input?>
+    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Value?> {
+        var cache: Void = (); return try resolve(proposal, with: &cache)
+    }
 }

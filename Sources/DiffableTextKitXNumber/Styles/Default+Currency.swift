@@ -42,8 +42,8 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     // MARK: * Cache
     //*========================================================================*
     
-    public final class Cache: _DefaultCache {
-        public typealias Input = Format.FormatInput
+    public final class Cache: _DefaultCache {        
+        public typealias Value = Format.FormatInput
         
         //=--------------------------------------------------------------------=
         // MARK: State

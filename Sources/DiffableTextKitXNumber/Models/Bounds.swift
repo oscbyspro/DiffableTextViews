@@ -13,20 +13,20 @@ import DiffableTextKit
 // MARK: * Bounds
 //*============================================================================*
 
-@usableFromInline struct Bounds<Input: _Input>: CustomStringConvertible, Equatable {
+@usableFromInline struct Bounds<Value: _Input>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let min: Input
-    @usableFromInline let max: Input
+    @usableFromInline let min: Value
+    @usableFromInline let max: Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (min: Input,  max: Input)) {
+    @inlinable init(unchecked: (min: Value, max: Value)) {
         (self.min, self.max) = unchecked; assert(min <= max)
     }
     
@@ -35,18 +35,18 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.init(unchecked: (Input.min, Input.max))
+        self.init(unchecked: (Value.min, Value.max))
     }
     
-    @inlinable init(_ limits: PartialRangeFrom<Input>) {
-        self.init(unchecked: (Self.clamping(limits.lowerBound), Input.max))
+    @inlinable init(_ limits: PartialRangeFrom<Value>) {
+        self.init(unchecked: (Self.clamping(limits.lowerBound), Value.max))
     }
     
-    @inlinable init(_ limits: PartialRangeThrough<Input>) {
-        self.init(unchecked: (Input.min, Self.clamping(limits.upperBound)))
+    @inlinable init(_ limits: PartialRangeThrough<Value>) {
+        self.init(unchecked: (Value.min, Self.clamping(limits.upperBound)))
     }
     
-    @inlinable init(_ limits: ClosedRange<Input>) {
+    @inlinable init(_ limits: ClosedRange<Value>) {
         self.init(unchecked: (Self.clamping(limits.lowerBound), Self.clamping(limits.upperBound)))
     }
     
@@ -68,18 +68,18 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func clamping(_  input:  Input) -> Input {
-        Swift.min(Swift.max(Input.min, input), Input.max)
+    @inlinable static func clamping(_  value:  Value) -> Value {
+        Swift.min(Swift.max(Value.min, value), Value.max)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable func full(_ input: Input) -> Bool? {
-        if min < input  && input < max { return false }
-        if input == max { return input > .zero || min == max }
-        if input == min { return input < .zero }; return nil
+    @inlinable func full(_ value: Value) -> Bool? {
+        if min < value  && value < max { return false }
+        if value == max { return value > .zero || min == max }
+        if value == min { return value < .zero }; return nil
     }
     
     @inlinable func autocorrect(_ sign: inout Sign) {
@@ -96,23 +96,23 @@ import DiffableTextKit
 extension Bounds {
     
     //=------------------------------------------------------------------------=
-    // MARK: Input
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ input: inout Input) {
+    @inlinable func autocorrect(_ value: inout Value) {
         //=--------------------------------------=
         // Lower Bound
         //=--------------------------------------=
-        if  input < min {
-            Brrr.autocorrection << Info([.mark(input), "is less than \(min)"])
-            input = min; return
+        if  value < min {
+            Brrr.autocorrection << Info([.mark(value), "is less than \(min)"])
+            value = min; return
         }
         //=--------------------------------------=
         // Upper Bound
         //=--------------------------------------=
-        if  input > max {
-            Brrr.autocorrection << Info([.mark(input), "is more than \(max)"])
-            input = max; return
+        if  value > max {
+            Brrr.autocorrection << Info([.mark(value), "is more than \(max)"])
+            value = max; return
         }
     }
     
@@ -140,18 +140,18 @@ extension Bounds {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Input
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func autovalidate(_ input: Input, _ number: inout Number) throws {
+    @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
         //=--------------------------------------=
         // Full, Or Not Full, Or Out Of Bounds
         //=--------------------------------------=
-        guard let full = full(input) else {
-            throw Info([.mark(input), "is not in \(self)"])
+        guard let full = full(value) else {
+            throw Info([.mark(value), "is not in \(self)"])
         }
         //=--------------------------------------=
-        // Remove Separator When Input Is Full
+        // Remove Separator When Value Is Full
         //=--------------------------------------=
         if  full, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])

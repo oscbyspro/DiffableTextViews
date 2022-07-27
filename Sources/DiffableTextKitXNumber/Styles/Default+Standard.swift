@@ -42,7 +42,7 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
     //*========================================================================*
 
     public final class Cache: _DefaultCache {
-        public typealias Input = Format.FormatInput
+        public typealias Value = Format.FormatInput
         
         //=--------------------------------------------------------------------=
         // MARK: State

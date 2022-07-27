@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Precision
 //*============================================================================*
 
-@usableFromInline struct Precision<Input: _Input>: Equatable {
+@usableFromInline struct Precision<Value: _Input>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -64,7 +64,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var upper: Count {
-        .init(value: Input .precision,
+        .init(value: Value .precision,
          integer:  integer.upperBound,
         fraction: fraction.upperBound)
     }
@@ -96,11 +96,11 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable static var integer: ClosedRange<Int> {
-        ClosedRange(uncheckedBounds:(1, Input.precision))
+        ClosedRange(uncheckedBounds:(1, Value.precision))
     }
     
     @inlinable static var fraction: ClosedRange<Int> {
-        let max = Input.integer ? 0 : Input.precision
+        let max = Value.integer ? 0 : Value.precision
         return ClosedRange(uncheckedBounds: (0, max))
     }
     

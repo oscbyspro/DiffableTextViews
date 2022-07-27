@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Default x Cache
 //*============================================================================*
 
-@usableFromInline protocol _DefaultCache<Style>: _Cache where Input == Style.Input {
+@usableFromInline protocol _DefaultCache<Style>: _Cache where Value == Style.Input {
     
     associatedtype Style: _DefaultStyle
     
@@ -26,7 +26,7 @@ import Foundation
     
     @inlinable var adapter:  Adapter<Style.Format> { get }
     
-    @inlinable var preferences: Preferences<Input> { get }
+    @inlinable var preferences: Preferences<Value> { get }
     
     @inlinable var interpreter: Interpreter { get }
     
@@ -55,11 +55,11 @@ extension _DefaultCache {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: Bounds<Input> {
+    @inlinable var bounds: Bounds<Value> {
         style.bounds ?? preferences.bounds
     }
 
-    @inlinable var precision: Precision<Input> {
+    @inlinable var precision: Precision<Value> {
         style.precision ?? preferences.precision
     }
     
@@ -69,6 +69,14 @@ extension _DefaultCache {
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         Snapshot(characters, as: { interpreter.attributes[$0] })
+    }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.style == rhs.style
     }
 }
 
@@ -82,56 +90,59 @@ extension _DefaultCache {
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ input: Input) -> String {
-        self.adapter.format(precision.inactive()).format(input)
+    @inlinable public func format(_ value: Value,
+    with cache: inout Void) -> String {
+        adapter.format(precision.inactive()).format(value)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable public func interpret(_ input: Input) -> Commit<Input> {
-        var input = input
+    @inlinable public func interpret(_ value: Value,
+    with cache: inout Void) -> Commit<Value> {
+        var value = value
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&input)
+        bounds.autocorrect(&value)
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
         let format = adapter.format(precision.active())
-        let numberable = snapshot(format.format(input))
-        var number = try! interpreter.number(numberable, as: Input.self)!
+        let numberable = snapshot(format.format(value))
+        var number = try! interpreter.number(numberable, as: Value.self)!
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         bounds   .autocorrect(&number)
         precision.autocorrect(&number)
         //=--------------------------------------=
-        // Input
+        // Value
         //=--------------------------------------=
-        input = try! adapter.parse(number)
+        value = try! adapter.parse(number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(input, number, with: format)
+        return commit(value, number, with: format)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Input> {
-        let number = try interpreter.number(proposal, as: Input.self)!
-        return try resolve(number)
+    @inlinable public func resolve(_ proposal: Proposal,
+    with cache: inout Void) throws -> Commit<Value> {
+        try resolve(interpreter.number(proposal, as: Value.self)!)
     }
     
-    @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Input?> {
-        let number = try interpreter.number(proposal, as: Input?.self)
+    @inlinable public func resolve(_ proposal: Proposal,
+    with cache: inout Void) throws -> Commit<Value?> {
+        let number = try interpreter.number(proposal, as: Value?.self)
         return try number.map({ try Commit(resolve($0)) }) ?? Commit()
     }
     
-    @inlinable func resolve( _ number: Number) throws -> Commit<Input> {
+    @inlinable func resolve(_ number: Number) throws -> Commit<Value> {
         var number = number; let count = number.count
         //=--------------------------------------=
         // Autovalidate
@@ -139,33 +150,37 @@ extension _DefaultCache {
         try bounds   .autovalidate(&number)
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
-        // Input
+        // Value
         //=--------------------------------------=
-        let input = try adapter.parse(number)
+        let value = try adapter.parse(number)
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
-        try bounds.autovalidate(input, &number)
+        try bounds.autovalidate(value, &number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
         let format = adapter.format(precision.interactive(count))
-        return commit(input, number, with: format)
+        return commit(value, number, with: format)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable func commit(_ input: Input, _ number: Number, with format: Style.Format) -> Commit<Input> {
+    @inlinable func commit(_ value: Value, _ number: Number,
+    with format: Style.Format) -> Commit<Value> {
+        //=--------------------------------------=
+        // Characters
+        //=--------------------------------------=
         let separator = number.separator != nil ? _NFSC_SeparatorDS.always : .automatic
         let sign = Style.Format._SignDS(number.sign == .negative ? .always : .automatic)
         let format = format.decimalSeparator(strategy:  separator).sign(strategy:  sign)
-        var characters = format.format(input)
+        var characters = format.format(value)
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if  number.sign == .negative, input == .zero,
+        if  number.sign == .negative, value == .zero,
         let position = characters.firstIndex(of:
         interpreter.components.signs[.positive]) {
             //=----------------------------------=
@@ -175,8 +190,8 @@ extension _DefaultCache {
             characters.replaceSubrange(position...position, with:replacement)
         }
         //=--------------------------------------=
-        // Commit
+        // Snapshot, Commit
         //=--------------------------------------=
-        return Commit(input, snapshot(characters))
+        return Commit(value, snapshot(characters))
     }
 }

@@ -16,7 +16,7 @@ import Foundation
 
 public protocol _Style: DiffableTextStyle
 where Value == Graph.Value, Cache: _Cache,
-Cache.Input == Input {
+Cache.Value == Input {
     
     associatedtype Graph: _Graph
     
