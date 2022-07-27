@@ -14,7 +14,8 @@ import Foundation
 // MARK: * Default x Cache
 //*============================================================================*
 
-@usableFromInline protocol _DefaultCache<Style>: _Cache where Value == Style.Input {
+@usableFromInline protocol _DefaultCache<Style>: NullableTextStyle
+where Value == Style.Input {
     
     associatedtype Style: _DefaultStyle
     
@@ -136,7 +137,7 @@ extension _DefaultCache {
         try resolve(interpreter.number(proposal, as: Value.self)!)
     }
     
-    @inlinable public func resolve(_ proposal: Proposal,
+    @inlinable public func resolve(optional proposal: Proposal,
     with cache: inout Void) throws -> Commit<Value?> {
         let number = try interpreter.number(proposal, as: Value?.self)
         return try number.map({ try Commit(resolve($0)) }) ?? Commit()

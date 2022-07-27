@@ -15,7 +15,7 @@
 ///
 /// Use this modifier to optimize the comparison on view update.
 ///
-@usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: DiffableTextStyleWrapper {
+@usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value
     
@@ -43,6 +43,12 @@
         lhs.proxy == rhs.proxy
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conditionals
+//=----------------------------------------------------------------------------=
+
+extension Equals: NullableTextStyle where Style: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Equals x Style

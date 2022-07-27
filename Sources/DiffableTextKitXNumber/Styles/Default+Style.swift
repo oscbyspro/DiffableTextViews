@@ -14,8 +14,8 @@ import Foundation
 // MARK: * Default x Style
 //*============================================================================*
 
-@usableFromInline protocol _DefaultStyle<Value>: _Style
-where Cache: _DefaultCache<Self>, Value == Input {
+@usableFromInline protocol _DefaultStyle<Value>: _Style, NullableTextStyle
+where Cache: _DefaultCache<Self>, Value == Input, Input: _Input {
     
     associatedtype Format: _Format
     

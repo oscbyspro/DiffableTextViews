@@ -14,8 +14,8 @@ import Foundation
 // MARK: * Style x Optional
 //*============================================================================*
 
-public struct _OptionalStyle<Style>: _Style, DiffableTextStyleWrapper
-where Style: _Style, Style.Value == Style.Input {
+public struct _OptionalStyle<Style>: _Style, WrapperTextStyle where
+Style: _Style & NullableTextStyle, Style.Value == Style.Input {
     public typealias Graph = _OptionalGraph<Style.Graph>
     
     public typealias Cache = Style.Cache
@@ -33,25 +33,6 @@ where Style: _Style, Style.Value == Style.Input {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ style: Style) { self.style = style }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-
-    @inlinable public func format(_ value: Value,
-    with cache: inout Cache) -> String {
-        value.map({ style.format($0, with: &cache) }) ?? String()
-    }
-
-    @inlinable public func interpret(_ value: Value,
-    with cache: inout Cache) -> Commit<Value> {
-        value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
-    }
-
-    @inlinable public func resolve(_ proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value> {
-        try cache.resolve(proposal)
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -122,7 +103,7 @@ extension _OptionalStyle: _Standard where Style: _Standard {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.style = Style(locale: locale)
+        self.init(Style(locale: locale))
     }
 }
 
@@ -149,6 +130,6 @@ extension _OptionalStyle: _Currency where Style: _Currency {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
-        self.style = Style(code:   code, locale: locale)
+        self.init(Style(code: code, locale: locale))
     }
 }

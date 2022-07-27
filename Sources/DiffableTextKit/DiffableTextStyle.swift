@@ -129,7 +129,7 @@ public extension DiffableTextStyle where Cache == Void {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Cache: DiffableTextStyle
+// MARK: + Details where Cache: Style
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle where Cache: DiffableTextStyle,

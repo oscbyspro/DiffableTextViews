@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Style x Wrapper
 //*============================================================================*
 
-public protocol DiffableTextStyleWrapper: DiffableTextStyle {
+public protocol WrapperTextStyle: DiffableTextStyle {
     
     associatedtype Style: DiffableTextStyle
     
@@ -28,7 +28,7 @@ public protocol DiffableTextStyleWrapper: DiffableTextStyle {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyleWrapper {
+public extension WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -51,7 +51,7 @@ public extension DiffableTextStyleWrapper {
 // MARK: + Details where Cache == Style.Cache
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyleWrapper where Cache == Style.Cache {
+public extension WrapperTextStyle where Cache == Style.Cache {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -67,10 +67,10 @@ public extension DiffableTextStyleWrapper where Cache == Style.Cache {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Cache == Style.Cache, Value == Style.Value
+// MARK: + Details where Cache == Style.Cache
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyleWrapper where Cache == Style.Cache, Value == Style.Value {
+public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Value {
 
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -89,5 +89,59 @@ public extension DiffableTextStyleWrapper where Cache == Style.Cache, Value == S
     @inlinable func resolve(_ proposal: Proposal,
     with cache: inout Cache) throws -> Commit<Value> {
         try style.resolve(proposal, with: &cache)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details where Style: Nullable
+//=----------------------------------------------------------------------------=
+
+public extension WrapperTextStyle where Self: NullableTextStyle, Style: NullableTextStyle,
+Cache == Style.Cache, Value == Style.Value {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func format(optional value: Value?,
+    with cache: inout Cache) -> String {
+        style.format(optional: value, with: &cache)
+    }
+    
+    @inlinable func interpret(optional value: Value?,
+    with cache: inout Cache) -> Commit<Value?> {
+        style.interpret(optional: value, with: &cache)
+    }
+    
+    @inlinable func resolve(optional proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value?> {
+        try style.resolve(optional: proposal, with: &cache)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details where Style: Nullable
+//=----------------------------------------------------------------------------=
+
+public extension WrapperTextStyle where Style: NullableTextStyle,
+Cache == Style.Cache, Value == Style.Value? {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func format(_ value: Value,
+    with cache: inout Cache) -> String {
+        style.format(optional: value, with: &cache)
+    }
+    
+    @inlinable func interpret(_ value: Value,
+    with cache: inout Cache) -> Commit<Value> {
+        style.interpret(optional: value, with: &cache)
+    }
+    
+    @inlinable func resolve(_ proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value> {
+        try style.resolve(optional: proposal, with: &cache)
     }
 }

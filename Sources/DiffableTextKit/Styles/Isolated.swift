@@ -15,7 +15,7 @@
 ///
 /// Use this modifier to control when the cache is created and destroyed.
 ///
-@usableFromInline struct Isolated<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
+@usableFromInline struct Isolated<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -71,6 +71,12 @@
         @inlinable init(_ cache: Style.Cache) { self.cache = cache }
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conditionals
+//=----------------------------------------------------------------------------=
+
+extension Isolated: NullableTextStyle where Style: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Isolated x Style

@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
+
 //*============================================================================*
 // MARK: * Optional x Graph
 //*============================================================================*
@@ -50,15 +52,18 @@ public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.V
 // MARK: + Nodes
 //=----------------------------------------------------------------------------=
 
-extension _OptionalGraph: _Numberable where Graph: _Numberable {
+extension _OptionalGraph: _Numberable
+where Graph: _Numberable, Graph.Number: NullableTextStyle {
     public typealias Number = _OptionalStyle<Graph.Number>
 }
 
-extension _OptionalGraph: _Percentable where Graph: _Percentable {
+extension _OptionalGraph: _Percentable
+where Graph: _Percentable, Graph.Percent: NullableTextStyle {
     public typealias Percent = _OptionalStyle<Graph.Percent>
 }
 
-extension _OptionalGraph: _Currencyable where Graph: _Currencyable {
+extension _OptionalGraph: _Currencyable
+where Graph: _Currencyable, Graph.Currency: NullableTextStyle {
     public typealias Currency = _OptionalStyle<Graph.Currency>
 }
 

@@ -17,7 +17,7 @@ import Foundation
 ///
 /// Use this modifier to ignore the environment.
 ///
-@usableFromInline struct Constant<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
+@usableFromInline struct Constant<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value
     
@@ -39,6 +39,12 @@ import Foundation
 
     @inlinable public func locale(_ locale: Locale) -> Self { self }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conditionals
+//=----------------------------------------------------------------------------=
+
+extension Constant: NullableTextStyle where Style: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Constant x Style
