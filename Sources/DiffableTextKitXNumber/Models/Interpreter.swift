@@ -38,12 +38,10 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// - Requires that formatter.numberStyle == .none.
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self(local: .standard(formatter))
     }
     
-    /// - Requires that formatter.numberStyle == .none.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self(local: .currency(formatter))
     }

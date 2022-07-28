@@ -38,9 +38,7 @@ import Foundation
         Self(bounds: Bounds(), precision: Precision())
     }
     
-    /// - Requires that formatter.numberStyle == .currency.
     /// - Requires that formatter.maximumFractionDigits == default.
-    /// 
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .currency)
         

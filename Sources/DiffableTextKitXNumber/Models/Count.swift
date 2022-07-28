@@ -73,18 +73,8 @@ import DiffableTextKit
     }
     
     //*========================================================================*
-    // MARK: * Component
+    // MARK: * Component [...]
     //*========================================================================*
     
-    @usableFromInline enum Component: Int, CaseIterable {
-        @usableFromInline static let allCases = [value, integer, fraction]
-
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        case value    = 0
-        case integer  = 1
-        case fraction = 2
-    }
+    @usableFromInline enum Component: Int, CaseIterable { case value, integer, fraction }
 }

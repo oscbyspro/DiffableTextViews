@@ -38,17 +38,15 @@ import Foundation
     
     /// Returns an instance if it is needed, returns nil otherwise.
     ///
-    /// Correctness is assert by tests parsing currency formats for all locale-currency pairs.
-    ///
-    /// - Requires that formatter.numberStyle == .currency.
-    /// - Requires that formatter.maximumFractionDigits == .zero.
+    /// Correctness is known by tests parsing currency formats for all locale-currency pairs.
     ///
     @inlinable static func currency(_ formatter: NumberFormatter, _ components: Components) -> Self? {
-        let label = formatter.currencySymbol!
+        assert(formatter.numberStyle == .currency)
+        assert(formatter.maximumFractionDigits == 0)
         //=--------------------------------------=
         // Necessity
         //=--------------------------------------=
-        assert(formatter.numberStyle == .currency)
+        let label = formatter.currencySymbol!
         guard label.contains(components.separators[.fraction]) else { return nil }
         //=--------------------------------------=
         // Direction
@@ -59,7 +57,7 @@ import Foundation
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .init(label: label, direction: direction)
+        return Self(label: label, direction: direction)
     }
 
     //=------------------------------------------------------------------------=
