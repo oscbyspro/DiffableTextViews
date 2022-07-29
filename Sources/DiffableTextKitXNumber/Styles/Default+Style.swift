@@ -87,7 +87,7 @@ extension _DefaultStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func bounds(_ bounds: Bounds<Value>) -> Self {
+    @inlinable func bounds(_ bounds: Bounds<Value>) -> Self {
         var result = self; result.bounds = bounds; return result
     }
 }
@@ -102,13 +102,11 @@ extension _DefaultStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision(
-    integer:  some RangeExpression<Int>) -> Self {
+    @inlinable public func precision(integer:  some RangeExpression<Int>) -> Self {
         precision(Precision(integer: integer))
     }
     
-    @inlinable public func precision(
-    fraction: some RangeExpression<Int>) -> Self {
+    @inlinable public func precision(fraction: some RangeExpression<Int>) -> Self {
         precision(Precision(fraction: fraction))
     }
     
@@ -122,7 +120,7 @@ extension _DefaultStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ precision: Precision<Value>) -> Self {
+    @inlinable func precision(_ precision: Precision<Value>) -> Self {
         var result = self; result.precision = precision; return result
     }
 }
