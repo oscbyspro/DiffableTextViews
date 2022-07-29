@@ -19,8 +19,9 @@ enum Constants {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    static let currencies: [String] = Locale
-        .isoCurrencyCodes
+    static let currencies: [String] = Locale.Currency
+        .isoCurrencies
+        .map(\.identifier)
     
     static let locales: [Locale] = Locale
         .availableIdentifiers
