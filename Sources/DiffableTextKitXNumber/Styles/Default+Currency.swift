@@ -61,29 +61,32 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         //=--------------------------------------------------------------------=
         
         @inlinable init(_ style: _CurrencyStyle) {
-            self.style  = style
-            let  format = Format.currency(style)
-            self.parser = Parser(initial:format)
-            self.formatter = Formatter(initial:format)
-            //=--------------------------------------=
+            let format = Format(code: style.currencyCode, locale: style.locale)
+            //=----------------------------------=
+            // N/A
+            //=----------------------------------=
+            self.style = style
+            self.parser = Parser(initial: format)
+            self.formatter = Formatter(initial: format)
+            //=----------------------------------=
             // Formatter
-            //=--------------------------------------=
+            //=----------------------------------=
             let formatter = NumberFormatter()
             formatter.locale = style.locale
             formatter.currencyCode = style.currencyCode
-            //=--------------------------------------=
+            //=----------------------------------=
             // Formatter x None
-            //=--------------------------------------=
+            //=----------------------------------=
             assert(formatter.numberStyle == .none)
             self.interpreter = Interpreter.currency(formatter)
-            //=--------------------------------------=
+            //=----------------------------------=
             // Formatter x Currency
-            //=--------------------------------------=
+            //=----------------------------------=
             formatter.numberStyle = .currency
             self.preferences = Preferences.currency(formatter)
-            //=--------------------------------------=
+            //=----------------------------------=
             // Formatter x Currency x Fractionless
-            //=--------------------------------------=
+            //=----------------------------------=
             formatter.maximumFractionDigits = .zero
             self.adjustments = Label.currency(formatter, interpreter.components)
         }

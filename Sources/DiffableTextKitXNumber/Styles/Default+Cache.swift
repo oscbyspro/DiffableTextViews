@@ -85,7 +85,7 @@ extension _DefaultCache {
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
-        formatter.with(precision.inactive()).format(value)
+        formatter.precision(precision.inactive()).format(value)
     }
     
     //=------------------------------------------------------------------------=
@@ -101,8 +101,8 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        let formatter = formatter.with(precision.active())
-        let numberable = snapshot(formatter.format(value))
+        let formatter = formatter.precision(precision.active())
+        let numberable = self.snapshot(formatter.format(value))
         var number = try! interpreter.number(numberable, as: Value.self)!
         //=--------------------------------------=
         // Autocorrect
@@ -116,7 +116,8 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(value, number, with: formatter)
+        return Commit(value,snapshot(formatter.format(
+        value, number, with: interpreter.components)))
     }
     
     //=------------------------------------------------------------------------=
@@ -152,18 +153,9 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        let formatter = formatter.with(precision.interactive(count))
-        return commit(value, number, with: formatter)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func commit(_ value: Value, _ number: Number,
-    with formatter: Formatter<Style.Format>) -> Commit<Value> {
-        let components = interpreter.components
-        let characters = formatter.format(value, number, with: components)
-        return Commit(value, snapshot(characters))
+        let precision = precision.interactive(count)
+        let formatter = formatter.precision(precision)
+        return Commit(value,snapshot(formatter.format(
+        value, number, with: interpreter.components)))
     }
 }

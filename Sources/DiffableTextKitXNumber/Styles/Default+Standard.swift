@@ -59,22 +59,24 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
         //=--------------------------------------------------------------------=
         
         @inlinable init(_ style: _StandardStyle) {
-            self.style  = style
+            let format = Format(locale: style.locale)
+            //=----------------------------------=
+            // N/A
+            //=----------------------------------=
+            self.style = style
             self.preferences = Preferences.standard()
-            //=--------------------------------------=
+            self.parser = Parser(initial: format)
+            self.formatter = Formatter(initial: format)
+            //=----------------------------------=
             // Formatter
-            //=--------------------------------------=
+            //=----------------------------------=
             let formatter = NumberFormatter()
             formatter.locale = style.locale
-            //=--------------------------------------=
+            //=----------------------------------=
             // Formatter x None
-            //=--------------------------------------=
+            //=----------------------------------=
             assert(formatter.numberStyle == .none)
             self.interpreter = Interpreter.standard(formatter)
-            
-            let  format = Format.standard(style)
-            self.parser = Parser(initial:format)
-            self.formatter = Formatter(initial:format)
         }
         
         //=--------------------------------------------------------------------=

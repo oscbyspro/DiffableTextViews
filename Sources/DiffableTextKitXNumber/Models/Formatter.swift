@@ -32,7 +32,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func with(_ precision: _NFSC.Precision) -> Self {
+    @inlinable func precision(_ precision: _NFSC.Precision) -> Self {
         var result = self; result.base = result.base.precision(precision); return result
     }
     
