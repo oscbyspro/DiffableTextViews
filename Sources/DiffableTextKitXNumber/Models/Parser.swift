@@ -7,39 +7,32 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-
 //*============================================================================*
-// MARK: * Adapter
+// MARK: * Parser
 //*============================================================================*
 
-@usableFromInline struct Adapter<Format: _Format> {
-    
+@usableFromInline struct Parser<Format: _Format> {
+    @usableFromInline typealias Value = Format.FormatInput
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Format
-    @usableFromInline let parser: Format.Strategy
+    @usableFromInline let base: Format.Strategy
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: Format) {
-        self.format = unchecked.rounded(rule: .towardZero, increment: nil)
-        self.parser = self.format.locale(Locale.en_US_POSIX).parseStrategy
+    @inlinable init(initial: Format) {
+        self.base = initial.locale(.en_US_POSIX).parseStrategy
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(_  precision: _NFSC.Precision) -> Format {
-        self.format.precision(precision)
-    }
-    
-    @inlinable func parse(_  number: Number) throws -> Format.FormatInput {
-        try parser.parse(number.description)
+    @inlinable func parse(_ number: Number) throws -> Value {
+        try base.parse(String(bytes: number.ascii, encoding: .ascii)!)
     }
 }

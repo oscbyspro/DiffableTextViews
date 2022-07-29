@@ -47,9 +47,11 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style:       _StandardStyle
-        @usableFromInline let adapter:     Adapter<Format>
+        @usableFromInline var style: _StandardStyle
         @usableFromInline let preferences: Preferences<Input>
+
+        @usableFromInline let parser: Parser<Format>
+        @usableFromInline let formatter: Formatter<Format>
         @usableFromInline let interpreter: Interpreter
         
         //=--------------------------------------------------------------------=
@@ -58,9 +60,7 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
         
         @inlinable init(_ style: _StandardStyle) {
             self.style  = style
-            
             self.preferences = Preferences.standard()
-            self.adapter = Adapter(unchecked: Format(locale: style.locale))
             //=--------------------------------------=
             // Formatter
             //=--------------------------------------=
@@ -71,6 +71,10 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
             //=--------------------------------------=
             assert(formatter.numberStyle == .none)
             self.interpreter = Interpreter.standard(formatter)
+            
+            let  format = Format.standard(style)
+            self.parser = Parser(initial:format)
+            self.formatter = Formatter(initial:format)
         }
         
         //=--------------------------------------------------------------------=
@@ -79,6 +83,10 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
         
         @inlinable func compatible(_ style: Style) -> Bool {
             self.style.locale == style.locale
+        }
+        
+        @inlinable func snapshot(_ characters: String) -> Snapshot {
+            Snapshot(characters, as: { interpreter.attributes[$0] })
         }
     }
 }

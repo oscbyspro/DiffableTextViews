@@ -71,8 +71,10 @@ import Foundation
         //=--------------------------------------=
         // Keystroke
         //=--------------------------------------=
-        if  replacement.count == 1, let keystroke = replacement.first {
-            replacement = Snapshot([translator.keystroke(keystroke.character)])
+        if  replacement.count == 1 {
+            var keystroke = replacement.first!
+            translator.keystroke(&keystroke.character)
+            replacement = Snapshot([keystroke])
         //=--------------------------------------=
         // Paste, Backspace
         //=--------------------------------------=
@@ -83,7 +85,8 @@ import Foundation
         //=--------------------------------------=
         // Keystroke
         //=--------------------------------------=
-        if  replacement.count == 1, let  keystroke = replacement.first {
+        if  replacement.count == 1 {
+            let keystroke = replacement.first!
             let sign  = components.signs[keystroke.character]
             if  sign != nil { replacement = [] }; return sign
         //=--------------------------------------=

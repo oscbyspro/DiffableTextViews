@@ -48,9 +48,11 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style:       _CurrencyStyle
-        @usableFromInline let adapter:     Adapter<Format>
+        @usableFromInline var style: _CurrencyStyle
         @usableFromInline let preferences: Preferences<Input>
+
+        @usableFromInline let parser: Parser<Format>
+        @usableFromInline let formatter: Formatter<Format>
         @usableFromInline let interpreter: Interpreter
         @usableFromInline let adjustments: Label?
         
@@ -60,9 +62,9 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         
         @inlinable init(_ style: _CurrencyStyle) {
             self.style  = style
-            
-            self.adapter = Adapter(unchecked: Format.init(
-            code: style.currencyCode, locale: style.locale))
+            let  format = Format.currency(style)
+            self.parser = Parser(initial:format)
+            self.formatter = Formatter(initial:format)
             //=--------------------------------------=
             // Formatter
             //=--------------------------------------=

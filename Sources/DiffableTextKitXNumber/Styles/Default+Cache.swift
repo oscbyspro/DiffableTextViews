@@ -14,8 +14,7 @@ import Foundation
 // MARK: * Default x Cache
 //*============================================================================*
 
-@usableFromInline protocol _DefaultCache<Style>: NullableTextStyle
-where Value == Style.Input {
+@usableFromInline protocol _DefaultCache<Style>: NullableTextStyle where Value == Style.Input {
     
     associatedtype Style: _DefaultStyle
     
@@ -25,10 +24,12 @@ where Value == Style.Input {
     
     @inlinable var style: Style { get set }
     
-    @inlinable var adapter:  Adapter<Style.Format> { get }
-    
     @inlinable var preferences: Preferences<Value> { get }
+
+    @inlinable var parser: Parser<Style.Format> { get }
     
+    @inlinable var formatter: Formatter<Style.Format> { get }
+        
     @inlinable var interpreter: Interpreter { get }
     
     //=------------------------------------------------------------------------=
@@ -68,14 +69,6 @@ extension _DefaultCache {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        Snapshot(characters, as: { interpreter.attributes[$0] })
-    }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.style == rhs.style
     }
@@ -91,17 +84,15 @@ extension _DefaultCache {
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Value,
-    with cache: inout Void) -> String {
-        adapter.format(precision.inactive()).format(value)
+    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
+        formatter.with(precision.inactive()).format(value)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable public func interpret(_ value: Value,
-    with cache: inout Void) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
         var value = value
         //=--------------------------------------=
         // Autocorrect
@@ -110,8 +101,8 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        let format = adapter.format(precision.active())
-        let numberable = snapshot(format.format(value))
+        let formatter = formatter.with(precision.active())
+        let numberable = snapshot(formatter.format(value))
         var number = try! interpreter.number(numberable, as: Value.self)!
         //=--------------------------------------=
         // Autocorrect
@@ -121,11 +112,11 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Value
         //=--------------------------------------=
-        value = try! adapter.parse(number)
+        value = try! parser.parse(number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(value, number, with: format)
+        return commit(value, number, with: formatter)
     }
     
     //=------------------------------------------------------------------------=
@@ -153,7 +144,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Value
         //=--------------------------------------=
-        let value = try adapter.parse(number)
+        let value = try parser.parse(number)
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
@@ -161,8 +152,8 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        let format = adapter.format(precision.interactive(count))
-        return commit(value, number, with: format)
+        let formatter = formatter.with(precision.interactive(count))
+        return commit(value, number, with: formatter)
     }
     
     //=------------------------------------------------------------------------=
@@ -170,29 +161,9 @@ extension _DefaultCache {
     //=------------------------------------------------------------------------=
     
     @inlinable func commit(_ value: Value, _ number: Number,
-    with format: Style.Format) -> Commit<Value> {
-        //=--------------------------------------=
-        // Characters
-        //=--------------------------------------=
-        let separator = number.separator != nil ? _NFSC_SeparatorDS.always : .automatic
-        let sign = Style.Format._SignDS(number.sign == .negative ? .always : .automatic)
-        let format = format.decimalSeparator(strategy:  separator).sign(strategy:  sign)
-        var characters = format.format(value)
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        if  number.sign == .negative, value == .zero,
-        let position = characters.firstIndex(of:
-        interpreter.components.signs[.positive]) {
-            //=----------------------------------=
-            // Make Positive Zero Negative
-            //=----------------------------------=
-            let replacement = String(interpreter.components.signs[.negative])
-            characters.replaceSubrange(position...position, with:replacement)
-        }
-        //=--------------------------------------=
-        // Snapshot, Commit
-        //=--------------------------------------=
+    with formatter: Formatter<Style.Format>) -> Commit<Value> {
+        let components = interpreter.components
+        let characters = formatter.format(value, number, with: components)
         return Commit(value, snapshot(characters))
     }
 }
