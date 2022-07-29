@@ -72,15 +72,15 @@ extension _DefaultStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func bounds(_ limits: ClosedRange<Value>) -> Self {
-        self.bounds(Bounds(limits))
+        bounds(Bounds(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
-        self.bounds(Bounds(limits))
+        bounds(Bounds(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
-        self.bounds(Bounds(limits))
+        bounds(Bounds(limits))
     }
     
     //=------------------------------------------------------------------------=
@@ -102,19 +102,20 @@ extension _DefaultStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(Precision(integer: integer))
+    @inlinable public func precision(
+    integer:  some RangeExpression<Int>) -> Self {
+        precision(Precision(integer: integer))
     }
     
-    @inlinable public func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
-        self.precision(Precision(fraction: fraction))
+    @inlinable public func precision(
+    fraction: some RangeExpression<Int>) -> Self {
+        precision(Precision(fraction: fraction))
     }
     
-    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
-    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.precision(Precision(integer: integer, fraction: fraction))
+    @inlinable public func precision(
+    integer:  some RangeExpression<Int>,
+    fraction: some RangeExpression<Int>) -> Self {
+        precision(Precision(integer: integer, fraction: fraction))
     }
     
     //=------------------------------------------------------------------------=

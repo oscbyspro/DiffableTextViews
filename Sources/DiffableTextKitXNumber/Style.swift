@@ -35,14 +35,13 @@ Cache.Value == Input, Value == Graph.Value {
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int
+    @inlinable func precision(integer:  some RangeExpression<Int>) -> Self
     
-    @inlinable func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int
+    @inlinable func precision(fraction: some RangeExpression<Int>) -> Self
     
-    @inlinable func precision<I, F>(integer:  I, fraction: F) -> Self
-    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
+    @inlinable func precision(
+    integer:  some RangeExpression<Int>,
+    fraction: some RangeExpression<Int>) -> Self
 }
 
 //=----------------------------------------------------------------------------=
@@ -67,13 +66,11 @@ public extension _Style {
         precision(integer: integer...integer, fraction: fraction...fraction)
     }
     
-    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int {
+    @inlinable func precision(integer: some RangeExpression<Int>, fraction: Int) -> Self {
         precision(integer: integer, fraction: fraction...fraction)
     }
     
-    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
+    @inlinable func precision(integer: Int, fraction: some RangeExpression<Int>) -> Self {
         precision(integer: integer...integer, fraction: fraction)
     }
 }
@@ -92,8 +89,7 @@ public extension _Style where Input: BinaryInteger {
         precision(integer: integer...integer)
     }
     
-    @inlinable func precision<I>(_ integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
+    @inlinable func precision(_ integer: some RangeExpression<Int>) -> Self {
         precision(integer: integer)
     }
 }

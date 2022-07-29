@@ -279,10 +279,9 @@ extension Snapshot {
     }
     
     @inlinable @inline(__always)
-    public mutating func transform<R>(
-    attributes positions: R,
-    with transform: (inout Attribute) -> Void)
-    where R: RangeExpression, R.Bound == Index {
+    public mutating func transform(
+    attributes positions: some RangeExpression<Index>,
+    with transform: (inout Attribute) -> Void) {
         for index in indices[positions.relative(to:self)] {
             transform(&self._attributes[index.attribute])
         }

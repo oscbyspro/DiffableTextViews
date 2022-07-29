@@ -68,18 +68,17 @@ extension _OptionalStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
+    @inlinable public func precision(integer:  some RangeExpression<Int>) -> Self {
         Self(style.precision(integer: integer))
     }
     
-    @inlinable public func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
+    @inlinable public func precision(fraction: some RangeExpression<Int>) -> Self {
         Self(style.precision(fraction: fraction))
     }
     
-    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
-    where I: RangeExpression, F: RangeExpression, I.Bound == Int, F.Bound == Int {
+    @inlinable public func precision(
+    integer:  some RangeExpression<Int>,
+    fraction: some RangeExpression<Int>) -> Self {
         Self(style.precision(integer: integer, fraction: fraction))
     }
 }

@@ -39,21 +39,17 @@ import Foundation
         self.init(unchecked:(Self.integer,Self.fraction))
     }
     
-    @inlinable init<I>(integer:  I) where
-    I: RangeExpression, I.Bound == Int {
+    @inlinable init(integer: some RangeExpression<Int>) {
         let integer  = Self.clamping(integer,  to: Self.integer )
         self.init(unchecked:(integer,Self.fraction))
     }
     
-    @inlinable init<F>(fraction: F) where
-    F: RangeExpression, F.Bound == Int {
+    @inlinable init(fraction: some RangeExpression<Int>) {
         let fraction = Self.clamping(fraction, to: Self.fraction)
         self.init(unchecked:(Self.integer,fraction))
     }
     
-    @inlinable init<I, F>(integer: I, fraction: F) where
-    I: RangeExpression, I.Bound == Int,
-    F: RangeExpression, F.Bound == Int {
+    @inlinable init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
         let integer  = Self.clamping(integer,  to: Self.integer )
         let fraction = Self.clamping(fraction, to: Self.fraction)
         self.init(unchecked:(integer,fraction))
@@ -104,9 +100,9 @@ import Foundation
         return ClosedRange(uncheckedBounds: (0, max))
     }
     
-    /// - Requires that expression is not empty.
-    @inlinable static func clamping<R: RangeExpression>(_ expression: R,
-    to limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+    /// - Requires that the range expression is nonempty.
+    @inlinable static func clamping(_ expression: some RangeExpression<Int>,
+    to limits: ClosedRange<Int>) -> ClosedRange<Int> {
         let range = expression.relative(to: Int.min ..< Int.max)
         let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
         let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
