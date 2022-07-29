@@ -231,8 +231,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            let dismiss = textField.resignFirstResponder()
-            if  dismiss { sidestream.onSubmit?() }; return dismiss
+            let _ = textField.resignFirstResponder()
+            self.sidestream.onSubmit?(); return true
         }
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
