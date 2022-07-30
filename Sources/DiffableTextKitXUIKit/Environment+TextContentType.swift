@@ -12,47 +12,21 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Text Content Type
+// MARK: * Environment x Text Content Type [...]
 //*============================================================================*
-//=----------------------------------------------------------------------------=
-// MARK: + Key
-//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_TextContentType: EnvironmentKey {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Defaults
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline static let defaultValue: UITextContentType? = nil
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Values
-//=----------------------------------------------------------------------------=
-
 extension EnvironmentValues {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-
     @inlinable var diffableTextViews_textContentType: UITextContentType? {
         get { self[DiffableTextViews_TextContentType.self] }
         set { self[DiffableTextViews_TextContentType.self] = newValue }
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + View
-//=----------------------------------------------------------------------------=
-
 public extension View {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
     @inlinable func diffableTextViews_textContentType(_  type: UITextContentType?) -> some View {
         environment(\.diffableTextViews_textContentType, type)
     }

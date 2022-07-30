@@ -12,47 +12,21 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Autocorrection Disabled
+// MARK: * Environment x Autocorrection Disabled [...]
 //*============================================================================*
-//=----------------------------------------------------------------------------=
-// MARK: + Key
-//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_AutocorrectionDisabled: EnvironmentKey {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Defaults
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline static let defaultValue: Bool = false
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Values
-//=----------------------------------------------------------------------------=
-
 extension EnvironmentValues {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-
     @inlinable var diffableTextViews_autocorrectionDisabled: Bool {
         get { self[DiffableTextViews_AutocorrectionDisabled.self] }
         set { self[DiffableTextViews_AutocorrectionDisabled.self] = newValue }
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + View
-//=----------------------------------------------------------------------------=
-
 public extension View {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
     @inlinable func diffableTextViews_autocorrectionDisabled(_  disabled: Bool = true) -> some View {
         environment(\.diffableTextViews_autocorrectionDisabled, disabled)
     }

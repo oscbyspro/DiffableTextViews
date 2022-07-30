@@ -12,47 +12,21 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Text Input Autocapitalization
+// MARK: * Environment x Text Input Autocapitalization [...]
 //*============================================================================*
-//=----------------------------------------------------------------------------=
-// MARK: + Key
-//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_TextInputAutocapitalization: EnvironmentKey {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Defaults
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline static let defaultValue: UITextAutocapitalizationType? = nil
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Values
-//=----------------------------------------------------------------------------=
-
 extension EnvironmentValues {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-
     @inlinable var diffableTextViews_textInputAutocapitalization: UITextAutocapitalizationType? {
         get { self[DiffableTextViews_TextInputAutocapitalization.self] }
         set { self[DiffableTextViews_TextInputAutocapitalization.self] = newValue }
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + View
-//=----------------------------------------------------------------------------=
-
 public extension View {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
     @inlinable func diffableTextViews_textInputAutocapitalization(
     _ autocapitalization: UITextAutocapitalizationType?) -> some View {
         environment(\.diffableTextViews_textInputAutocapitalization, autocapitalization)

@@ -12,47 +12,21 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Foreground Color
+// MARK: * Environment x Foreground Color [...]
 //*============================================================================*
-//=----------------------------------------------------------------------------=
-// MARK: + Key
-//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_ForegroundColor: EnvironmentKey {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Defaults
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline static let defaultValue: Color? = nil
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Values
-//=----------------------------------------------------------------------------=
-
 extension EnvironmentValues {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-
     @inlinable var diffableTextViews_foregroundColor: Color? {
         get { self[DiffableTextViews_ForegroundColor.self] }
         set { self[DiffableTextViews_ForegroundColor.self] = newValue }
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + View
-//=----------------------------------------------------------------------------=
-
 public extension View {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
     @inlinable func diffableTextViews_foregroundColor(_  color: Color?) -> some View {
         environment(\.diffableTextViews_foregroundColor, color)
     }
