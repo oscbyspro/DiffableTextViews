@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Init x Number
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + Decimal
+// MARK: + Decimal [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal> {
@@ -21,7 +21,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Float(s)
+// MARK: + Float(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double> {
@@ -29,7 +29,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Double> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Int(s)
+// MARK: + Int(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int> {
@@ -53,7 +53,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int64> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + UInt(s)
+// MARK: + UInt(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt> {
@@ -80,7 +80,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt64> {
 // MARK: * Init x Number x Optional
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + Decimal
+// MARK: + Decimal [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal?> {
@@ -88,7 +88,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Float(s)
+// MARK: + Float(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double?> {
@@ -96,7 +96,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Double?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Int(s)
+// MARK: + Int(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int?> {
@@ -120,7 +120,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int64?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + UInt(s)
+// MARK: + UInt(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt?> {

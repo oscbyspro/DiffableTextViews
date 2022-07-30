@@ -13,31 +13,17 @@ import DiffableTextKit
 // MARK: * Style x Init
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + String
+// MARK: + String [...]
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyle where Self == PatternTextStyle<String> {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func pattern(_ pattern: String) -> Self {
-        Self(pattern)
-    }
+extension DiffableTextStyle where Self == PatternTextStyle<String> {
+    @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Array<Character>
+// MARK: + Array<Character> [...]
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func pattern(_ pattern: String) -> Self {
-        Self(pattern)
-    }
+extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
+    @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }

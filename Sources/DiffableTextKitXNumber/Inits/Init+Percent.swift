@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Init x Percent
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + Decimal
+// MARK: + Decimal [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Percent {
@@ -21,7 +21,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Percent {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Float(s)
+// MARK: + Float(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double>.Percent {
@@ -32,7 +32,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Double>.Percent {
 // MARK: * Init x Percent x Optional
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + Decimal
+// MARK: + Decimal [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
@@ -40,7 +40,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Float(s)
+// MARK: + Float(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double?>.Percent {
