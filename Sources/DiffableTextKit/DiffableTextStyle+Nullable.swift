@@ -52,14 +52,14 @@ public extension NullableTextStyle {
     @inlinable func resolve(optional proposal: Proposal,
     with cache: inout Cache) throws -> Commit<Value?> {
         //=--------------------------------------=
-        // Erase
+        // None
         //=--------------------------------------=
         if  proposal.replacement.isEmpty,
             proposal.range.lowerBound == proposal.base.startIndex,
             proposal.range.upperBound == proposal.base.endIndex {
             return Commit()
         //=--------------------------------------=
-        // Other
+        // Some
         //=--------------------------------------=
         } else { return try Commit(resolve(proposal, with: &cache)) }
     }
