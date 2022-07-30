@@ -24,23 +24,23 @@ extension UITextField {
     //=------------------------------------------------------------------------=
     
     @inlinable func offset(at position: UITextPosition) -> Offset {
-        Offset(self.offset(from: self.beginningOfDocument, to: position))
+        Offset(offset(from: beginningOfDocument, to: position))
     }
     
     @inlinable func offsets(at positions: UITextRange) -> Range<Offset> {
-        let lower = self.offset(at:   positions.start)
-        let count = self.offset(from: positions.start, to: positions.end)
+        let lower = offset(at:   positions.start)
+        let count = offset(from: positions.start, to: positions.end)
         return lower ..< lower + Offset(count)
     }
     
     @inlinable func position(at offset: Offset) -> UITextPosition {
-        self.position(from: self.beginningOfDocument, offset: Int(offset))!
+        position(from: beginningOfDocument, offset: Int(offset))!
     }
     
     @inlinable func positions(at offsets: Range<Offset>) -> UITextRange {
-        let lower = self.position(at: offsets.lowerBound)
-        let upper = self.position(from: lower, offset: offsets.count)!
-        return self.textRange(from: lower, to: upper)!
+        let lower = position(at: offsets.lowerBound)
+        let upper = position(from: lower, offset: offsets.count)!
+        return textRange(from: lower, to: upper)!
     }
 }
 

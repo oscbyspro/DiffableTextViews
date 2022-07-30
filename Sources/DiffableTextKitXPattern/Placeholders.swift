@@ -12,6 +12,7 @@
 //*============================================================================*
 
 @usableFromInline struct Placeholders: Equatable {
+    @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -27,11 +28,11 @@
         self.storage = .none
     }
     
-    @inlinable init(_ elements: (Character, (Character) -> Bool)) {
+    @inlinable init(_ elements: (Character, Predicate)) {
         self.storage = .some(Some(elements))
     }
     
-    @inlinable init(_ elements: [Character: (Character) -> Bool]) {
+    @inlinable init(_ elements: [Character: Predicate]) {
         self.storage = .many(Many(elements))
     }
     
@@ -39,7 +40,7 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
+    @inlinable subscript(character: Character) -> Predicate? {
         switch storage {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
@@ -65,15 +66,15 @@
         
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: (Character, (Character) -> Bool)
+        @usableFromInline let elements: (Character, Predicate)
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ elements: (Character, (Character) -> Bool)) {
+        @inlinable init(_ elements: (Character, Predicate)) {
             self.elements = elements
         }
         
-        @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
+        @inlinable subscript(character: Character) -> Predicate? {
             elements.0 == character ? elements.1 : nil
         }
         
@@ -90,15 +91,15 @@
         
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: [Character: (Character) -> Bool]
+        @usableFromInline let elements: [Character: Predicate]
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ elements: [Character: (Character) -> Bool]) {
+        @inlinable init(_ elements: [Character: Predicate]) {
             self.elements = elements
         }
         
-        @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
+        @inlinable subscript(character: Character) -> Predicate? {
             elements[character]
         }
         

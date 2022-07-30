@@ -13,14 +13,10 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * NSTextAlignment
+// MARK: * NSTextAlignment [...]
 //*============================================================================*
 
 extension NSTextAlignment {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable init(_ alignment: TextAlignment, relativeTo layout: LayoutDirection) {
         switch alignment {
@@ -30,10 +26,6 @@ extension NSTextAlignment {
         }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable init(_ layout: LayoutDirection, leftToRight: Self, rightToLeft: Self) {
         switch layout {
         case .rightToLeft: self = rightToLeft
@@ -42,4 +34,5 @@ extension NSTextAlignment {
         }
     }
 }
+
 #endif

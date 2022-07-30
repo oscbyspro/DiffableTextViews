@@ -13,28 +13,21 @@ import DiffableTextKit
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Upstream
+// MARK: * Upstream [...]
 //*============================================================================*
 
 @usableFromInline struct Upstream<Style: DiffableTextStyle> {
     @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @usableFromInline let style: Style
     @usableFromInline let value: Binding<Value>
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
- 
-    @inlinable @inline(__always) init(
-    _ parent: DiffableTextField<Style>,
-    _ environment: EnvironmentValues) {
-        self.style = parent.style.locale(environment.locale)
-        self.value = parent.value
+    
+    @inlinable init(_ parent: DiffableTextField<Style>, _ environment: EnvironmentValues) {
+        self.style = parent.style.locale(environment.locale); self.value = parent.value
     }
 }
 

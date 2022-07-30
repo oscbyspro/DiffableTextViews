@@ -52,80 +52,58 @@ import UIKit
         get { view.delegate }
         set { view.delegate = newValue }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Transformations
-//=----------------------------------------------------------------------------=
-
-extension Downstream {
     
     //=------------------------------------------------------------------------=
-    // MARK: Direct
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func placeholder(_ placeholder: String) {
+    @inlinable func placeholder(_ placeholder: String) {
         self.view.placeholder = placeholder
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Environment
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    func autocorrectionDisabled(_ environment: EnvironmentValues) {
+    @inlinable func autocorrectionDisabled(_ environment: EnvironmentValues) {
         let disabled = environment.diffableTextViews_autocorrectionDisabled
         self.view.autocorrectionType = disabled ? .no : .default
     }
     
-    @inlinable @inline(__always)
-    func font(_ environment: EnvironmentValues) {
+    @inlinable func font(_ environment: EnvironmentValues) {
         let font = environment.diffableTextViews_font
         self.view.font = UIFont(font ?? .body)
     }
     
-    @inlinable @inline(__always)
-    func foregroundColor(_ environment: EnvironmentValues) {
+    @inlinable func foregroundColor(_ environment: EnvironmentValues) {
         let color = environment.diffableTextViews_foregroundColor
         self.view.textColor = UIColor(color ?? .primary)
     }
     
-    @inlinable @inline(__always)
-    func keyboardType(_ environment: EnvironmentValues) {
+    @inlinable func keyboardType(_ environment: EnvironmentValues) {
         self.view.keyboardType = environment.diffableTextViews_keyboardType
     }
     
-    @inlinable @inline(__always)
-    func multilineTextAlignment(_ environment: EnvironmentValues) {
+    @inlinable func multilineTextAlignment(_ environment: EnvironmentValues) {
         self.view.textAlignment = NSTextAlignment(
         environment.diffableTextViews_multilineTextAlignment,
         relativeTo: environment.layoutDirection)
     }
-
-    @inlinable @inline(__always)
-    func submitLabel(_ environment: EnvironmentValues) {
+    
+    @inlinable func submitLabel(_ environment: EnvironmentValues) {
         self.view.returnKeyType = environment.diffableTextViews_submitLabel
     }
     
-    @inlinable @inline(__always)
-    func textContentType(_ environment: EnvironmentValues) {
+    @inlinable func textContentType(_ environment: EnvironmentValues) {
         self.view.textContentType = environment.diffableTextViews_textContentType
     }
-        
-    @inlinable @inline(__always)
-    func textFieldStyle(_ environment: EnvironmentValues) {
+    
+    @inlinable func textFieldStyle(_ environment: EnvironmentValues) {
         self.view.borderStyle = environment.diffableTextViews_textFieldStyle
     }
     
-    @inlinable @inline(__always)
-    func textInputAutocapitalization(_ environment: EnvironmentValues) {
+    @inlinable func textInputAutocapitalization(_ environment: EnvironmentValues) {
         let autocapitalization = environment.diffableTextViews_textInputAutocapitalization
         self.view.autocapitalizationType = autocapitalization ?? .sentences
     }
-
-    @inlinable @inline(__always)
-    func tint(_ environment: EnvironmentValues) {
+    
+    @inlinable func tint(_ environment: EnvironmentValues) {
         let color = environment.diffableTextViews_tint
         self.view.tintColor = UIColor(color ?? .accentColor)
     }
