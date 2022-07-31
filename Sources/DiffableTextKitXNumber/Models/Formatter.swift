@@ -54,13 +54,12 @@
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if number.sign == .negative, value == .zero,
-        let positive = characters.firstIndex(of: components.signs[.positive]) {
+        if number.sign == .negative, value == .zero, let index =
+        characters.firstIndex(of: components.signs[.positive]) {
             //=----------------------------------=
             // Make Positive Zero Negative
             //=----------------------------------=
-            let negative = String(components.signs[.negative])
-            characters.replaceSubrange(positive ... positive, with: negative)
+            characters.replaceSubrange(index...index, with: String(components.signs[.negative]))
         }
         //=--------------------------------------=
         // Characters

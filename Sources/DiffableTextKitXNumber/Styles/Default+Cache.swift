@@ -136,7 +136,8 @@ extension _DefaultCache {
     }
     
     @inlinable func resolve(_ number: Number) throws -> Commit<Value> {
-        var number = number; let count = number.count
+        var number = number
+        let count  = Count(number)
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=

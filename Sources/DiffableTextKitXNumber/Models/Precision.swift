@@ -15,19 +15,20 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Precision<Value: _Input>: Equatable {
+    @usableFromInline typealias Limits = ClosedRange<Int>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let integer:  ClosedRange<Int>
-    @usableFromInline let fraction: ClosedRange<Int>
+    @usableFromInline let integer:  Limits
+    @usableFromInline let fraction: Limits
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked:(integer: ClosedRange<Int>, fraction: ClosedRange<Int>)) {
+    @inlinable init(unchecked:(integer: Limits, fraction: Limits)) {
         (self.integer, self.fraction) = unchecked
     }
 
@@ -59,9 +60,9 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var upper: Count {
-        .init(value: Value .precision,
-         integer:  integer.upperBound,
+    @inlinable func limits() -> Count {
+        Count(digits: Value.precision,
+        integer:  integer .upperBound,
         fraction: fraction.upperBound)
     }
     
@@ -91,71 +92,68 @@ import Foundation
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static var integer: ClosedRange<Int> {
+    @inlinable static var integer: Limits {
         ClosedRange(uncheckedBounds:(1, Value.precision))
     }
     
-    @inlinable static var fraction: ClosedRange<Int> {
+    @inlinable static var fraction: Limits {
         let max = Value.integer ? 0 : Value.precision
         return ClosedRange(uncheckedBounds: (0, max))
     }
     
     /// - Requires a nonempty range expression.
-    @inlinable static func clamping(_ expression: some RangeExpression<Int>,
-    to limits: ClosedRange<Int>) -> ClosedRange<Int> {
-        let range = expression.relative(to: Int.min ..< Int.max)
-        let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
-        let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
-        return lower...upper
+    @inlinable static func clamping(_ range: some RangeExpression<Int>, to limits: Limits) -> Limits {
+        ClosedRange(range.relative(to:Range(uncheckedBounds: (Int.min, Int.max)))).clamped(to: limits)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension Precision {
     
     //=------------------------------------------------------------------------=
-    // MARK: Number
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ number: inout Number) {
-        if  number.trim(to: upper) {
-            Brrr.autocorrection << Info([.mark("number"), "exceeded precision \(upper)"])
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Downstream
-//=----------------------------------------------------------------------------=
-
-extension Precision {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Number
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
-        let capacity = try capacity(count)
+        let limits = limits()
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if  capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
-            Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
+        if  number.trim(to: limits) {
+            Brrr.autocorrection << Info([.mark("number"), "exceeded precision \(limits)"])
         }
     }
     
-    @inlinable func capacity(_ count: Count) throws -> Count {
-        let capacity = upper.map((&-, count))
+    //=------------------------------------------------------------------------=
+    // MARK: Downstream
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
+        let limits = limits()
         //=--------------------------------------=
-        // Validate Each Component
+        // Validate
         //=--------------------------------------=
-        if  let component = capacity.first(where: (.<, 0)) {
-            throw Info([.mark(component), "digits exceeded max precision \(upper[component])"])
+        if  count.digits > limits.digits {
+            throw Info([.mark("digits"),   "exceeded max precision \(limits  .digits)"])
         }
         
-        return capacity
+        if  count.integer > limits.integer {
+            throw Info([.mark("integer"),  "exceeded max precision \(limits .integer)"])
+        }
+        
+        if  count.fraction > limits.fraction {
+            throw Info([.mark("fraction"), "exceeded max precision \(limits.fraction)"])
+        }
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        let full = count.digits == limits.digits || count.fraction == limits.fraction
+        
+        if  full, number.removeSeparatorAsSuffix() {
+            Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
+        }
     }
 }

@@ -15,66 +15,36 @@ import DiffableTextKit
 
 /// A count of a number's components.
 ///
-/// - Value is defined as: integer + fraction - integer prefix zeros.
+/// - It SHOULD NOT include leading integer zeros.
 ///
 @usableFromInline struct Count: CustomStringConvertible, Equatable {
-    @usableFromInline typealias SIMD = SIMD3<Int>
-    @usableFromInline typealias Mask = SIMDMask<SIMD>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var storage: SIMD
+    @usableFromInline let digits:   Int
+    @usableFromInline let integer:  Int
+    @usableFromInline let fraction: Int
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @inlinable init( _ storage: SIMD) {
-        self.storage = storage
+    
+    @inlinable init(digits: Int, integer: Int, fraction: Int) {
+        self.digits = digits; self.integer = integer; self.fraction = fraction
     }
     
-    @inlinable init(value: Int, integer: Int, fraction: Int) {
-        self.storage = SIMD3(value,  integer, fraction)
+    @inlinable init(_ number: Number) {
+        self.integer  = number.integer.count - number.integer.count(prefix:{$0 == .zero})
+        self.fraction = number.fraction.count; self.digits = self.integer + self.fraction
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var value:    Int { storage.x }
-    @inlinable public var integer:  Int { storage.y }
-    @inlinable public var fraction: Int { storage.z }
-    
-    @inlinable subscript(component: Component) -> Int {
-        storage[component.rawValue]
-    }
-    
     public var description: String {
-        String(describing: (value, integer, fraction))
+        String(describing: (digits, integer, fraction))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func map(_ transformation: ((SIMD, SIMD) -> SIMD, Self)) -> Self {
-        Self(transformation.0(storage, transformation.1.storage))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func first(where predicate: ((SIMD, Int) -> Mask, Int)) -> Component? {
-        let mask = predicate.0(storage,predicate.1); return
-        Component.allCases.first(where:{mask[$0.rawValue]})
-    }
-    
-    //*========================================================================*
-    // MARK: * Component [...]
-    //*========================================================================*
-    
-    @usableFromInline enum Component: Int, CaseIterable { case value, integer, fraction }
 }

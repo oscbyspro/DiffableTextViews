@@ -123,11 +123,6 @@ import DiffableTextKit
         $0.append(contentsOf: fraction.ascii)}
     }
     
-    @inlinable var count: Count {
-        let value = integer.count+fraction.count-integer.count(prefix:{$0 == .zero})
-        return Count(value: value, integer: integer.count, fraction: fraction.count)
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -138,10 +133,10 @@ import DiffableTextKit
         // Trim
         //=--------------------------------------=
         trimmed.integer = self.integer.resize(
-        suffix: min(precision.integer,  precision.value))
+        suffix: min(precision.integer,  precision.digits))
         
         trimmed.fraction = self.fraction.resize(
-        prefix: min(precision.fraction, precision.value - integer.count))
+        prefix: min(precision.fraction, precision.digits - integer.count))
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
