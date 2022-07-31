@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * Count
+// MARK: * Count [...]
 //*============================================================================*
 
 /// A count of a number's components.
@@ -20,15 +20,11 @@ import DiffableTextKit
 @usableFromInline struct Count: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
     
     @usableFromInline let digits:   Int
     @usableFromInline let integer:  Int
     @usableFromInline let fraction: Int
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    
     //=------------------------------------------------------------------------=
     
     @inlinable init(digits: Int, integer: Int, fraction: Int) {
@@ -39,10 +35,6 @@ import DiffableTextKit
         self.integer  = number.integer.count - number.integer.count(prefix:{$0 == .zero})
         self.fraction = number.fraction.count; self.digits = self.integer + self.fraction
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
     
     public var description: String {
         String(describing: (digits, integer, fraction))

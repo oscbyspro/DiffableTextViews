@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Links
 //*============================================================================*
 
-/// A mapping model between components and characters.
+/// A mapping model between tokens and characters.
 @usableFromInline struct Links<Token: DiffableTextKitXNumber.Token> {
     
     //=------------------------------------------------------------------------=
