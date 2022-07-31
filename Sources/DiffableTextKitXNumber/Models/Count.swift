@@ -7,8 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
-
 //*============================================================================*
 // MARK: * Count [...]
 //*============================================================================*
@@ -37,6 +35,6 @@ import DiffableTextKit
     }
     
     public var description: String {
-        String(describing: (digits, integer, fraction))
+        "\((digits, integer, fraction))"
     }
 }

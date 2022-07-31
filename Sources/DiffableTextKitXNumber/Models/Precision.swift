@@ -103,7 +103,7 @@ import Foundation
     
     /// - Requires a nonempty range expression.
     @inlinable static func clamping(_ range: some RangeExpression<Int>, to limits: Limits) -> Limits {
-        ClosedRange(range.relative(to:Range(uncheckedBounds: (Int.min, Int.max)))).clamped(to: limits)
+        ClosedRange(range.relative(to: Range(uncheckedBounds: (Int.min, Int.max)))).clamped(to: limits)
     }
 }
 

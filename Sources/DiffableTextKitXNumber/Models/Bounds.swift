@@ -39,15 +39,15 @@ import DiffableTextKit
     }
     
     @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self.init(unchecked: (Self.clamping(limits.lowerBound), Value.max))
+        self.init(unchecked: (limits.lowerBound.clamped(), Value.max))
     }
     
     @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self.init(unchecked: (Value.min, Self.clamping(limits.upperBound)))
+        self.init(unchecked: (Value.min, limits.upperBound.clamped()))
     }
     
     @inlinable init(_ limits: ClosedRange<Value>) {
-        self.init(unchecked: (Self.clamping(limits.lowerBound), Self.clamping(limits.upperBound)))
+        self.init(unchecked: (limits.lowerBound.clamped(), limits.upperBound.clamped()))
     }
     
     //=------------------------------------------------------------------------=
@@ -63,40 +63,16 @@ import DiffableTextKit
     public var description: String {
         "\(min) to \(max)"
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func clamping(_  value:  Value) -> Value {
-        Swift.min(Swift.max(Value.min, value), Value.max)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func full(_ value: Value) -> Bool? {
-        if min < value  && value < max { return false }
-        if value == max { return value > .zero || min == max }
-        if value == min { return value < .zero }; return nil
-    }
-    
-    @inlinable func autocorrect(_ sign: inout Sign) {
-        guard let correct = self .sign, sign != correct else { return }
-        Brrr.autocorrection << Info([.mark(sign), "is not in \(self)"])
-        sign = correct
-    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ value: inout Value) {
@@ -116,33 +92,18 @@ extension Bounds {
         }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Number
-    //=------------------------------------------------------------------------=
-    
     @inlinable func autocorrect(_ number: inout Number) {
         autocorrect(&number.sign)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Downstream
-//=----------------------------------------------------------------------------=
-
-extension Bounds {
 
     //=------------------------------------------------------------------------=
-    // MARK: Number
+    // MARK: Downstream
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ number: inout Number) throws {
         autocorrect(&number.sign)
     }
 
-    //=------------------------------------------------------------------------=
-    // MARK: Value
-    //=------------------------------------------------------------------------=
-    
     @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
         //=--------------------------------------=
         // Full, Or Not Full, Or Out Of Bounds
@@ -156,5 +117,21 @@ extension Bounds {
         if  full, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Upstream, Downstream x Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func full(_ value: Value) -> Bool? {
+        if min < value  && value < max { return false }
+        if value == max { return value > .zero || min == max }
+        if value == min { return value < .zero }; return nil
+    }
+    
+    @inlinable func autocorrect(_ sign: inout Sign) {
+        guard let correct = self .sign, sign != correct else { return }
+        Brrr.autocorrection << Info([.mark(sign), "is not in \(self)"])
+        sign = correct
     }
 }
