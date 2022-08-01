@@ -21,7 +21,7 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: String
-    @usableFromInline var placeholders = Placeholders()
+    @usableFromInline var placeholders = Placeholders.none
     @usableFromInline var hidden = false
     
     //=------------------------------------------------------------------------=
@@ -36,20 +36,33 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func placeholders(_ character: Character,
-    where predicate: @escaping (Character) -> Bool) -> Self {
-        var result = self; result.placeholders = .init((character, predicate)); return result
+    @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
+        var result = self; result.placeholders = .many(Many(placeholders)); return result
     }
     
-    @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
-        var result = self; result.placeholders = .init(placeholders); return result
+    @inlinable public func placeholders(_ character: Character,
+    where predicate: @escaping (Character) -> Bool) -> Self {
+        var result = self; result.placeholders = .some(Some((character, predicate))); return result
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Hides the pattern suffix.
+    /// Hides the pattern's suffix.
+    ///
+    /// Charactes after the last value, or from the first placeholder, are excluded.
+    ///
+    /// ```
+    /// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|~
+    /// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|~ (HIDDEN)
+    /// ```
+    ///
+    /// ```
+    /// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|#|-|#|#|~
+    /// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~ (VISIBLE)
+    /// ```
+    ///
     @inlinable public func hidden(_ hidden: Bool = true) -> Self {
         var result = self; result.hidden = hidden; return result
     }

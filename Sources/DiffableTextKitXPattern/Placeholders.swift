@@ -8,94 +8,75 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Placeholders
+// MARK: * Placeholders [...]
 //*============================================================================*
 
 @usableFromInline enum Placeholders: Equatable {
     @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
     
     case none
     case some(Some)
     case many(Many)
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() {
-        self = .none
-    }
-    
-    @inlinable init(_ elements: (Character, Predicate)) {
-        self = .some(Some(elements))
-    }
-    
-    @inlinable init(_ elements: [Character: Predicate]) {
-        self = .many(Many(elements))
-    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> Predicate? {
-        switch self {
+    @inlinable subscript(character: Character) -> Predicate? { switch self {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
         case .none:           return nil }
     }
+}
+
+//*============================================================================*
+// MARK: * Some [...]
+//*============================================================================*
+
+@usableFromInline struct Some: Equatable {
+    @usableFromInline typealias Predicate = (Character) -> Bool
     
-    //*========================================================================*
-    // MARK: * Some [...]
-    //*========================================================================*
+    //=------------------------------------------------------------------------=
     
-    @usableFromInline struct Some: Equatable {
-        
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let elements: (Character, Predicate)
-        
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ elements: (Character, Predicate)) {
-            self.elements = elements
-        }
-        
-        @inlinable subscript(character: Character) -> Predicate? {
-            elements.0 == character ? elements.1 : nil
-        }
-        
-        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.elements.0 == rhs.elements.0
-        }
+    @usableFromInline let elements: (Character, Predicate)
+    
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_   elements: (Character, Predicate)) {
+        self.elements = elements
     }
     
-    //*========================================================================*
-    // MARK: * Many [...]
-    //*========================================================================*
+    @inlinable subscript(character: Character) -> Predicate? {
+        elements.0 == character ? elements.1 : nil
+    }
     
-    @usableFromInline struct Many: Equatable {
-        
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let elements: [Character: Predicate]
-        
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ elements: [Character: Predicate]) {
-            self.elements = elements
-        }
-        
-        @inlinable subscript(character: Character) -> Predicate? {
-            elements[character]
-        }
-        
-        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.elements.keys == rhs.elements.keys
-        }
+    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.elements.0 == rhs.elements.0
+    }
+}
+    
+//*============================================================================*
+// MARK: * Many [...]
+//*============================================================================*
+
+@usableFromInline struct Many: Equatable {
+    @usableFromInline typealias Predicate = (Character) -> Bool
+    
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let elements: [Character: Predicate]
+    
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_   elements: [Character: Predicate]) {
+        self.elements = elements
+    }
+    
+    @inlinable subscript(character: Character) -> Predicate? {
+        elements[character]
+    }
+    
+    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.elements.keys == rhs.elements.keys
     }
 }

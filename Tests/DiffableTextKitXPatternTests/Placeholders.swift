@@ -18,15 +18,14 @@ import XCTest
 //*============================================================================*
 
 final class PlaceholdersTests: XCTestCase {
-    typealias T = Placeholders
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var none = T()
-    lazy var some = T(("#", \.isNumber))
-    lazy var many = T(["#": \.isNumber, "@": \.isLetter])
+    lazy var none = Placeholders.none
+    lazy var some = Placeholders.some(Some(("#", \.isNumber)))
+    lazy var many = Placeholders.many(Many(["#": \.isNumber, "@": \.isLetter]))
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
@@ -38,7 +37,8 @@ final class PlaceholdersTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func AssertSubscriptResults(_ instance: T, _ values: () -> [(Character, Character, Bool?)]) {
+    func AssertSubscriptResults(_ instance: Placeholders,
+    _ values: () -> [(Character, Character, Bool?)]) {
         for value in values() {
             XCTAssertEqual(instance[value.0]?(value.1), value.2)
         }
@@ -88,12 +88,12 @@ final class PlaceholdersTests: XCTestCase {
         XCTAssertNotEqual(some, many)
         
         XCTAssertNotEqual(
-        T(("A", TRUE)),
-        T(("_", TRUE)))
+        Placeholders.some(Some(("A", TRUE))),
+        Placeholders.some(Some(("_", TRUE))))
         
         XCTAssertNotEqual(
-        T(["A": TRUE, "B": TRUE]),
-        T(["A": TRUE, "_": TRUE]))
+        Placeholders.many(Many(["A": TRUE, "B": TRUE])),
+        Placeholders.many(Many(["A": TRUE, "_": TRUE])))
     }
 }
 
