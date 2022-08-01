@@ -50,10 +50,6 @@
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
 ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollection {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
     public typealias Index   = DiffableTextKit.Index
     public typealias Element = DiffableTextKit.Symbol
 
@@ -99,6 +95,10 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     @inlinable @inline(__always)
     public var anchor: Index? {
         _anchor
+    }
+    
+    public var description: String {
+        "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
     
     //=------------------------------------------------------------------------=
@@ -231,14 +231,6 @@ extension Snapshot {
     public var underestimatedCount: Int {
         _attributes.underestimatedCount
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Descriptions
-    //=------------------------------------------------------------------------=
-    
-    public var description: String {
-        "\(Self.self)(\"\(_characters)\", \(_attributes))"
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -260,16 +252,16 @@ extension Snapshot {
     @inlinable public mutating func transform(
     attributes positions: some Sequence<Index>,
     with transform: (inout Attribute) -> Void) {
-        for index in positions {
-            transform(&self._attributes[index.attribute])
+        for position in positions {
+            transform(&self._attributes[position.attribute])
         }
     }
     
     @inlinable public mutating func transform(
     attributes positions: some RangeExpression<Index>,
     with transform: (inout Attribute) -> Void) {
-        for index in indices[positions.relative(to:self)] {
-            transform(&self._attributes[index.attribute])
+        for position in indices[positions.relative(to:self)] {
+            transform(&self._attributes[position.attribute])
         }
     }
     

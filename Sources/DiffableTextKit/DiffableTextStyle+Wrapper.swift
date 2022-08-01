@@ -96,8 +96,8 @@ public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Val
 // MARK: + Details where Style: Nullable
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Self: NullableTextStyle, Style: NullableTextStyle,
-Cache == Style.Cache, Value == Style.Value {
+public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Value,
+Self: NullableTextStyle, Style: NullableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -123,8 +123,8 @@ Cache == Style.Cache, Value == Style.Value {
 // MARK: + Details where Style: Nullable
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Style: NullableTextStyle,
-Cache == Style.Cache, Value == Style.Value? {
+public extension WrapperTextStyle where Cache == Style.Cache, Value == Optional<Style.Value>,
+Style: NullableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

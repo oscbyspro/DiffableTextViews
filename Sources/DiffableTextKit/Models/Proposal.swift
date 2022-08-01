@@ -8,14 +8,12 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Proposal
+// MARK: * Proposal [...]
 //*============================================================================*
 
 /// A snapshot and a proposed change that has not yet been applied to it.
 public struct Proposal {
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
     //=------------------------------------------------------------------------=
     
     public let base: Snapshot
@@ -23,16 +21,10 @@ public struct Proposal {
     public var range: Range<Index>
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable init(_ base: Snapshot, with replacement: Snapshot, in range: Range<Index>) {
         self.base = base; self.replacement = replacement; self.range = range
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func merged() -> Snapshot {

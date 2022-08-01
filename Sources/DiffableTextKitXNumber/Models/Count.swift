@@ -29,9 +29,9 @@
         self.digits = digits; self.integer = integer; self.fraction = fraction
     }
     
-    @inlinable init(_ number: Number) {
-        self.integer  = number.integer.count - number.integer.count(prefix:{$0 == .zero})
-        self.fraction = number.fraction.count; self.digits = self.integer + self.fraction
+    @inlinable init(  _ number: Number) {
+        self.integer  = number.integer .count - number.integer.count(prefix:{$0 == .zero})
+        self.fraction = number.fraction.count;  self.digits = self.integer + self.fraction
     }
     
     public var description: String {

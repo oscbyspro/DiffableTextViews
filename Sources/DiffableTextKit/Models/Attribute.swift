@@ -41,7 +41,7 @@ public struct Attribute: CustomStringConvertible, OptionSet {
     
     /// An attribute describing normal characters.
     ///
-    /// It is empty.
+    /// It contains no attributes other than itself; it is empty.
     ///
     public static let content = Self([])
     

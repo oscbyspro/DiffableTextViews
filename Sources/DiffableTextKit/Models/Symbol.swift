@@ -27,8 +27,7 @@ ExpressibleByExtendedGraphemeClusterLiteral {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ character: Character, as attribute: Attribute = .content) {
-        self.character = character
-        self.attribute = attribute
+        self.character = character; self.attribute =  attribute
     }
     
     @inlinable public init(extendedGraphemeClusterLiteral character: Character) {
@@ -58,10 +57,6 @@ ExpressibleByExtendedGraphemeClusterLiteral {
     public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
     
     public var description: String {
         "(\(character), \(attribute))"
