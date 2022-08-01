@@ -28,9 +28,7 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ pattern: String) {
-        self.pattern = pattern
-    }
+    @inlinable public init(_ pattern: String) { self.pattern = pattern }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -51,7 +49,7 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     
     /// Hides the pattern's suffix.
     ///
-    /// Charactes after the last value, or from the first placeholder, are excluded.
+    /// Characters after the last value, or from the first placeholder, are excluded.
     ///
     /// ```
     /// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|~
