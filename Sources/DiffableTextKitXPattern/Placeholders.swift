@@ -22,7 +22,8 @@
     
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> Predicate? { switch self {
+    @inlinable subscript(character: Character) -> Predicate? {
+        switch self {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
         case .none:           return nil }
