@@ -66,8 +66,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are separated.
-    @inlinable public func format(_ value: Value,
-    with cache: inout Void) -> String {
+    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
         reduce(with: value, into: String()) {
             characters, virtuals, nonvirtual in
             characters.append(contentsOf: virtuals)
@@ -98,8 +97,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are removed.
-    @inlinable public func interpret(_ value: Value,
-    with cache: inout Void) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
         reduce(with: value, into:  Commit()) {
             commit, virtuals, nonvirtual in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
@@ -225,4 +223,23 @@ extension PatternTextStyle {
         //=--------------------------------------=
         done(&result, pattern[pIndex...], value[vIndex...]); return result
     }
+}
+
+//*============================================================================*
+// MARK: * Style x Init
+//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + String [...]
+//=----------------------------------------------------------------------------=
+
+extension DiffableTextStyle where Self == PatternTextStyle<String> {
+    @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Array<Character> [...]
+//=----------------------------------------------------------------------------=
+
+extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
+    @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }

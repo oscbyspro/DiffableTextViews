@@ -11,29 +11,31 @@
 // MARK: * Placeholders
 //*============================================================================*
 
-@usableFromInline struct Placeholders: Equatable {
+@usableFromInline enum Placeholders: Equatable {
     @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let storage: Storage
-    
+    case none
+    case some(Some)
+    case many(Many)
+        
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.storage = .none
+        self = .none
     }
     
     @inlinable init(_ elements: (Character, Predicate)) {
-        self.storage = .some(Some(elements))
+        self = .some(Some(elements))
     }
     
     @inlinable init(_ elements: [Character: Predicate]) {
-        self.storage = .many(Many(elements))
+        self = .many(Many(elements))
     }
     
     //=------------------------------------------------------------------------=
@@ -41,21 +43,10 @@
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Predicate? {
-        switch storage {
+        switch self {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
-        case .none:           return nil
-        }
-    }
-    
-    //*========================================================================*
-    // MARK: * Storage
-    //*========================================================================*
-    
-    @usableFromInline enum Storage: Equatable {
-        case none
-        case some(Some)
-        case many(Many)
+        case .none:           return nil }
     }
     
     //*========================================================================*

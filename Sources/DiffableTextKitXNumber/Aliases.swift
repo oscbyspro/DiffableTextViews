@@ -13,8 +13,9 @@ import Foundation
 // MARK: * Aliases
 //*============================================================================*
 
-public typealias NumberTextStyle<Value> = Value.NumberTextGraph.Number
-where Value: _Value, Value.NumberTextGraph: _Numberable
+public typealias NumberTextStyle<Value> =
+Value.NumberTextGraph.Number where
+Value.NumberTextGraph: _Numberable, Value: _Value
 
 //*============================================================================*
 // MARK: * Aliases x Internal

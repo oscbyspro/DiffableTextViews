@@ -38,28 +38,10 @@ final class PlaceholdersTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func AssertStorageResult(_ instance: T, _ value: Int) {
-        switch instance.storage {
-        case .none: XCTAssertEqual(value, 0)
-        case .some: XCTAssertEqual(value, 1)
-        case .many: XCTAssertEqual(value, 2)
-        }
-    }
-    
     func AssertSubscriptResults(_ instance: T, _ values: () -> [(Character, Character, Bool?)]) {
         for value in values() {
             XCTAssertEqual(instance[value.0]?(value.1), value.2)
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests x State
-    //=------------------------------------------------------------------------=
-    
-    func testNoneSomeManyStorage() {
-        AssertStorageResult(none, 0)
-        AssertStorageResult(some, 1)
-        AssertStorageResult(many, 2)
     }
     
     //=------------------------------------------------------------------------=

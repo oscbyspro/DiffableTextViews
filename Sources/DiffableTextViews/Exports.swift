@@ -12,12 +12,13 @@
 //*============================================================================*
 
 @_exported import DiffableTextKitXNumber
+
 @_exported import DiffableTextKitXPattern
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
 
 //=----------------------------------------------------------------------------=
-// MARK: + UIKit
+// MARK: + Platforms
 //=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
