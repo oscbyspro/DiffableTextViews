@@ -8,102 +8,93 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
-import Foundation
 
 //*============================================================================*
 // MARK: * Precision
 //*============================================================================*
 
-@usableFromInline struct Precision<Value: _Input>: Equatable {
-    @usableFromInline typealias Limits = ClosedRange<Int>
+@usableFromInline enum Precision<Value: _Input>: Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let integer:  Limits
-    @usableFromInline let fraction: Limits
+    case total(Total<Value>)
+    case sides(Sides<Value>)
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(unchecked:(integer: Limits, fraction: Limits)) {
-        (self.integer, self.fraction) = unchecked
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.init(unchecked:(Self.integer,Self.fraction))
+        self = .total(Total())
+    }
+    
+    @inlinable init(_ digits: some RangeExpression<Int>) {
+        self = .total(Total(digits: digits))
     }
     
     @inlinable init(integer: some RangeExpression<Int>) {
-        let integer  = Self.clamping(integer,  to: Self.integer )
-        self.init(unchecked:(integer,Self.fraction))
+        self = .sides(Sides(integer: integer))
     }
     
     @inlinable init(fraction: some RangeExpression<Int>) {
-        let fraction = Self.clamping(fraction, to: Self.fraction)
-        self.init(unchecked:(Self.integer,fraction))
+        self = .sides(Sides(fraction: fraction))
     }
     
     @inlinable init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
-        let integer  = Self.clamping(integer,  to: Self.integer )
-        let fraction = Self.clamping(fraction, to: Self.fraction)
-        self.init(unchecked:(integer,fraction))
+        self = .sides(Sides(integer: integer, fraction: fraction))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func limits() -> Count {
-        Count(digits: Value.precision,
-        integer:  integer .upperBound,
-        fraction: fraction.upperBound)
+    @inlinable func lower() -> Count {
+        switch self {
+        case .sides(let sides): return sides.lower()
+        case .total(let total): return total.lower() }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
+    @inlinable func upper() -> Count {
+        switch self {
+        case .sides(let sides): return sides.upper()
+        case .total(let total): return total.upper() }
+    }
     
     @inlinable func inactive() -> _NFSC.Precision {
-        .integerAndFractionLength(
-         integerLimits:  integer.lowerBound ... Int.max,
-        fractionLimits: fraction.lowerBound ... Int.max)
+        switch self {
+        case .sides(let sides): return sides.inactive()
+        case .total(let total): return total.inactive() }
     }
     
     @inlinable func active() -> _NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: 1 ... Int.max,
-        fractionLimits: 0 ... Int.max)
+         integerLimits: ClosedRange(uncheckedBounds: (1, Int.max)),
+        fractionLimits: ClosedRange(uncheckedBounds: (0, Int.max)))
     }
     
     @inlinable func interactive(_ count: Count) -> _NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: max(1, count .integer) ... Int.max,
-        fractionLimits: max(0, count.fraction) ... Int.max)
+         integerLimits: ClosedRange(uncheckedBounds: (max(1, count .integer), Int.max)),
+        fractionLimits: ClosedRange(uncheckedBounds: (max(0, count.fraction), Int.max)))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static var integer: Limits {
-        ClosedRange(uncheckedBounds:(1, Value.precision))
+    @inlinable static var digits: ClosedRange<Int> {
+        ClosedRange(uncheckedBounds: (1, Value.precision))
     }
     
-    @inlinable static var fraction: Limits {
+    @inlinable static var integer: ClosedRange<Int> {
+        ClosedRange(uncheckedBounds: (1, Value.precision))
+    }
+    
+    @inlinable static var fraction: ClosedRange<Int> {
         let max = Value.integer ? 0 : Value.precision
         return ClosedRange(uncheckedBounds: (0, max))
-    }
-    
-    /// - Requires a nonempty range expression.
-    @inlinable static func clamping(_ range: some RangeExpression<Int>, to limits: Limits) -> Limits {
-        ClosedRange(range.relative(to: Range(uncheckedBounds: (Int.min, Int.max)))).clamped(to: limits)
     }
 }
 
@@ -118,7 +109,7 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ number: inout Number) {
-        let limits = limits()
+        let limits = upper()
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -132,7 +123,7 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
-        let limits = limits()
+        let limits = upper()
         //=--------------------------------------=
         // Validate
         //=--------------------------------------=
@@ -155,5 +146,105 @@ extension Precision {
         if  full, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
+    }
+}
+
+//*============================================================================*
+// MARK: * Precision x Sides
+//*============================================================================*
+
+@usableFromInline struct Sides<Value: _Input>: Equatable {
+    @usableFromInline typealias P = Precision<Value>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline private(set) var integer:  ClosedRange<Int> = P.integer
+    @usableFromInline private(set) var fraction: ClosedRange<Int> = P.fraction
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init() { }
+    
+    @inlinable init(integer: some RangeExpression<Int>) {
+        self.integer  = integer .clamped(to: self.integer)
+    }
+    
+    @inlinable init(fraction: some RangeExpression<Int>) {
+        self.fraction = fraction.clamped(to: self.fraction)
+    }
+    
+    @inlinable init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
+        self.integer  = integer .clamped(to: self.integer )
+        self.fraction = fraction.clamped(to: self.fraction)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func lower() -> Count {
+        Count(digits: P.digits.lowerBound,
+        integer:       integer.lowerBound,
+        fraction:     fraction.lowerBound)
+    }
+    
+    @inlinable func upper() -> Count {
+        Count(digits: P.digits.upperBound,
+        integer:       integer.upperBound,
+        fraction:     fraction.upperBound)
+    }
+    
+    @inlinable func inactive() -> _NFSC.Precision {
+        .integerAndFractionLength(
+         integerLimits: ClosedRange(uncheckedBounds: (integer .lowerBound, Int.max)),
+        fractionLimits: ClosedRange(uncheckedBounds: (fraction.lowerBound, Int.max)))
+    }
+}
+
+//*============================================================================*
+// MARK: * Precision x Total
+//*============================================================================*
+
+@usableFromInline struct Total<Value: _Input>: Equatable {
+    @usableFromInline typealias P = Precision<Value>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline private(set) var digits: ClosedRange<Int> = P.digits
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init() { }
+    
+    @inlinable init(digits: some RangeExpression<Int>) {
+        self.digits = digits.clamped(to:  self.digits)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func lower() -> Count {
+        Count(digits: digits.lowerBound,
+        integer:  P .integer.lowerBound,
+        fraction: P.fraction.lowerBound)
+    }
+    
+    @inlinable func upper() -> Count {
+        Count(digits: digits.upperBound,
+        integer:  P .integer.upperBound,
+        fraction: P.fraction.upperBound)
+    }
+    
+    @inlinable func inactive() -> _NFSC.Precision {
+        .significantDigits(ClosedRange(uncheckedBounds: (digits.lowerBound, Int.max)))
     }
 }

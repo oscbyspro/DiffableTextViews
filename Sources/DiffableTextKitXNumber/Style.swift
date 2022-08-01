@@ -35,6 +35,8 @@ Cache.Value == Input, Value == Graph.Value {
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
+    @inlinable func precision(_ digits: some RangeExpression<Int>) -> Self
+    
     @inlinable func precision(integer:  some RangeExpression<Int>) -> Self
     
     @inlinable func precision(fraction: some RangeExpression<Int>) -> Self
@@ -54,6 +56,10 @@ public extension _Style {
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
+    @inlinable func precision(_ digits: Int) -> Self {
+        precision(digits...digits)
+    }
+    
     @inlinable func precision(integer: Int) -> Self {
         precision(integer: integer...integer)
     }
@@ -72,24 +78,5 @@ public extension _Style {
     
     @inlinable func precision(integer: Int, fraction: some RangeExpression<Int>) -> Self {
         precision(integer: integer...integer, fraction: fraction)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details where Input: Binary Integer
-//=----------------------------------------------------------------------------=
-
-public extension _Style where Input: BinaryInteger {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Precision
-    //=------------------------------------------------------------------------=
-
-    @inlinable func precision(_ integer: Int) -> Self {
-        precision(integer: integer...integer)
-    }
-    
-    @inlinable func precision(_ integer: some RangeExpression<Int>) -> Self {
-        precision(integer: integer)
     }
 }

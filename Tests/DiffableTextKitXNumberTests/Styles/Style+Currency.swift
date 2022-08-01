@@ -28,11 +28,15 @@ final class StyleTestsOnCurrency: StyleTests {
         XCTAssertCurrencies(value, with: T.NumberTextGraph.Currency.init)
     }
         
-    func XCTAssertDefaultPrecisionLimits(_ limits: ClosedRange<Int>, code: String) {
+    func XCTAssertDefaultFractionLimits(_ limits: ClosedRange<Int>, code: String) {
         typealias Style = NumberTextStyle<Decimal>.Currency
         let cache = Style(code: code, locale: .en_US_POSIX).cache()
-        XCTAssertEqual(cache.precision.integer,  1 ... Decimal._NumberTextGraph.precision)
-        XCTAssertEqual(cache.precision.fraction, limits)
+        
+        let lower = Count(digits:  1, integer:  1, fraction: limits.lowerBound)
+        let upper = Count(digits: 38, integer: 38, fraction: limits.lowerBound)
+        
+        XCTAssertEqual(cache.precision.lower(), lower)
+        XCTAssertEqual(cache.precision.upper(), upper)
     }
 }
 
@@ -47,9 +51,9 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     
     func testDefaultFractionLimits_JPY_USD_BHD() {
-        XCTAssertDefaultPrecisionLimits(0...0, code: "JPY")
-        XCTAssertDefaultPrecisionLimits(2...2, code: "USD")
-        XCTAssertDefaultPrecisionLimits(3...3, code: "BHD")
+        XCTAssertDefaultFractionLimits(0...0, code: "JPY")
+        XCTAssertDefaultFractionLimits(2...2, code: "USD")
+        XCTAssertDefaultFractionLimits(3...3, code: "BHD")
     }
 }
 

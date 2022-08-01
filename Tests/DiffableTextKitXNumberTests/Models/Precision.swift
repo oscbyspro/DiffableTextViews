@@ -18,23 +18,31 @@ import XCTest
 //*============================================================================*
 
 final class PrecisionTests: XCTestCase {
-    typealias Range = ClosedRange<Int>
+    typealias Limits = ClosedRange<Int>
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T: _Value>(_ precision: Precision<T>, integer: Range, fraction: Range) {
+    func XCTAssert<T>(_ precision: Precision<T>,
+    digits: Limits, integer: Limits, fraction: Limits) {
+        let lower = precision.lower()
+        let upper = precision.upper()
         //=--------------------------------------=
         // Integer
         //=--------------------------------------=
-        XCTAssertEqual(precision.integer.lowerBound, integer.lowerBound)
-        XCTAssertEqual(precision.integer.upperBound, integer.upperBound)
+        XCTAssertEqual(lower.integer, integer.lowerBound)
+        XCTAssertEqual(upper.integer, integer.upperBound)
+        //=--------------------------------------=
+        // Integer
+        //=--------------------------------------=
+        XCTAssertEqual(lower.integer, integer.lowerBound)
+        XCTAssertEqual(upper.integer, integer.upperBound)
         //=--------------------------------------=
         // Fraction
         //=--------------------------------------=
-        XCTAssertEqual(precision.fraction.lowerBound, fraction.lowerBound)
-        XCTAssertEqual(precision.fraction.upperBound, fraction.upperBound)
+        XCTAssertEqual(lower.fraction, fraction.lowerBound)
+        XCTAssertEqual(upper.fraction, fraction.upperBound)
     }
     
     //=------------------------------------------------------------------------=
@@ -42,36 +50,57 @@ final class PrecisionTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testDecimal() {
-        XCTAssert(Precision<Decimal>(),
-        integer: ( 01)...(38), fraction: ( 00)...(38))
-        XCTAssert(Precision<Decimal>(
-        integer: ( 07)...(07), fraction: ( 07)...(07)),
-        integer: ( 07)...(07), fraction: ( 07)...(07))
-        XCTAssert(Precision<Decimal>(
-        integer: (-99)...(99), fraction: (-99)...(99)),
-        integer: ( 01)...(38), fraction: ( 00)...(38))
+        let digits   = 1...38
+        let integer  = 1...38
+        let fraction = 0...38
+        
+        var precision = Precision<Decimal>()
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
+        
+        precision = Precision<Decimal>(7...7)
+        XCTAssert(precision, digits:  7...7, integer: integer, fraction: fraction)
+        
+        precision = Precision<Decimal>(integer: 7...7, fraction: 7...7)
+        XCTAssert(precision, digits: digits, integer: 7...7, fraction: 7...7)
+        
+        precision = Precision<Decimal>(integer: (-99)...99, fraction: (-99)...99)
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
     
     func testDouble() {
-        XCTAssert(Precision<Double>(),
-        integer: ( 01)...(15), fraction: ( 00)...(15))
-        XCTAssert(Precision<Double>(
-        integer: ( 07)...(07), fraction: ( 07)...(07)),
-        integer: ( 07)...(07), fraction: ( 07)...(07))
-        XCTAssert(Precision<Double>(
-        integer: (-99)...(99), fraction: (-99)...(99)),
-        integer: ( 01)...(15), fraction: ( 00)...(15))
+        let digits   = 1...15
+        let integer  = 1...15
+        let fraction = 0...15
+        
+        var precision = Precision<Double>()
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
+        
+        precision = Precision<Double>(7...7)
+        XCTAssert(precision, digits:  7...7, integer: integer, fraction: fraction)
+        
+        precision = Precision<Double>(integer: 7...7, fraction: 7...7)
+        XCTAssert(precision, digits: digits, integer: 7...7, fraction: 7...7)
+        
+        precision = Precision<Double>(integer: (-99)...99, fraction: (-99)...99)
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
     
     func testInt() {
-        XCTAssert(Precision<Int>(),
-        integer: ( 01)...(19), fraction: ( 00)...(00))
-        XCTAssert(Precision<Int>(
-        integer: ( 07)...(07), fraction: ( 07)...(07)),
-        integer: ( 07)...(07), fraction: ( 00)...(00))
-        XCTAssert(Precision<Int>(
-        integer: (-99)...(99), fraction: (-99)...(99)),
-        integer: ( 01)...(19), fraction: ( 00)...(00))
+        let digits   = 1...19
+        let integer  = 1...19
+        let fraction = 0...00
+        
+        var precision = Precision<Int>()
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
+        
+        precision = Precision<Int>(7...7)
+        XCTAssert(precision, digits: 7...7, integer: integer, fraction: fraction)
+        
+        precision = Precision<Int>(integer: 7...7, fraction: 7...7)
+        XCTAssert(precision, digits: digits, integer: 7...7, fraction: fraction)
+        
+        precision = Precision<Int>(integer: (-99)...99, fraction: (-99)...99)
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
 }
 

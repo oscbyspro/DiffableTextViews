@@ -10,29 +10,21 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Preferences
+// MARK: * Preferences [...]
 //*============================================================================*
 
 @usableFromInline struct Preferences<Input> where Input: _Input {
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let bounds:    Bounds<Input>
     @usableFromInline let precision: Precision<Input>
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable init(bounds: Bounds<Input>, precision: Precision<Input>) {
         self.bounds = bounds; self.precision = precision
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable static func standard() -> Self {
         Self(bounds: Bounds(), precision: Precision())

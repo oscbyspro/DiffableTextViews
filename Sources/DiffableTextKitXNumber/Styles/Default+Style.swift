@@ -102,6 +102,10 @@ extension _DefaultStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
+    @inlinable public func precision(_ digits: some RangeExpression<Int>) -> Self {
+        precision(Precision(digits))
+    }
+    
     @inlinable public func precision(integer:  some RangeExpression<Int>) -> Self {
         precision(Precision(integer: integer))
     }

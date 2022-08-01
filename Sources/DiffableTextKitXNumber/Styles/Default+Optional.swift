@@ -68,6 +68,10 @@ extension _OptionalStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
+    @inlinable public func precision(_ digits: some RangeExpression<Int>) -> Self {
+        Self(style.precision(digits))
+    }
+    
     @inlinable public func precision(integer:  some RangeExpression<Int>) -> Self {
         Self(style.precision(integer: integer))
     }
