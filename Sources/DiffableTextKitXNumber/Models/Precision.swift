@@ -16,7 +16,7 @@ import DiffableTextKit
 @usableFromInline enum Precision<Value: _Input>: Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     case total(Total<Value>)
@@ -52,20 +52,20 @@ import DiffableTextKit
     
     @inlinable func lower() -> Count {
         switch self {
-        case .sides(let sides): return sides.lower()
-        case .total(let total): return total.lower() }
+        case .total(let total): return total.lower()
+        case .sides(let sides): return sides.lower() }
     }
     
     @inlinable func upper() -> Count {
         switch self {
-        case .sides(let sides): return sides.upper()
-        case .total(let total): return total.upper() }
+        case .total(let total): return total.upper()
+        case .sides(let sides): return sides.upper() }
     }
     
     @inlinable func inactive() -> _NFSC.Precision {
         switch self {
-        case .sides(let sides): return sides.inactive()
-        case .total(let total): return total.inactive() }
+        case .total(let total): return total.inactive()
+        case .sides(let sides): return sides.inactive() }
     }
     
     @inlinable func active() -> _NFSC.Precision {
