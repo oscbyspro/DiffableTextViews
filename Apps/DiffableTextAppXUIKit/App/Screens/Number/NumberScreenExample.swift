@@ -113,8 +113,8 @@ struct NumberScreenExample: View {
 struct NumberScreenExampleX<Style>: View where Style: _Style,
 Style.Value: _Value, Style.Input == Decimal {
     typealias Context = NumberScreenContext
-    typealias Member  = Source.KeyPath<Style.Value>
-    typealias Source  = Observable<Twins<Style.Input>>
+    typealias Member = Source.KeyPath<Style.Value>
+    typealias Source = Observable<Twins<Style.Input>>
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -162,21 +162,21 @@ Style.Value: _Value, Style.Input == Decimal {
     //=------------------------------------------------------------------------=
     
     var style: some DiffableTextStyle<Style.Value> {
-        //=--------------------------------------=
-        // Bounds
-        //=--------------------------------------=
-        var style = base.bounds(bounds.value.closed)
-        //=--------------------------------------=
-        // Precision
-        //=--------------------------------------=
+        var style = base
+        style.bounds = __bounds
+        style.precision = __precision
+        return style.constant()
+    }
+    
+    var __bounds: NumberTextBounds<Style.Input> {
+        NumberTextBounds(bounds.value.closed)
+    }
+    
+    var __precision: NumberTextPrecision<Style.Input> {
         switch precision.value {
-        case .sides: style = style.precision(
+        case .sides: return NumberTextPrecision(
         integer:  ClosedRange(integer .value),
         fraction: ClosedRange(fraction.value))
-        case .total: style = style.precision(ClosedRange(digits.value)) }
-        //=--------------------------------------=
-        // Constant
-        //=--------------------------------------=
-        return style.constant()
+        case .total: return NumberTextPrecision(ClosedRange(digits.value)) }
     }
 }

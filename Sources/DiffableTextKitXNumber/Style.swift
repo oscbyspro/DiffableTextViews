@@ -41,7 +41,7 @@ Cache.Value == Input, Value == Graph.Value, Input: _Input {
 public extension _Style {
     
     //=------------------------------------------------------------------------=
-    // MARK: Any
+    // MARK: Basic
     //=------------------------------------------------------------------------=
     
     @inlinable func bounds(_ bounds: Bounds?) -> Self {
@@ -72,7 +72,7 @@ public extension _Style {
 public extension _Style {
     
     //=------------------------------------------------------------------------=
-    // MARK: Any
+    // MARK: Basic
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ precision: Precision?) -> Self {
