@@ -57,41 +57,16 @@ import Foundation
     }
     
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
-        var proposal = proposal;translate(&proposal.replacement)
-        let sign = consumeSingleSignInput(&proposal.replacement)
+        var proposal = proposal
+        //=--------------------------------------=
+        // Edit
+        //=--------------------------------------=
+        translator.translate(&proposal.replacement)
+        let sign = components.process(&proposal.replacement)
+        //=--------------------------------------=
+        // Read
+        //=--------------------------------------=
         var number = try number(proposal.merged(), as:    value)
         if  sign  != nil { number?.sign = sign! }; return number
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func translate(_ replacement: inout Snapshot) {
-        //=--------------------------------------=
-        // Keystroke
-        //=--------------------------------------=
-        if  replacement.count == 1 {
-            var keystroke = replacement.first!
-            translator.keystroke(&keystroke.character)
-            replacement = Snapshot([keystroke])
-        //=--------------------------------------=
-        // Paste, Backspace
-        //=--------------------------------------=
-        } else { return }
-    }
-    
-    @inlinable func consumeSingleSignInput(_ replacement: inout Snapshot) -> Sign? {
-        //=--------------------------------------=
-        // Keystroke
-        //=--------------------------------------=
-        if  replacement.count == 1 {
-            let keystroke = replacement.first!
-            let sign  = components.signs[keystroke.character]
-            if  sign != nil { replacement = [] }; return sign
-        //=--------------------------------------=
-        // Paste, Backspace
-        //=--------------------------------------=
-        } else { return nil }
     }
 }

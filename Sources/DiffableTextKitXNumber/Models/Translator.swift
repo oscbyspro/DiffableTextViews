@@ -41,4 +41,18 @@ import DiffableTextKit
         character = singular[character, default: character]
         character = fraction[character, default: character]
     }
+    
+    @inlinable func translate(_ replacement: inout Snapshot) {
+        //=--------------------------------------=
+        // Keystroke (1)
+        //=--------------------------------------=
+        if  replacement.count == 1 {
+            var  keystroke = replacement.first!
+            self.keystroke(&keystroke.character)
+            replacement =  [keystroke]
+        //=--------------------------------------=
+        // Paste (2...), Backspace (0)
+        //=--------------------------------------=
+        } else { return }
+    }
 }

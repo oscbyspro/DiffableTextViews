@@ -48,4 +48,19 @@ import Foundation
         digits:     .currency(formatter),
         separators: .currency(formatter))
     }
+    
+    @inlinable func process(_ replacement: inout Snapshot) -> Sign? {
+        //=--------------------------------------=
+        // Keystroke (1)
+        //=--------------------------------------=
+        if  replacement.count == 1 {
+            let keystroke = replacement.first!
+            let sign = signs[keystroke.character]
+            if sign != nil { replacement = [] }
+            return sign
+        //=--------------------------------------=
+        // Paste (2...), Backspace (0)
+        //=--------------------------------------=
+        } else { return nil }
+    }
 }
