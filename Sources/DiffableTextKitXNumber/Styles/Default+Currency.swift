@@ -26,8 +26,8 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     
     public var locale: Locale
     public var currencyCode: String
-    @usableFromInline var bounds: Bounds<Input>?
-    @usableFromInline var precision: Precision<Input>?
+    public var bounds: Bounds?
+    public var precision: Precision?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

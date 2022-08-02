@@ -31,7 +31,7 @@ final class BoundsTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T: _Value>(_ bounds: Bounds<T>, _ expectation: ClosedRange<T>) {
+    func XCTAssert<T: _Value>(_ bounds: _Bounds<T>, _ expectation: ClosedRange<T>) {
         XCTAssertEqual(bounds.min, expectation.lowerBound)
         XCTAssertEqual(bounds.max, expectation.upperBound)
     }
@@ -41,15 +41,15 @@ final class BoundsTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testOutsideClosedRange() {
-        XCTAssert(Bounds((-outside)...(+outside)), (.min)...(.max))
+        XCTAssert(_Bounds((-outside)...(+outside)), (.min)...(.max))
     }
     
     func testOutsidePartialRangeFrom() {
-        XCTAssert(Bounds((-outside)...), (.min)...(.max))
+        XCTAssert(_Bounds((-outside)...), (.min)...(.max))
     }
     
     func testOutsidePartialRangeThrough() {
-        XCTAssert(Bounds(...(+outside)), (.min)...(.max))
+        XCTAssert(_Bounds(...(+outside)), (.min)...(.max))
     }
     
     func testOutside() {
@@ -69,7 +69,7 @@ extension BoundsTests {
     //=------------------------------------------------------------------------=
     
     func XCTAutocorrectSign(_ bounds: (Int, Int), positive: Sign, negative: Sign) {
-        let bounds = Bounds(unchecked:  bounds)
+        let bounds = _Bounds(unchecked:  bounds)
         
         func autocorrected(_ sign: Sign) -> Sign {
             var sign = sign; bounds.autocorrect(&sign); return sign

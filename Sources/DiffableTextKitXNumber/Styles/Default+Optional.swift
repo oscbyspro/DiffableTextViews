@@ -33,57 +33,19 @@ Style: _Style & NullableTextStyle, Style.Value == Style.Input {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ style: Style) { self.style = style }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Bounds
-//=----------------------------------------------------------------------------=
-
-extension _OptionalStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Limits
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
-        Self(style.bounds(limits))
+    @inlinable public var bounds: Bounds? {
+        get { style.bounds }
+        set { style.bounds = newValue }
     }
     
-    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
-        Self(style.bounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
-        Self(style.bounds(limits))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Precision
-//=----------------------------------------------------------------------------=
-
-extension _OptionalStyle {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision(_ digits: some RangeExpression<Int>) -> Self {
-        Self(style.precision(digits))
-    }
-    
-    @inlinable public func precision(integer:  some RangeExpression<Int>) -> Self {
-        Self(style.precision(integer: integer))
-    }
-    
-    @inlinable public func precision(fraction: some RangeExpression<Int>) -> Self {
-        Self(style.precision(fraction: fraction))
-    }
-    
-    @inlinable public func precision(
-    integer:  some RangeExpression<Int>,
-    fraction: some RangeExpression<Int>) -> Self {
-        Self(style.precision(integer: integer, fraction: fraction))
+    @inlinable public var precision: Precision? {
+        get { style.precision }
+        set { style.precision = newValue }
     }
 }
 

@@ -24,7 +24,7 @@ final class PrecisionTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T>(_ precision: Precision<T>,
+    func XCTAssert<T>(_ precision: _Precision<T>,
     digits: Limits, integer: Limits, fraction: Limits) {
         let lower = precision.lower()
         let upper = precision.upper()
@@ -54,16 +54,16 @@ final class PrecisionTests: XCTestCase {
         let integer  = 1...38
         let fraction = 0...38
         
-        var precision = Precision<Decimal>()
+        var precision = _Precision<Decimal>()
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
         
-        precision = Precision<Decimal>(7...7)
+        precision = _Precision<Decimal>(7...7)
         XCTAssert(precision, digits:  7...7, integer: integer, fraction: fraction)
         
-        precision = Precision<Decimal>(integer: 7...7, fraction: 7...7)
+        precision = _Precision<Decimal>(integer: 7...7, fraction: 7...7)
         XCTAssert(precision, digits: digits, integer: 7...7, fraction: 7...7)
         
-        precision = Precision<Decimal>(integer: (-99)...99, fraction: (-99)...99)
+        precision = _Precision<Decimal>(integer: (-99)...99, fraction: (-99)...99)
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
     
@@ -72,16 +72,16 @@ final class PrecisionTests: XCTestCase {
         let integer  = 1...15
         let fraction = 0...15
         
-        var precision = Precision<Double>()
+        var precision = _Precision<Double>()
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
         
-        precision = Precision<Double>(7...7)
+        precision = _Precision<Double>(7...7)
         XCTAssert(precision, digits:  7...7, integer: integer, fraction: fraction)
         
-        precision = Precision<Double>(integer: 7...7, fraction: 7...7)
+        precision = _Precision<Double>(integer: 7...7, fraction: 7...7)
         XCTAssert(precision, digits: digits, integer: 7...7, fraction: 7...7)
         
-        precision = Precision<Double>(integer: (-99)...99, fraction: (-99)...99)
+        precision = _Precision<Double>(integer: (-99)...99, fraction: (-99)...99)
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
     
@@ -90,16 +90,16 @@ final class PrecisionTests: XCTestCase {
         let integer  = 1...19
         let fraction = 0...00
         
-        var precision = Precision<Int>()
+        var precision = _Precision<Int>()
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
         
-        precision = Precision<Int>(7...7)
+        precision = _Precision<Int>(7...7)
         XCTAssert(precision, digits: 7...7, integer: integer, fraction: fraction)
         
-        precision = Precision<Int>(integer: 7...7, fraction: 7...7)
+        precision = _Precision<Int>(integer: 7...7, fraction: 7...7)
         XCTAssert(precision, digits: digits, integer: 7...7, fraction: fraction)
         
-        precision = Precision<Int>(integer: (-99)...99, fraction: (-99)...99)
+        precision = _Precision<Int>(integer: (-99)...99, fraction: (-99)...99)
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
 }

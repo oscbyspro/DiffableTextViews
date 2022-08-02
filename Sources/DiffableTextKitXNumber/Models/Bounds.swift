@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Bounds
 //*============================================================================*
 
-@usableFromInline struct Bounds<Value: _Input>: CustomStringConvertible, Equatable {
+public struct _Bounds<Value: _Input>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -34,19 +34,19 @@ import DiffableTextKit
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
+    @inlinable public init() {
         self.init(unchecked: (Value.min, Value.max))
     }
     
-    @inlinable init(_ limits: PartialRangeFrom<Value>) {
+    @inlinable public init(_ limits: PartialRangeFrom<Value>) {
         self.init(unchecked: (limits.lowerBound.clamped(), Value.max))
     }
     
-    @inlinable init(_ limits: PartialRangeThrough<Value>) {
+    @inlinable public init(_ limits: PartialRangeThrough<Value>) {
         self.init(unchecked: (Value.min, limits.upperBound.clamped()))
     }
     
-    @inlinable init(_ limits: ClosedRange<Value>) {
+    @inlinable public init(_ limits: ClosedRange<Value>) {
         self.init(unchecked: (limits.lowerBound.clamped(), limits.upperBound.clamped()))
     }
     
@@ -69,7 +69,7 @@ import DiffableTextKit
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-extension Bounds {
+extension _Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Upstream

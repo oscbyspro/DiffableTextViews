@@ -57,11 +57,11 @@ extension _DefaultCache {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: Bounds<Value> {
+    @inlinable var bounds: _Bounds<Value> {
         style.bounds ?? preferences.bounds
     }
 
-    @inlinable var precision: Precision<Value> {
+    @inlinable var precision: _Precision<Value> {
         style.precision ?? preferences.precision
     }
     

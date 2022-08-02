@@ -13,37 +13,36 @@ import DiffableTextKit
 // MARK: * Precision
 //*============================================================================*
 
-@usableFromInline enum Precision<Value: _Input>: Equatable {
+public struct _Precision<Value: _Input>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    case total(Total)
-    case sides(Sides)
+    @usableFromInline let option: Option
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self = .total(Total())
+    @inlinable public init() {
+        self.option = .total(Total())
     }
     
-    @inlinable init(_ digits: some RangeExpression<Int>) {
-        self = .total(Total(digits: digits))
+    @inlinable public init(_ digits: some RangeExpression<Int>) {
+        self.option = .total(Total(digits: digits))
     }
     
-    @inlinable init(integer: some RangeExpression<Int>) {
-        self = .sides(Sides(integer: integer))
+    @inlinable public init(integer: some RangeExpression<Int>) {
+        self.option = .sides(Sides(integer: integer))
     }
     
-    @inlinable init(fraction: some RangeExpression<Int>) {
-        self = .sides(Sides(fraction: fraction))
+    @inlinable public init(fraction: some RangeExpression<Int>) {
+        self.option = .sides(Sides(fraction: fraction))
     }
     
-    @inlinable init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
-        self = .sides(Sides(integer: integer, fraction: fraction))
+    @inlinable public init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
+        self.option = .sides(Sides(integer: integer, fraction: fraction))
     }
     
     //=------------------------------------------------------------------------=
@@ -51,19 +50,19 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable func lower() -> Count {
-        switch self {
+        switch option {
         case .total(let total): return total.lower()
         case .sides(let sides): return sides.lower() }
     }
     
     @inlinable func upper() -> Count {
-        switch self {
+        switch option {
         case .total(let total): return total.upper()
         case .sides(let sides): return sides.upper() }
     }
     
     @inlinable func inactive() -> _NFSC.Precision {
-        switch self {
+        switch option {
         case .total(let total): return total.inactive()
         case .sides(let sides): return sides.inactive() }
     }
@@ -96,13 +95,22 @@ import DiffableTextKit
         let max = Value.integer ? 0 : Value.precision
         return ClosedRange(uncheckedBounds: (0, max))
     }
+    
+    //*========================================================================*
+    // MARK: * Option [...]
+    //*========================================================================*
+    
+    @usableFromInline enum Option: Equatable {
+        case total(Total)
+        case sides(Sides)
+    }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-extension Precision {
+extension _Precision {
     
     //=------------------------------------------------------------------------=
     // MARK: Upstream
@@ -153,11 +161,11 @@ extension Precision {
 // MARK: * Precision x Total [...]
 //*============================================================================*
 
-extension Precision { @usableFromInline struct Total: Equatable {
+extension _Precision { @usableFromInline struct Total: Equatable {
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var digits: ClosedRange<Int> = Precision.digits
+    @usableFromInline private(set) var digits: ClosedRange<Int> = _Precision.digits
     
     //=------------------------------------------------------------------------=
     
@@ -169,14 +177,14 @@ extension Precision { @usableFromInline struct Total: Equatable {
     
     @inlinable func lower() -> Count {
         Count(digits: digits.lowerBound,
-        integer:  Precision.integer .lowerBound,
-        fraction: Precision.fraction.lowerBound)
+        integer:  _Precision.integer .lowerBound,
+        fraction: _Precision.fraction.lowerBound)
     }
     
     @inlinable func upper() -> Count {
         Count(digits: digits.upperBound,
-        integer:  Precision.integer .upperBound,
-        fraction: Precision.fraction.upperBound)
+        integer:  _Precision.integer .upperBound,
+        fraction: _Precision.fraction.upperBound)
     }
     
     @inlinable func inactive() -> _NFSC.Precision {
@@ -188,12 +196,12 @@ extension Precision { @usableFromInline struct Total: Equatable {
 // MARK: * Precision x Sides [...]
 //*============================================================================*
 
-extension Precision { @usableFromInline struct Sides: Equatable {
+extension _Precision { @usableFromInline struct Sides: Equatable {
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var integer:  ClosedRange<Int> = Precision.integer
-    @usableFromInline private(set) var fraction: ClosedRange<Int> = Precision.fraction
+    @usableFromInline private(set) var integer:  ClosedRange<Int> = _Precision.integer
+    @usableFromInline private(set) var fraction: ClosedRange<Int> = _Precision.fraction
     
     //=------------------------------------------------------------------------=
     
@@ -213,13 +221,13 @@ extension Precision { @usableFromInline struct Sides: Equatable {
     }
     
     @inlinable func lower() -> Count {
-        Count(digits: Precision.digits.lowerBound,
+        Count(digits: _Precision.digits.lowerBound,
         integer:  integer .lowerBound,
         fraction: fraction.lowerBound)
     }
     
     @inlinable func upper() -> Count {
-        Count(digits: Precision.digits.upperBound,
+        Count(digits: _Precision.digits.upperBound,
         integer:  integer .upperBound,
         fraction: fraction.upperBound)
     }

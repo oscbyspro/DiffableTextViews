@@ -10,12 +10,18 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Aliases
+// MARK: * Aliases x Public
 //*============================================================================*
 
 public typealias NumberTextStyle<Value> =
 Value.NumberTextGraph.Number where
 Value.NumberTextGraph: _Numberable, Value: _Value
+
+public typealias NumberTextBounds<Value> =
+_Bounds<Value> where Value: _Input
+
+public typealias NumberTextPrecision<Value> =
+_Precision<Value> where Value: _Input
 
 //*============================================================================*
 // MARK: * Aliases x Internal

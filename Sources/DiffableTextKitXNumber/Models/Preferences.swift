@@ -17,17 +17,17 @@ import Foundation
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let bounds:    Bounds<Input>
-    @usableFromInline let precision: Precision<Input>
+    @usableFromInline let bounds:    _Bounds<Input>
+    @usableFromInline let precision: _Precision<Input>
     
     //=------------------------------------------------------------------------=
     
-    @inlinable init(bounds: Bounds<Input>, precision: Precision<Input>) {
+    @inlinable init(bounds: _Bounds<Input>, precision: _Precision<Input>) {
         self.bounds = bounds; self.precision = precision
     }
     
     @inlinable static func standard() -> Self {
-        Self(bounds: Bounds(), precision: Precision())
+        Self(bounds: _Bounds(), precision: _Precision())
     }
     
     /// - Requires that formatter.maximumFractionDigits == default.
@@ -38,6 +38,6 @@ import Foundation
         formatter.minimumFractionDigits ...
         formatter.maximumFractionDigits
         
-        return Self(bounds: Bounds(), precision: Precision(fraction: fraction))
+        return Self(bounds: _Bounds(), precision: _Precision(fraction: fraction))
     }
 }

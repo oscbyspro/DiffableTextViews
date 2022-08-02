@@ -15,68 +15,116 @@ import Foundation
 //*============================================================================*
 
 public protocol _Style: DiffableTextStyle where Cache: NullableTextStyle,
-Cache.Value == Input, Value == Graph.Value {
+Cache.Value == Input, Value == Graph.Value, Input: _Input {
     
     associatedtype Graph: _Graph
     
     typealias Input = Graph.Input
     
-    //=------------------------------------------------------------------------=
-    // MARK: Bounds
-    //=------------------------------------------------------------------------=
+    typealias Bounds = _Bounds<Input>
     
-    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self
-    
-    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self
-    
-    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self
+    typealias Precision = _Precision<Input>
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ digits: some RangeExpression<Int>) -> Self
+    @inlinable var bounds: Bounds? { get set }
     
-    @inlinable func precision(integer:  some RangeExpression<Int>) -> Self
-    
-    @inlinable func precision(fraction: some RangeExpression<Int>) -> Self
-    
-    @inlinable func precision(
-    integer:  some RangeExpression<Int>,
-    fraction: some RangeExpression<Int>) -> Self
+    @inlinable var precision: Precision? { get set }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: + Bounds
 //=----------------------------------------------------------------------------=
 
 public extension _Style {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Any
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds(_ bounds: Bounds?) -> Self {
+        var result = self; result.bounds = bounds; return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self {
+        bounds(Bounds(limits))
+    }
+    
+    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+        bounds(Bounds(limits))
+    }
+    
+    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+        bounds(Bounds(limits))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Precision
+//=----------------------------------------------------------------------------=
+
+public extension _Style {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Any
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision(_ precision: Precision?) -> Self {
+        var result = self; result.precision = precision; return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Total
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ digits: Int) -> Self {
-        precision(digits...digits)
+        precision(Precision(digits...digits))
     }
     
+    @inlinable func precision(_ digits: some RangeExpression<Int>) -> Self {
+        precision(Precision(digits))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sides
+    //=------------------------------------------------------------------------=
+    
     @inlinable func precision(integer: Int) -> Self {
-        precision(integer: integer...integer)
+        precision(Precision(integer: integer...integer))
     }
     
     @inlinable func precision(fraction: Int) -> Self {
-        precision(fraction: fraction...fraction)
+        precision(Precision(fraction: fraction...fraction))
     }
     
     @inlinable func precision(integer: Int, fraction: Int) -> Self {
-        precision(integer: integer...integer, fraction: fraction...fraction)
+        precision(Precision(integer: integer...integer, fraction: fraction...fraction))
+    }
+    
+    @inlinable func precision(integer: some RangeExpression<Int>) -> Self {
+        precision(Precision(integer: integer))
+    }
+    
+    @inlinable func precision(fraction: some RangeExpression<Int>) -> Self {
+        precision(Precision(fraction: fraction))
     }
     
     @inlinable func precision(integer: some RangeExpression<Int>, fraction: Int) -> Self {
-        precision(integer: integer, fraction: fraction...fraction)
+        precision(Precision(integer: integer, fraction: fraction...fraction))
     }
     
     @inlinable func precision(integer: Int, fraction: some RangeExpression<Int>) -> Self {
-        precision(integer: integer...integer, fraction: fraction)
+        precision(Precision(integer: integer...integer, fraction: fraction))
+    }
+    
+    @inlinable func precision(integer: some RangeExpression<Int>,
+    fraction: some RangeExpression<Int>) -> Self {
+        precision(Precision(integer: integer, fraction: fraction))
     }
 }

@@ -26,10 +26,6 @@ where Cache: _DefaultCache<Self>, Value == Input, Input: _Input {
     //=------------------------------------------------------------------------=
         
     @inlinable var locale: Locale { get set }
-    
-    @inlinable var bounds: Bounds<Value>? { get set }
-    
-    @inlinable var precision: Precision<Value>? { get set }
 }
 
 //=----------------------------------------------------------------------------=
@@ -58,73 +54,5 @@ extension _DefaultStyle {
         switch cache.compatible(self) {
         case  true: cache.style = self
         case false: cache = self.cache() }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Bounds
-//=----------------------------------------------------------------------------=
-
-extension _DefaultStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func bounds(_ limits: ClosedRange<Value>) -> Self {
-        bounds(Bounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
-        bounds(Bounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
-        bounds(Bounds(limits))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func bounds(_ bounds: Bounds<Value>) -> Self {
-        var result = self; result.bounds = bounds; return result
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Precision
-//=----------------------------------------------------------------------------=
-
-extension _DefaultStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision(_ digits: some RangeExpression<Int>) -> Self {
-        precision(Precision(digits))
-    }
-    
-    @inlinable public func precision(integer:  some RangeExpression<Int>) -> Self {
-        precision(Precision(integer: integer))
-    }
-    
-    @inlinable public func precision(fraction: some RangeExpression<Int>) -> Self {
-        precision(Precision(fraction: fraction))
-    }
-    
-    @inlinable public func precision(
-    integer:  some RangeExpression<Int>,
-    fraction: some RangeExpression<Int>) -> Self {
-        precision(Precision(integer: integer, fraction: fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func precision(_ precision: Precision<Value>) -> Self {
-        var result = self; result.precision = precision; return result
     }
 }
