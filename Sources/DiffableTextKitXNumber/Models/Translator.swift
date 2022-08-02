@@ -23,32 +23,13 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable init(from source: Components, to target: Components) {
-        //=--------------------------------------=
-        // Singular
-        //=--------------------------------------=
-        for (token,character) in source.signs.characters {
-            self.singular[character] = target.signs[token]
-        }
+        source.signs     .tokens.forEach { self.singular[$0] = target.signs     [$1] }
+        source.digits    .tokens.forEach { self.singular[$0] = target.digits    [$1] }
+        source.separators.tokens.forEach { self.singular[$0] = target.separators[$1] }
         
-        for (token,character) in source.digits.characters {
-            self.singular[character] = target.digits[token]
-        }
-        
-        for (token,character) in source.separators.characters {
-            self.singular[character] = target.separators[token]
-        }
-        //=--------------------------------------=
-        // Fraction
-        //=--------------------------------------=
         let fraction = target.separators.characters[.fraction]
-
-        for character in source.separators.characters.values {
-            self.fraction[character] = fraction
-        }
-        
-        for character in target.separators.characters.values {
-            self.fraction[character] = fraction
-        }
+        source.separators.tokens.keys.forEach { self.fraction[$0] = fraction }
+        target.separators.tokens.keys.forEach { self.fraction[$0] = fraction }
     }
     
     /// Translates a keystroke.
