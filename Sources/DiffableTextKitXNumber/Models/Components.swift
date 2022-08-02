@@ -16,15 +16,9 @@ import Foundation
 
 @usableFromInline struct Components {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline static let ascii = Self(
     signs: .ascii(), digits: .ascii(), separators: .ascii())
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let signs:      Links<Sign>
@@ -32,16 +26,12 @@ import Foundation
     @usableFromInline let separators: Links<Separator>
 
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable init(signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
-        self.signs = signs; self.digits = digits; self.separators = separators
+        self.signs      = signs
+        self.digits     = digits
+        self.separators = separators
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self.init(

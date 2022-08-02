@@ -34,10 +34,10 @@ import Foundation
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .currency)
         
-        let precision = Precision<Input>(fraction:
+        let fraction: ClosedRange<Int> =
         formatter.minimumFractionDigits ...
-        formatter.maximumFractionDigits)
+        formatter.maximumFractionDigits
         
-        return Self(bounds: Bounds(), precision: precision)
+        return Self(bounds: Bounds(), precision: Precision(fraction: fraction))
     }
 }

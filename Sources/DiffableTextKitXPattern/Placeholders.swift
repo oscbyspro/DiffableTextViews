@@ -12,6 +12,7 @@
 //*============================================================================*
 
 @usableFromInline enum Placeholders: Equatable {
+    @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,11 +30,11 @@
         self = .none
     }
     
-    @inlinable init(_ some: (Character, (Character) -> Bool)) {
+    @inlinable init(_ some: (Character, Predicate)) {
         self = .some(Some(some))
     }
     
-    @inlinable init(_ many: [Character: (Character) -> Bool]) {
+    @inlinable init(_ many: [Character: Predicate]) {
         self = .many(Many(many))
     }
     
@@ -41,7 +42,7 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
+    @inlinable subscript(character: Character) -> Predicate? {
         switch self {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
@@ -53,48 +54,48 @@
 // MARK: * Placeholders x Some [...]
 //*============================================================================*
 
-@usableFromInline struct Some: Equatable {
+extension Placeholders { @usableFromInline struct Some: Equatable {
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let elements: (Character, (Character) -> Bool)
+    @usableFromInline let elements: (character: Character, predicate: Predicate)
     
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_   elements: (Character, (Character) -> Bool)) {
+    @inlinable init(_ elements: (Character, Predicate)) {
         self.elements = elements
     }
     
-    @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
-        self.elements.0 == character ? self.elements.1 : nil
+    @inlinable subscript(character: Character) -> Predicate? {
+        elements.character == character ? elements.predicate : nil
     }
     
     @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.elements.0 == rhs.elements.0
+        lhs.elements.character == rhs.elements.character
     }
-}
+}}
     
 //*============================================================================*
 // MARK: * Placeholders x Many [...]
 //*============================================================================*
 
-@usableFromInline struct Many: Equatable {
+extension Placeholders { @usableFromInline struct Many: Equatable {
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let elements: [Character: (Character) -> Bool]
+    @usableFromInline let elements: [Character: Predicate]
     
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_   elements: [Character: (Character) -> Bool]) {
+    @inlinable init(_ elements: [Character: Predicate]) {
         self.elements = elements
     }
     
-    @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
-        self.elements[character]
+    @inlinable subscript(character: Character) -> Predicate? {
+        elements[character]
     }
     
     @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.elements.keys == rhs.elements.keys
     }
-}
+}}
