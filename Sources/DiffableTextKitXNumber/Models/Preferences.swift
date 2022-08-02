@@ -13,31 +13,33 @@ import Foundation
 // MARK: * Preferences [...]
 //*============================================================================*
 
-@usableFromInline struct Preferences<Input> where Input: _Input {
+@usableFromInline struct Preferences<Value> where Value: _Input {
+    @usableFromInline typealias Bounds = _Bounds<Value>
+    @usableFromInline typealias Precision = _Precision<Value>
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let bounds:    _Bounds<Input>
-    @usableFromInline let precision: _Precision<Input>
+    @usableFromInline let bounds: Bounds
+    @usableFromInline let precision: Precision
     
     //=------------------------------------------------------------------------=
     
-    @inlinable init(bounds: _Bounds<Input>, precision: _Precision<Input>) {
+    @inlinable init(bounds: Bounds, precision: Precision) {
         self.bounds = bounds; self.precision = precision
     }
     
     @inlinable static func standard() -> Self {
-        Self(bounds: _Bounds(), precision: _Precision())
+        Self(bounds: Bounds(), precision: Precision())
     }
     
     /// - Requires that formatter.maximumFractionDigits == default.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .currency)
         
-        let fraction: ClosedRange<Int> =
+        let precision = Precision(fraction:
         formatter.minimumFractionDigits ...
-        formatter.maximumFractionDigits
+        formatter.maximumFractionDigits)
         
-        return Self(bounds: _Bounds(), precision: _Precision(fraction: fraction))
+        return Self(bounds: Bounds(), precision: precision)
     }
 }
