@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * NumberScreen x PrecisionSliders
+// MARK: * Screen x Number x Precision x Sliders
 //*============================================================================*
 
 struct NumberScreenPrecisionSliders: View {
@@ -51,13 +51,11 @@ struct NumberScreenPrecisionSliders: View {
     //=------------------------------------------------------------------------=
     
     var primary: some View {
-        switch precision.value {
-        case .total: return digits
-        case .sides: return integer }
+        precision == .total ? digits : integer
     }
     
     @ViewBuilder var secondary: some View {
-        if precision.value == .sides { fraction }
+        if precision == .sides { fraction }
     }
     
     //=------------------------------------------------------------------------=
