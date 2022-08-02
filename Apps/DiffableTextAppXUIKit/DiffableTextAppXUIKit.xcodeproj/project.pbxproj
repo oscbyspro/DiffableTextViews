@@ -15,6 +15,7 @@
 		55781F3127AD4500003D4252 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F3027AD4500003D4252 /* Constants.swift */; };
 		557C01422830309D00DC3FEA /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557C01412830309D00DC3FEA /* Interval.swift */; };
 		557DAF2127BA493200D9F0E5 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557DAF2027BA493200D9F0E5 /* Action.swift */; };
+		557F68C228991D6400F88173 /* NumberScreenPrecision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557F68C128991D6400F88173 /* NumberScreenPrecision.swift */; };
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
 		5589A1AB27A7E3E40000F04A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */; };
@@ -44,6 +45,7 @@
 		557C01412830309D00DC3FEA /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		557D9AB427F98C14008C317B /* Entitlements.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Entitlements.entitlements; sourceTree = "<group>"; };
 		557DAF2027BA493200D9F0E5 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		557F68C128991D6400F88173 /* NumberScreenPrecision.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberScreenPrecision.swift; sourceTree = "<group>"; };
 		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 		5589A1A027A7E3E30000F04A /* DiffableTextAppXUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiffableTextAppXUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */,
 				55B38EF62827FBB9005159F4 /* NumberScreenWheels.swift */,
 				55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */,
+				557F68C128991D6400F88173 /* NumberScreenPrecision.swift */,
 			);
 			path = Number;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 				559CA92D2828684A00E6F369 /* Observable.swift in Sources */,
 				55F3290F28317BB30099A249 /* Bounds.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
+				557F68C228991D6400F88173 /* NumberScreenPrecision.swift in Sources */,
 				55F3291028317BB30099A249 /* Range.swift in Sources */,
 				557C01422830309D00DC3FEA /* Interval.swift in Sources */,
 				55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */,

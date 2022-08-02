@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Components
+// MARK: * Components [...]
 //*============================================================================*
 
 @usableFromInline struct Components {

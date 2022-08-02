@@ -36,6 +36,9 @@ struct NumberScreen: View {
 
                 Selector.each(selection: $context.format)
                     .pickerStyle(.segmented)
+                
+                Selector.each(selection: $context.precision)
+                    .pickerStyle(.segmented)
 
                 NumberScreenWheels(context)
                 //=------------------------------=
@@ -45,13 +48,7 @@ struct NumberScreen: View {
                     Interval("Bounds (9s)", unordered: $0.value.unordered, in: $1)
                 }
                 
-                Observer(context.$integer, cache: context.integerLimits) {
-                    Interval("Integer digits", unordered: $0.value, in: $1)
-                }
-                
-                Observer(context.$fraction, cache: context.fractionLimits) {
-                    Interval("Fraction digits", unordered: $0.value, in: $1)
-                }
+                NumberScreenPrecisionSliders(context)
                 
                 Spacer()
             }

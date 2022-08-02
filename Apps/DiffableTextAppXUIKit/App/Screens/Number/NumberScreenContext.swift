@@ -21,16 +21,20 @@ final class NumberScreenContext: ObservableObject {
     
     @Observable var kind = KindID.standard
     @Observable var format = FormatID.currency
+    @Observable var precision = PrecisionID.sides
+    
     @Observable var locale = Locale(identifier: "en_US")
     @Observable var currency = "USD"
     
     @Observable var bounds   = Bounds((0, p))
+    @Observable var digits   = (1, p)
     @Observable var integer  = (1, p)
     @Observable var fraction = (2, 2)
     
     @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
     
     let boundsLimits   = -p ... p
+    let digitsLimits   =  1 ... p
     let integerLimits  =  1 ... p
     let fractionLimits =  0 ... p
     
@@ -50,5 +54,10 @@ final class NumberScreenContext: ObservableObject {
     
     enum FormatID: String, CaseIterable {
         case number, currency, percent
+    }
+    
+    enum PrecisionID: String, CaseIterable {
+        case total = "total"
+        case sides = "integer & fraction"
     }
 }

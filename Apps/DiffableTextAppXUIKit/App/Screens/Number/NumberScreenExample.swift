@@ -18,6 +18,7 @@ struct NumberScreenExample: View {
     typealias Context = NumberScreenContext
     typealias KindID = Context.KindID
     typealias FormatID = Context.FormatID
+    typealias PrecisionID = Context.PrecisionID
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -48,13 +49,14 @@ struct NumberScreenExample: View {
     
     var body: some View {
         switch (kind.value, format.value) {
+        
         case (.standard,   .number): decimalStandardNumber
         case (.standard, .currency): decimalStandardCurrency
         case (.standard,  .percent): decimalStandardPercent
+        
         case (.optional,   .number): decimalOptionalNumber
         case (.optional, .currency): decimalOptionalCurrency
-        case (.optional,  .percent): decimalOptionalPercent
-        }
+        case (.optional,  .percent): decimalOptionalPercent }
     }
     
     //=------------------------------------------------------------------------=
@@ -108,27 +110,26 @@ struct NumberScreenExample: View {
 // MARK: * Screen x Number x Example X
 //*============================================================================*
 
-struct NumberScreenExampleX<Style>: View
-where Style: _Style, Style.Value: _Value,
-Style.Input == Decimal {
-    typealias Value   = Style.Value
-    typealias Input   = Style.Input
-    typealias Source  = Observable<Twins<Input>>
-    typealias Member  = Source.KeyPath<Value>
+struct NumberScreenExampleX<Style>: View where Style: _Style,
+Style.Value: _Value, Style.Input == Decimal {
     typealias Context = NumberScreenContext
-    
+    typealias Member  = Source.KeyPath<Style.Value>
+    typealias Source  = Observable<Twins<Style.Input>>
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-    
+        
     let base:   Style
     let source: Source
     let member: Member
     
-    @ObservedObject var bounds:   Observable<Bounds>
-    @ObservedObject var integer:  Observable<(Int, Int)>
-    @ObservedObject var fraction: Observable<(Int, Int)>
-    
+    @ObservedObject var bounds:    Observable<Bounds>
+    @ObservedObject var digits:    Observable<(Int, Int)>
+    @ObservedObject var integer:   Observable<(Int, Int)>
+    @ObservedObject var fraction:  Observable<(Int, Int)>
+    @ObservedObject var precision: Observable<Context.PrecisionID>
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -137,36 +138,45 @@ Style.Input == Decimal {
         self.base   = base
         self.source = source
         self.member = member
-        
-        self.bounds   = context.$bounds
-        self.integer  = context.$integer
-        self.fraction = context.$fraction
+                
+        self.bounds    = context.$bounds
+        self.digits    = context.$digits
+        self.integer   = context.$integer
+        self.fraction  = context.$fraction
+        self.precision = context.$precision
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var style: some DiffableTextStyle<Value> {
-        let integer  = ClosedRange(integer .value)
-        let fraction = ClosedRange(fraction.value)
-        
-        return base.bounds(bounds.value.closed).precision(
-        integer: integer,   fraction: fraction).constant()
-    }
-    
-    var keyboard: UIKeyboardType {
-        Value._NumberTextGraph.integer ? .numberPad : .decimalPad
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
     //=------------------------------------------------------------------------=
 
     var body: some View {
         Observer(source, cache: style) {
             Example(value: $0[dynamicMember: member], style: $1)
         }
-        .diffableTextViews_keyboardType(keyboard)
+        .diffableTextViews_keyboardType(.decimalPad)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var style: some DiffableTextStyle<Style.Value> {
+        //=--------------------------------------=
+        // Bounds
+        //=--------------------------------------=
+        var style = base.bounds(bounds.value.closed)
+        //=--------------------------------------=
+        // Precision
+        //=--------------------------------------=
+        switch precision.value {
+        case .sides: style = style.precision(
+        integer:  ClosedRange(integer .value),
+        fraction: ClosedRange(fraction.value))
+        case .total: style = style.precision(ClosedRange(digits.value)) }
+        //=--------------------------------------=
+        // Constant
+        //=--------------------------------------=
+        return style.constant()
     }
 }

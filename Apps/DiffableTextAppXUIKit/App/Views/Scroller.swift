@@ -31,4 +31,3 @@ struct Scroller<Content: View>: View {
         }
     }
 }
-

@@ -38,15 +38,15 @@ struct Interval: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            text(ClosedRange(unordered))
+            label
             IntervalSlider($unordered, in: limits)
             Spacer(minLength: 16).fixedSize()
         }
     }
     
-    func text(_ interval: ClosedRange<Int>) -> some View {
-        Text("\(title): \(interval.lowerBound) to \(interval.upperBound)")
-            .font(.subheadline.weight(.light))
-            .animation(.none, value: interval)
+    var label: some View {
+        let interval = ClosedRange(unordered)
+        let text = Text("\(title): \(interval.lowerBound) to \(interval.upperBound)")
+        return text.font(.subheadline.weight(.light)).animation(nil)
     }
 }
