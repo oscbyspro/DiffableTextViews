@@ -11,14 +11,10 @@
 // MARK: * Clamp
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + Comparable
+// MARK: + Comparable [...]
 //=----------------------------------------------------------------------------=
 
 extension Comparable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
     
     @inlinable func clamped() -> Self where  Self: _Input {
         Swift.min(Swift.max(Self.min, self), Self.max)
@@ -30,14 +26,10 @@ extension Comparable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Range Expression
+// MARK: + Range Expression [...]
 //=----------------------------------------------------------------------------=
 
 extension RangeExpression where Bound == Int {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
     
     @inlinable func clamped(to bounds: Range<Int>) -> Range<Int> {
         relative(to: Range(uncheckedBounds: (Int.min, Int.max))).clamped(to: bounds)

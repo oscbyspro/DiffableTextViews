@@ -17,7 +17,9 @@ import Foundation
 @usableFromInline struct Components {
     
     @usableFromInline static let ascii = Self(
-    signs: .ascii(), digits: .ascii(), separators: .ascii())
+    signs:      .ascii(),
+    digits:     .ascii(),
+    separators: .ascii())
     
     //=------------------------------------------------------------------------=
     
