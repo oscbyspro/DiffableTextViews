@@ -23,6 +23,10 @@
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
 
+@_exported import protocol DiffableTextKit.NullableTextStyle
+
+@_exported import protocol DiffableTextKit.WrapperTextStyle
+
 //=----------------------------------------------------------------------------=
 // MARK: + Platforms
 //=----------------------------------------------------------------------------=
