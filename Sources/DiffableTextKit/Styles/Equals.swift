@@ -58,6 +58,8 @@ public extension DiffableTextStyle {
     
     typealias Equals<T> = EqualsTextStyle<Self, T> where T: Equatable
     
+    typealias EqualsVoid = EqualsTextStyle<Self, _Void>
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -66,15 +68,15 @@ public extension DiffableTextStyle {
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
-    @inlinable func equals(_ equatable: Void) -> Equals<_Void> {
-        Equals(self, equatable: _Void())
+    @inlinable func equals<T>(_ equatable: T) -> Equals<T> {
+        Equals(self, equatable: equatable)
     }
     
     /// Binds the style's equality to a proxy value.
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
-    @inlinable func equals<T>(_ equatable: T) -> Equals<T> {
-        Equals(self, equatable: equatable)
+    @inlinable func equals(_ equatable: Void) -> EqualsVoid {
+        Equals(self, equatable: _Void())
     }
 }

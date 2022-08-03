@@ -15,6 +15,12 @@
 
 @_exported import DiffableTextKitXPattern
 
+@_exported import struct DiffableTextKit.ConstantTextStyle
+
+@_exported import struct DiffableTextKit.EqualsTextStyle
+
+@_exported import struct DiffableTextKit.IsolatedTextStyle
+
 @_exported import protocol DiffableTextKit.DiffableTextStyle
 
 //=----------------------------------------------------------------------------=

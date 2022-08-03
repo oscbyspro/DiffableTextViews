@@ -29,7 +29,7 @@ public struct IsolatedTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ base: Base) {
+    @inlinable public init(_ base: Base) {
         self.base = base; self.shared = Storage(base.cache())
     }
     
