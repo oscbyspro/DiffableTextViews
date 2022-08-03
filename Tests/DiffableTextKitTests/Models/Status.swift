@@ -40,15 +40,15 @@ final class StatusTests: XCTestCase {
     }
     
     func testMergeDiscardsEqualValues() {
-        let en_US = Equals(en_US, proxy: _Void())
-        let sv_SE = Equals(sv_SE, proxy: _Void())
+        let en_US = en_US.equals(())
+        let sv_SE = sv_SE.equals(())
         
         var status0 = Status(en_US, 0, false)
         let status1 = Status(sv_SE, 1,  true)
         let changes = status0.merge( status1)
         
         XCTAssertEqual(status0, status1)
-        XCTAssertEqual(status0.style.style.locale, en_US.style.locale)
+        XCTAssertEqual(status0.style.base.locale, en_US.base.locale)
         XCTAssertEqual(changes, Changes([.value, .focus]))
     }
     

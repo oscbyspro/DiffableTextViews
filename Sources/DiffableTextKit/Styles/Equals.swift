@@ -15,24 +15,24 @@
 ///
 /// Use this modifier to optimize the comparison on view update.
 ///
-@usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
-    public typealias Cache = Style.Cache
-    public typealias Value = Style.Value
+public struct EqualsTextStyle<Base, Equatable>: WrapperTextStyle
+where Base: DiffableTextStyle, Equatable: Swift.Equatable {
+    public typealias Cache = Base.Cache
+    public typealias Value = Base.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var style: Style
-    public let proxy: Proxy
+    public var base: Base
+    public var equatable: Equatable
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style, proxy: Proxy) {
-        self.style = style
-        self.proxy = proxy
+    @inlinable public init(_ base: Base, equatable: Equatable) {
+        self.base = base; self.equatable = equatable
     }
 
     //=------------------------------------------------------------------------=
@@ -40,7 +40,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.proxy == rhs.proxy
+        lhs.equatable == rhs.equatable
     }
 }
 
@@ -48,13 +48,15 @@
 // MARK: + Conditionals
 //=----------------------------------------------------------------------------=
 
-extension Equals: NullableTextStyle where Style: NullableTextStyle { }
+extension EqualsTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Equals x Style
 //*============================================================================*
 
 public extension DiffableTextStyle {
+    
+    typealias Equals<T> = EqualsTextStyle<Self, T> where T: Equatable
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -64,15 +66,15 @@ public extension DiffableTextStyle {
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
-    @inlinable func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
-        Equals(self, proxy: _Void())
+    @inlinable func equals(_ equatable: Void) -> Equals<_Void> {
+        Equals(self, equatable: _Void())
     }
     
     /// Binds the style's equality to a proxy value.
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
-    @inlinable func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
-        Equals(self, proxy:  proxy)
+    @inlinable func equals<T>(_ equatable: T) -> Equals<T> {
+        Equals(self, equatable: equatable)
     }
 }

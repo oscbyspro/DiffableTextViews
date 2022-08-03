@@ -14,11 +14,11 @@ import Foundation
 // MARK: * Style x Optional
 //*============================================================================*
 
-public struct _OptionalStyle<Style>: _Style, WrapperTextStyle where
-Style: _Style & NullableTextStyle, Style.Value == Style.Input {
-    public typealias Graph = _OptionalGraph<Style.Graph>
+public struct _OptionalStyle<Base>: _Style, WrapperTextStyle where
+Base: _Style & NullableTextStyle, Base.Value == Base.Input {
+    public typealias Graph = _OptionalGraph<Base.Graph>
     
-    public typealias Cache = Style.Cache
+    public typealias Cache = Base .Cache
     public typealias Value = Graph.Value
     public typealias Input = Graph.Input
     
@@ -26,26 +26,26 @@ Style: _Style & NullableTextStyle, Style.Value == Style.Input {
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    public var style: Style
+    public var base: Base
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) { self.style = style }
+    @inlinable init(_ base: Base) { self.base = base }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var bounds: Bounds? {
-        get { style.bounds }
-        set { style.bounds = newValue }
+        get { base.bounds }
+        set { base.bounds = newValue }
     }
     
     @inlinable public var precision: Precision? {
-        get { style.precision }
-        set { style.precision = newValue }
+        get { base.precision }
+        set { base.precision = newValue }
     }
 }
 
@@ -53,14 +53,14 @@ Style: _Style & NullableTextStyle, Style.Value == Style.Input {
 // MARK: + Traits x Standard
 //=----------------------------------------------------------------------------=
 
-extension _OptionalStyle: _Standard where Style: _Standard {
+extension _OptionalStyle: _Standard where Base: _Standard {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        style.locale
+        base.locale
     }
     
     //=------------------------------------------------------------------------=
@@ -68,7 +68,7 @@ extension _OptionalStyle: _Standard where Style: _Standard {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.init(Style(locale: locale))
+        self.init(Base(locale: locale))
     }
 }
 
@@ -76,18 +76,18 @@ extension _OptionalStyle: _Standard where Style: _Standard {
 // MARK: + Traits x Currency
 //=----------------------------------------------------------------------------=
 
-extension _OptionalStyle: _Currency where Style: _Currency {
+extension _OptionalStyle: _Currency where Base: _Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        style.locale
+        base.locale
     }
     
     @inlinable public var currencyCode: String {
-        style.currencyCode
+        base.currencyCode
     }
     
     //=------------------------------------------------------------------------=
@@ -95,6 +95,6 @@ extension _OptionalStyle: _Currency where Style: _Currency {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
-        self.init(Style(code: code, locale: locale))
+        self.init(Base(code: code, locale: locale))
     }
 }

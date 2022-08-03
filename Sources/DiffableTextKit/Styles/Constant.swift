@@ -17,21 +17,21 @@ import Foundation
 ///
 /// Use this modifier to ignore the environment.
 ///
-@usableFromInline struct Constant<Style: DiffableTextStyle>: WrapperTextStyle {
-    public typealias Cache = Style.Cache
-    public typealias Value = Style.Value
+public struct ConstantTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
+    public typealias Cache = Base.Cache
+    public typealias Value = Base.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var style: Style
+    public var base: Base
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) { self.style = style }
+    @inlinable public init(_ base: Base) { self.base = base }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -44,13 +44,15 @@ import Foundation
 // MARK: + Conditionals
 //=----------------------------------------------------------------------------=
 
-extension Constant: NullableTextStyle where Style: NullableTextStyle { }
+extension ConstantTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Constant x Style
 //*============================================================================*
 
 public extension DiffableTextStyle {
+    
+    typealias Constant = ConstantTextStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -60,7 +62,7 @@ public extension DiffableTextStyle {
     ///
     /// Use this modifier to ignore the environment.
     ///
-    @inlinable func constant() -> some DiffableTextStyle<Value> {
+    @inlinable func constant() -> Constant {
         Constant(self)
     }
 }

@@ -15,10 +15,6 @@ import Foundation
 
 /// A protocol for styles capable of as-you-type formatting.
 public protocol DiffableTextStyle<Value>: Equatable {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
     
     associatedtype Cache = Void
     

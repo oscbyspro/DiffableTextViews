@@ -15,13 +15,13 @@ import Foundation
 
 public protocol WrapperTextStyle: DiffableTextStyle {
     
-    associatedtype Style: DiffableTextStyle
+    associatedtype Base: DiffableTextStyle
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @inlinable var style: Style { get set }
+    @inlinable var base: Base { get set }
 }
 
 //=----------------------------------------------------------------------------=
@@ -35,7 +35,7 @@ public extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func locale(_ locale: Locale) -> Self {
-        var result = self; result.style = result.style.locale(locale); return result
+        var result = self; result.base = result.base.locale(locale); return result
     }
     
     //=------------------------------------------------------------------------=
@@ -43,7 +43,7 @@ public extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.style == rhs.style
+        lhs.base == rhs.base
     }
 }
 
@@ -51,18 +51,18 @@ public extension WrapperTextStyle {
 // MARK: + Details where Cache == Style.Cache
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Cache == Style.Cache {
+public extension WrapperTextStyle where Cache == Base.Cache {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func cache() -> Cache {
-        style.cache()
+        base.cache()
     }
     
     @inlinable func update(_ cache: inout Cache) {
-        style.update(&cache)
+        base.update(&cache)
     }
 }
 
@@ -70,7 +70,7 @@ public extension WrapperTextStyle where Cache == Style.Cache {
 // MARK: + Details where Cache == Style.Cache
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Value {
+public extension WrapperTextStyle where Cache == Base.Cache, Value == Base.Value {
 
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -78,17 +78,17 @@ public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Val
     
     @inlinable func format(_ value: Value,
     with cache: inout Cache) -> String {
-        style.format(value, with: &cache)
+        base.format(value, with: &cache)
     }
     
     @inlinable func interpret(_ value: Value,
     with cache: inout Cache) -> Commit<Value> {
-        style.interpret(value, with: &cache)
+        base.interpret(value, with: &cache)
     }
     
     @inlinable func resolve(_ proposal: Proposal,
     with cache: inout Cache) throws -> Commit<Value> {
-        try style.resolve(proposal, with: &cache)
+        try base.resolve(proposal, with: &cache)
     }
 }
 
@@ -96,8 +96,8 @@ public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Val
 // MARK: + Details where Style: Nullable
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Value,
-Self: NullableTextStyle, Style: NullableTextStyle {
+public extension WrapperTextStyle where Cache == Base.Cache, Value == Base.Value,
+Self: NullableTextStyle, Base: NullableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -105,17 +105,17 @@ Self: NullableTextStyle, Style: NullableTextStyle {
     
     @inlinable func format(optional value: Value?,
     with cache: inout Cache) -> String {
-        style.format(optional: value, with: &cache)
+        base.format(optional: value, with: &cache)
     }
     
     @inlinable func interpret(optional value: Value?,
     with cache: inout Cache) -> Commit<Value?> {
-        style.interpret(optional: value, with: &cache)
+        base.interpret(optional: value, with: &cache)
     }
     
     @inlinable func resolve(optional proposal: Proposal,
     with cache: inout Cache) throws -> Commit<Value?> {
-        try style.resolve(optional: proposal, with: &cache)
+        try base.resolve(optional: proposal, with: &cache)
     }
 }
 
@@ -123,8 +123,8 @@ Self: NullableTextStyle, Style: NullableTextStyle {
 // MARK: + Details where Style: Nullable
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Cache == Style.Cache, Value == Optional<Style.Value>,
-Style: NullableTextStyle {
+public extension WrapperTextStyle where Cache == Base.Cache, Value == Optional<Base.Value>,
+Base: NullableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -132,16 +132,16 @@ Style: NullableTextStyle {
     
     @inlinable func format(_ value: Value,
     with cache: inout Cache) -> String {
-        style.format(optional: value, with: &cache)
+        base.format(optional: value, with: &cache)
     }
     
     @inlinable func interpret(_ value: Value,
     with cache: inout Cache) -> Commit<Value> {
-        style.interpret(optional: value, with: &cache)
+        base.interpret(optional: value, with: &cache)
     }
     
     @inlinable func resolve(_ proposal: Proposal,
     with cache: inout Cache) throws -> Commit<Value> {
-        try style.resolve(optional: proposal, with: &cache)
+        try base.resolve(optional: proposal, with: &cache)
     }
 }

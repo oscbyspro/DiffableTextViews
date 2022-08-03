@@ -15,23 +15,22 @@
 ///
 /// Use this modifier to control when the cache is created and destroyed.
 ///
-@usableFromInline struct Isolated<Style: DiffableTextStyle>: WrapperTextStyle {
-    public typealias Value = Style.Value
+public struct IsolatedTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
+    public typealias Value = Base.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var style: Style
+    public var base: Base
     @usableFromInline let shared: Storage
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) {
-        self.style  = style;
-        self.shared = Storage(style.cache())
+    @inlinable init(_ base: Base) {
+        self.base = base; self.shared = Storage(base.cache())
     }
     
     //=------------------------------------------------------------------------=
@@ -40,20 +39,20 @@
     
     @inlinable public func format(_ value: Value,
     with cache: inout Void) -> String {
-        style.update(&shared.cache); return
-        style.format(value, with: &shared.cache)
+        base.update(&shared.cache); return
+        base.format(value, with: &shared.cache)
     }
     
     @inlinable public func interpret(_ value: Value,
     with cache: inout Void) -> Commit<Value> {
-        style.update(&shared.cache); return
-        style.interpret(value, with: &shared.cache)
+        base.update(&shared.cache); return
+        base.interpret(value, with: &shared.cache)
     }
     
     @inlinable public func resolve(_ proposal: Proposal,
     with cache: inout Void) throws -> Commit<Value> {
-        style.update(&shared.cache); return
-        try style.resolve(proposal, with: &shared.cache)
+        base.update(&shared.cache); return
+        try base.resolve(proposal, with: &shared.cache)
     }
     
     //*========================================================================*
@@ -64,11 +63,11 @@
         
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var cache: Style.Cache
+        @usableFromInline var cache: Base.Cache
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ cache: Style.Cache) { self.cache = cache }
+        @inlinable init(_ cache: Base.Cache) { self.cache = cache }
     }
 }
 
@@ -76,13 +75,15 @@
 // MARK: + Conditionals
 //=----------------------------------------------------------------------------=
 
-extension Isolated: NullableTextStyle where Style: NullableTextStyle { }
+extension IsolatedTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Isolated x Style
 //*============================================================================*
 
 public extension DiffableTextStyle {
+    
+    typealias Isolated = IsolatedTextStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -92,7 +93,7 @@ public extension DiffableTextStyle {
     ///
     /// Use this modifier to control when the cache is created and destroyed.
     ///
-    @inlinable func isolated() -> some DiffableTextStyle<Value> {
+    @inlinable func isolated() -> Isolated {
         Isolated(self)
     }
 }

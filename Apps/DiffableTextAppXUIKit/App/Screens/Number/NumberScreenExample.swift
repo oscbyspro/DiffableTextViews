@@ -162,10 +162,10 @@ Style.Value: _Value, Style.Input == Decimal {
     //=------------------------------------------------------------------------=
     
     var style: some DiffableTextStyle<Style.Value> {
-        var style = base
-        style.bounds = __bounds
-        style.precision = __precision
-        return style.constant()
+        var style = base.constant()
+        style.base.bounds = __bounds
+        style.base.precision = __precision
+        return style
     }
     
     var __bounds: NumberTextBounds<Style.Input> {
