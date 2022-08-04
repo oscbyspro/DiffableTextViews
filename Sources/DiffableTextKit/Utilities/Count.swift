@@ -8,36 +8,20 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Count
+// MARK: * Count [...]
 //*============================================================================*
 
 public extension Sequence {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Where
-    //=------------------------------------------------------------------------=
-    
     @inlinable func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
         var count = 0
-        
-        for element in self {
-            if try predicate(element) { count += 1 }
-        }
-        
+        for element in self { if try predicate(element) { count += 1 } }
         return count
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: While
-    //=------------------------------------------------------------------------=
-    
     @inlinable func count(while predicate: (Element) throws -> Bool) rethrows -> Int {
         var count = 0
-
-        for element in self {
-            if try predicate(element) { count += 1 } else { break }
-        }
-        
+        for element in self { if try predicate(element) { count += 1 } else { break } }
         return count
     }
 }

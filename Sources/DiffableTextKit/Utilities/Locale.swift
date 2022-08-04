@@ -7,17 +7,10 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
+import struct Foundation.Locale
 
 //*============================================================================*
-// MARK: * Locale
+// MARK: * Locale [...]
 //*============================================================================*
 
-public extension Locale {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    static let en_US_POSIX = Locale(identifier: "en_US_POSIX")
-}
+public extension Locale { static let en_US_POSIX = Locale(identifier: "en_US_POSIX") }

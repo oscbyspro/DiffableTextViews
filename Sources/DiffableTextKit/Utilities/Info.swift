@@ -77,6 +77,11 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
         self.init([String(describing: error())])
     }
     
+    @inlinable @inline(__always)
+    public static func buildBlock(_ instances: Self...) -> Self {
+        Self(instances)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -129,21 +134,8 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
         Self({ $0.join(separator: separator()) })
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
     @inlinable @inline(__always)
     public static func += (info: inout Self, other: @autoclosure () -> Self) {
         info.transform({ $0.append(other().description) })
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func buildBlock(_ instances: Self...) -> Self {
-        Self(instances)
     }
 }

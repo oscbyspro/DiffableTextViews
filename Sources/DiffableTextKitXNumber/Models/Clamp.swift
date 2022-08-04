@@ -26,7 +26,7 @@ extension Comparable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Range Expression [...]
+// MARK: + Expression [...]
 //=----------------------------------------------------------------------------=
 
 extension RangeExpression where Bound == Int {

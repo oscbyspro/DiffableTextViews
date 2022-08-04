@@ -10,10 +10,9 @@
 //*============================================================================*
 // MARK: * Exports
 //*============================================================================*
-
-@_exported import DiffableTextKitXNumber
-
-@_exported import DiffableTextKitXPattern
+//=----------------------------------------------------------------------------=
+// MARK: + Basics
+//=----------------------------------------------------------------------------=
 
 @_exported import struct DiffableTextKit.ConstantTextStyle
 
@@ -26,6 +25,14 @@
 @_exported import protocol DiffableTextKit.NullableTextStyle
 
 @_exported import protocol DiffableTextKit.WrapperTextStyle
+
+//=----------------------------------------------------------------------------=
+// MARK: + Styles
+//=----------------------------------------------------------------------------=
+
+@_exported import DiffableTextKitXNumber
+
+@_exported import DiffableTextKitXPattern
 
 //=----------------------------------------------------------------------------=
 // MARK: + Platforms
