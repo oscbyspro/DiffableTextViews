@@ -42,14 +42,14 @@ import DiffableTextKit
         character = fraction[character, default: character]
     }
     
-    @inlinable func translate(_ replacement: inout Snapshot) {
+    @inlinable func translate(_ proposal: inout Proposal) {
         //=--------------------------------------=
         // Keystroke (1)
         //=--------------------------------------=
-        if  replacement.count == 1 {
-            var  keystroke = replacement.first!
-            self.keystroke(&keystroke.character)
-            replacement =  [keystroke]
+        if  proposal.replacement.count == 1 {
+            var keystroke = proposal.replacement.first!
+            self.keystroke(&keystroke.character)/*---*/
+            proposal.replacement = Snapshot([keystroke])
         //=--------------------------------------=
         // Paste (2...), Backspace (0)
         //=--------------------------------------=

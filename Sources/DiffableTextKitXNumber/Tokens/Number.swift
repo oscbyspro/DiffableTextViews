@@ -71,8 +71,8 @@ import DiffableTextKit
             //=----------------------------------=
             // Separator
             //=----------------------------------=
-            if let character = next, let separator = separators[character], separator == .fraction {
-                self.separator = separator; next = iterator.next()
+            if let character = next, separators[character] == .fraction {
+                self.separator = .fraction; next = iterator.next()
             }
             
             if separator == nil { break body }

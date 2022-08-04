@@ -49,15 +49,14 @@ import Foundation
         separators: .currency(formatter))
     }
     
-    @inlinable func process(_ replacement: inout Snapshot) -> Sign? {
+    @inlinable func process(_ proposal: inout Proposal) -> Sign? {
         //=--------------------------------------=
         // Keystroke (1)
         //=--------------------------------------=
-        if  replacement.count == 1 {
-            let keystroke = replacement.first!
-            let sign = signs[keystroke.character]
-            if sign != nil { replacement = [] }
-            return sign
+        if  proposal.replacement.count == 1 {
+            let keystroke = proposal.replacement.first!
+            guard let sign = signs[keystroke.character] else { return nil }
+            proposal.replacement = []; return sign
         //=--------------------------------------=
         // Paste (2...), Backspace (0)
         //=--------------------------------------=

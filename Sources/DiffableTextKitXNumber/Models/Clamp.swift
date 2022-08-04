@@ -29,13 +29,13 @@ extension Comparable {
 // MARK: + Expression [...]
 //=----------------------------------------------------------------------------=
 
-extension RangeExpression where Bound == Int {
+extension RangeExpression where Bound: FixedWidthInteger {
     
-    @inlinable func clamped(to bounds: Range<Int>) -> Range<Int> {
-        relative(to: Range(uncheckedBounds: (Int.min, Int.max))).clamped(to: bounds)
+    @inlinable func clamped(to bounds: Range<Bound>) -> Range<Bound> {
+        relative(to: Range(uncheckedBounds: (Bound.min, Bound.max))).clamped(to: bounds)
     }
     
-    @inlinable func clamped(to bounds: ClosedRange<Int>) -> ClosedRange<Int> {
-        ClosedRange(relative(to: Range(uncheckedBounds: (Int.min, Int.max)))).clamped(to: bounds)
+    @inlinable func clamped(to bounds: ClosedRange<Bound>) -> ClosedRange<Bound> {
+        ClosedRange(relative(to: Range(uncheckedBounds: (Bound.min, Bound.max)))).clamped(to: bounds)
     }
 }

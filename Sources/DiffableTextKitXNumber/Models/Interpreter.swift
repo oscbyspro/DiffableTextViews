@@ -28,10 +28,10 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(local components: Components) {
+    @inlinable init(_ components: Components) {
         self.components = components
         self.attributes = Attributes(components)
-        self.translator = Translator(from:.ascii, to: components)
+        self.translator = Translator(from: .ascii, to: components)
     }
     
     //=------------------------------------------------------------------------=
@@ -39,11 +39,11 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
-        assert(formatter.numberStyle == .none); return Self(local: .standard(formatter))
+        assert(formatter.numberStyle == .none); return Self(.standard(formatter))
     }
     
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
-        assert(formatter.numberStyle == .none); return Self(local: .currency(formatter))
+        assert(formatter.numberStyle == .none); return Self(.currency(formatter))
     }
     
     //=------------------------------------------------------------------------=
@@ -57,15 +57,8 @@ import Foundation
     }
     
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
-        var proposal = proposal
-        //=--------------------------------------=
-        // Edit
-        //=--------------------------------------=
-        translator.translate(&proposal.replacement)
-        let sign = components.process(&proposal.replacement)
-        //=--------------------------------------=
-        // Read
-        //=--------------------------------------=
+        var proposal = proposal; translator.translate(&proposal)
+        let sign   = components.process(&proposal) /*---------*/
         var number = try number(proposal.merged(), as:    value)
         if  sign  != nil { number?.sign = sign! }; return number
     }
