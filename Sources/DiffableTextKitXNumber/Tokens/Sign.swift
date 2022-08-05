@@ -14,7 +14,6 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Sign: Token {
-    @usableFromInline static let allCases = [positive, negative]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -22,6 +21,8 @@ import Foundation
     
     @usableFromInline static let positive = Self(ascii: 43) // "+"
     @usableFromInline static let negative = Self(ascii: 45) // "-"
+    
+    @usableFromInline static let allCases = [positive, negative]
 
     //=------------------------------------------------------------------------=
     // MARK: State

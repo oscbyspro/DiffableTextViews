@@ -12,8 +12,7 @@
 //*============================================================================*
 
 @usableFromInline struct Parser<Format: _Format> {
-    @usableFromInline typealias Value = Format.FormatInput
-
+    
     //=------------------------------------------------------------------------=
     
     @usableFromInline let base: Format.Strategy
@@ -24,7 +23,7 @@
         self.base = initial.locale(.en_US_POSIX).parseStrategy
     }
         
-    @inlinable func parse(_ number: Number) throws -> Value {
-        try base.parse(String(bytes: number.ascii, encoding: .ascii)!)
+    @inlinable func parse(_ number: Number) throws -> Format.FormatInput {
+        try base.parse(String.init(bytes: number.ascii, encoding: .ascii)!)
     }
 }

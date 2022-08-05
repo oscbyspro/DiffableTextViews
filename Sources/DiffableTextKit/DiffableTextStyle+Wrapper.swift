@@ -48,7 +48,7 @@ public extension WrapperTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Cache == Style.Cache
+// MARK: + Details where Cache == Base.Cache
 //=----------------------------------------------------------------------------=
 
 public extension WrapperTextStyle where Cache == Base.Cache {
@@ -67,7 +67,7 @@ public extension WrapperTextStyle where Cache == Base.Cache {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Cache == Style.Cache
+// MARK: + Details where Cache == Base.Cache
 //=----------------------------------------------------------------------------=
 
 public extension WrapperTextStyle where Cache == Base.Cache, Value == Base.Value {
@@ -93,7 +93,7 @@ public extension WrapperTextStyle where Cache == Base.Cache, Value == Base.Value
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Style: Nullable
+// MARK: + Details where Base: Nullable
 //=----------------------------------------------------------------------------=
 
 public extension WrapperTextStyle where Cache == Base.Cache, Value == Base.Value,
@@ -120,10 +120,10 @@ Self: NullableTextStyle, Base: NullableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Style: Nullable
+// MARK: + Details where Base: Nullable
 //=----------------------------------------------------------------------------=
 
-public extension WrapperTextStyle where Cache == Base.Cache, Value == Optional<Base.Value>,
+public extension WrapperTextStyle where Cache == Base.Cache, Value == Base.Value?,
 Base: NullableTextStyle {
     
     //=------------------------------------------------------------------------=

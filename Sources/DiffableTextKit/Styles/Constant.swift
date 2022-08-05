@@ -18,6 +18,7 @@ import Foundation
 /// Use this modifier to ignore the environment.
 ///
 public struct ConstantTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
+    
     public typealias Cache = Base.Cache
     public typealias Value = Base.Value
     

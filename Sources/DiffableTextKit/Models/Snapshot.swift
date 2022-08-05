@@ -421,7 +421,7 @@ extension Snapshot {
         if let index = positions.index(
         from: caret.position,
         towards: direction,
-        jumping: Jump.to, // do use Jump.to here
+        jumping: Jump.to, // direction independent
         targeting: nonpassthrough) { return index }
         //=--------------------------------------=
         // Return Preference On Caret Not Found

@@ -16,6 +16,7 @@
 /// - Uses copy-on-write semantics.
 ///
 public struct Context<Style: DiffableTextStyle> {
+    
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value
     
@@ -309,6 +310,6 @@ extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .selection(layout!.selection != selection)
+        return Update.selection(layout!.selection != selection)
     }
 }

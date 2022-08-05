@@ -16,6 +16,7 @@
 /// Use this modifier to control when the cache is created and destroyed.
 ///
 public struct IsolatedTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
+    
     public typealias Value = Base.Value
     
     //=------------------------------------------------------------------------=

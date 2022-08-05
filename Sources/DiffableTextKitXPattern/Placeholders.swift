@@ -11,31 +11,30 @@
 // MARK: * Placeholders
 //*============================================================================*
 
-@usableFromInline enum Placeholders: Equatable {
+@usableFromInline struct Placeholders: Equatable {
+    
     @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    case none
-    case some(Some)
-    case many(Many)
+    @usableFromInline let option: Option
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self = .none
+        self.option = .none
     }
     
     @inlinable init(_ some: (Character, Predicate)) {
-        self = .some(Some(some))
+        self.option = .some(Some(some))
     }
     
     @inlinable init(_ many: [Character: Predicate]) {
-        self = .many(Many(many))
+        self.option = .many(Many(many))
     }
     
     //=------------------------------------------------------------------------=
@@ -43,59 +42,83 @@
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Predicate? {
-        switch self {
+        switch option {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
         case .none:           return nil }
     }
+    
+    //*========================================================================*
+    // MARK: * Option [...]
+    //*========================================================================*
+    
+    @usableFromInline enum Option: Equatable {
+        case none
+        case some(Some)
+        case many(Many)
+    }
 }
 
-//*============================================================================*
-// MARK: * Placeholders x Some [...]
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Option(s)
+//=----------------------------------------------------------------------------=
 
-extension Placeholders { @usableFromInline struct Some: Equatable {
+extension Placeholders {
     
-    //=------------------------------------------------------------------------=
+    //*========================================================================*
+    // MARK: * Some [...]
+    //*========================================================================*
     
-    @usableFromInline let elements: (character: Character, predicate: Predicate)
-    
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ elements: (Character, Predicate)) {
-        self.elements = elements
+    @usableFromInline struct Some: Equatable {
+        
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let elements: (character: Character, predicate: Predicate)
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ elements: (Character, Predicate)) {
+            self.elements = elements
+        }
+        
+        @inlinable subscript(character: Character) -> Predicate? {
+            elements.character == character ? elements.predicate : nil
+        }
+        
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.elements.character == rhs.elements.character
+        }
     }
-    
-    @inlinable subscript(character: Character) -> Predicate? {
-        elements.character == character ? elements.predicate : nil
-    }
-    
-    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.elements.character == rhs.elements.character
-    }
-}}
-    
-//*============================================================================*
-// MARK: * Placeholders x Many [...]
-//*============================================================================*
+}
 
-extension Placeholders { @usableFromInline struct Many: Equatable {
+//=----------------------------------------------------------------------------=
+// MARK: + Option(s)
+//=----------------------------------------------------------------------------=
+
+extension Placeholders {
     
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let elements: [Character: Predicate]
-    
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ elements: [Character: Predicate]) {
-        self.elements = elements
+    //*========================================================================*
+    // MARK: * Many [...]
+    //*========================================================================*
+
+    @usableFromInline struct Many: Equatable {
+        
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let elements: [Character: Predicate]
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ elements: [Character: Predicate]) {
+            self.elements = elements
+        }
+        
+        @inlinable subscript(character: Character) -> Predicate? {
+            elements[character]
+        }
+        
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.elements.keys == rhs.elements.keys
+        }
     }
-    
-    @inlinable subscript(character: Character) -> Predicate? {
-        elements[character]
-    }
-    
-    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.elements.keys == rhs.elements.keys
-    }
-}}
+}

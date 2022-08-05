@@ -17,6 +17,7 @@
 ///
 public struct EqualsTextStyle<Base, Equatable>: WrapperTextStyle
 where Base: DiffableTextStyle, Equatable: Swift.Equatable {
+    
     public typealias Cache = Base.Cache
     public typealias Value = Base.Value
     

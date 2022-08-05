@@ -14,7 +14,6 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Separator: Token {
-    @usableFromInline static let allCases = [grouping, fraction]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -22,6 +21,8 @@ import Foundation
     
     @usableFromInline static let grouping = Self(ascii: 44) // ","
     @usableFromInline static let fraction = Self(ascii: 46) // "."
+    
+    @usableFromInline static let allCases = [grouping, fraction]
     
     //=------------------------------------------------------------------------=
     // MARK: State

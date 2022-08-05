@@ -13,6 +13,7 @@
 
 /// A model used to collect upstream and downstream values.
 public struct Status<Style: DiffableTextStyle>: Equatable {
+    
     public typealias Value = Style.Value
     public typealias Cache = Style.Cache
     

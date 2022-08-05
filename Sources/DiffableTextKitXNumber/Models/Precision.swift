@@ -157,84 +157,99 @@ extension _Precision {
     }
 }
 
-//*============================================================================*
-// MARK: * Precision x Total [...]
-//*============================================================================*
 
-extension _Precision { @usableFromInline struct Total: Equatable {
-    
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline private(set) var digits: ClosedRange<Int> = _Precision.digits
-    
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() { }
-    
-    @inlinable init(digits: some RangeExpression<Int>) {
-        self.digits = digits.clamped(to:  self.digits)
-    }
-    
-    @inlinable func lower() -> Count {
-        Count(digits: digits.lowerBound,
-        integer:  _Precision.integer .lowerBound,
-        fraction: _Precision.fraction.lowerBound)
-    }
-    
-    @inlinable func upper() -> Count {
-        Count(digits: digits.upperBound,
-        integer:  _Precision.integer .upperBound,
-        fraction: _Precision.fraction.upperBound)
-    }
-    
-    @inlinable func inactive() -> _NFSC.Precision {
-        .significantDigits(PartialRangeFrom(digits.lowerBound))
-    }
-}}
+//=----------------------------------------------------------------------------=
+// MARK: + Option(s)
+//=----------------------------------------------------------------------------=
 
-//*============================================================================*
-// MARK: * Precision x Sides [...]
-//*============================================================================*
+extension _Precision {
+    
+    //*========================================================================*
+    // MARK: * Total [...]
+    //*========================================================================*
+    
+    @usableFromInline struct Total: Equatable {
+    
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline private(set) var digits: ClosedRange<Int> = _Precision.digits
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init() { }
+        
+        @inlinable init(digits: some RangeExpression<Int>) {
+            self.digits = digits.clamped(to:  self.digits)
+        }
+        
+        @inlinable func lower() -> Count {
+            Count(digits: digits.lowerBound,
+            integer:  _Precision.integer .lowerBound,
+            fraction: _Precision.fraction.lowerBound)
+        }
+        
+        @inlinable func upper() -> Count {
+            Count(digits: digits.upperBound,
+            integer:  _Precision.integer .upperBound,
+            fraction: _Precision.fraction.upperBound)
+        }
+        
+        @inlinable func inactive() -> _NFSC.Precision {
+            .significantDigits(PartialRangeFrom(digits.lowerBound))
+        }
+    }
+}
 
-extension _Precision { @usableFromInline struct Sides: Equatable {
+//=----------------------------------------------------------------------------=
+// MARK: + Option(s)
+//=----------------------------------------------------------------------------=
+
+extension _Precision {
     
-    //=------------------------------------------------------------------------=
+    //*========================================================================*
+    // MARK: * Sides [...]
+    //*========================================================================*
     
-    @usableFromInline private(set) var integer:  ClosedRange<Int> = _Precision.integer
-    @usableFromInline private(set) var fraction: ClosedRange<Int> = _Precision.fraction
+    @usableFromInline struct Sides: Equatable {
     
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() { }
-    
-    @inlinable init(integer: some RangeExpression<Int>) {
-        self.integer  = integer .clamped(to: self.integer )
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline private(set) var integer:  ClosedRange<Int> = _Precision.integer
+        @usableFromInline private(set) var fraction: ClosedRange<Int> = _Precision.fraction
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init() { }
+        
+        @inlinable init(integer: some RangeExpression<Int>) {
+            self.integer  = integer .clamped(to: self.integer )
+        }
+        
+        @inlinable init(fraction: some RangeExpression<Int>) {
+            self.fraction = fraction.clamped(to: self.fraction)
+        }
+        
+        @inlinable init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
+            self.integer  = integer .clamped(to: self.integer )
+            self.fraction = fraction.clamped(to: self.fraction)
+        }
+        
+        @inlinable func lower() -> Count {
+            Count(digits: _Precision.digits.lowerBound,
+            integer:  integer .lowerBound,
+            fraction: fraction.lowerBound)
+        }
+        
+        @inlinable func upper() -> Count {
+            Count(digits: _Precision.digits.upperBound,
+            integer:  integer .upperBound,
+            fraction: fraction.upperBound)
+        }
+        
+        @inlinable func inactive() -> _NFSC.Precision {
+            .integerAndFractionLength(
+             integerLimits: PartialRangeFrom(integer .lowerBound),
+            fractionLimits: PartialRangeFrom(fraction.lowerBound))
+        }
     }
-    
-    @inlinable init(fraction: some RangeExpression<Int>) {
-        self.fraction = fraction.clamped(to: self.fraction)
-    }
-    
-    @inlinable init(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) {
-        self.integer  = integer .clamped(to: self.integer )
-        self.fraction = fraction.clamped(to: self.fraction)
-    }
-    
-    @inlinable func lower() -> Count {
-        Count(digits: _Precision.digits.lowerBound,
-        integer:  integer .lowerBound,
-        fraction: fraction.lowerBound)
-    }
-    
-    @inlinable func upper() -> Count {
-        Count(digits: _Precision.digits.upperBound,
-        integer:  integer .upperBound,
-        fraction: fraction.upperBound)
-    }
-    
-    @inlinable func inactive() -> _NFSC.Precision {
-        .integerAndFractionLength(
-         integerLimits: PartialRangeFrom(integer .lowerBound),
-        fractionLimits: PartialRangeFrom(fraction.lowerBound))
-    }
-}}
+}

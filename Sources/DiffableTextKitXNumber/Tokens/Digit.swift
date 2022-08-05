@@ -14,7 +14,6 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Digit: Token {
-    @usableFromInline static let allCases = (48 ..< 58).map(Self.init)
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -30,6 +29,8 @@ import Foundation
     @usableFromInline static let seven = Self(ascii: 55) // "7"
     @usableFromInline static let eight = Self(ascii: 56) // "8"
     @usableFromInline static let nine  = Self(ascii: 57) // "9"
+    
+    @usableFromInline static let allCases =  (48 ..< 58).map(Self.init)
     
     //=------------------------------------------------------------------------=
     // MARK: State

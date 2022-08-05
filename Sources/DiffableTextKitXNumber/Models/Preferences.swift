@@ -14,6 +14,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Preferences<Value> where Value: _Input {
+    
     @usableFromInline typealias Bounds = _Bounds<Value>
     @usableFromInline typealias Precision = _Precision<Value>
     

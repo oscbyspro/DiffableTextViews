@@ -26,9 +26,9 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @usableFromInline var sign = Sign.positive
-    @usableFromInline private(set) var integer = Digits()
+    @usableFromInline private(set) var integer   = Digits()
     @usableFromInline private(set) var separator = Separator?.none
-    @usableFromInline private(set) var fraction = Digits()
+    @usableFromInline private(set) var fraction  = Digits()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

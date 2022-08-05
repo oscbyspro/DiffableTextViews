@@ -16,7 +16,6 @@
 /// Equal bounds represent an upper bound.
 ///
 public struct Selection<Bound: Comparable>: Equatable {
-    public typealias Caret = DiffableTextKit.Caret<Bound>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -87,7 +86,7 @@ public struct Selection<Bound: Comparable>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func carets() -> Selection<Caret> {
+    @inlinable public func carets() -> Selection<Caret<Bound>> {
         Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
     }
     

@@ -22,7 +22,7 @@ import SwiftUI
 ///
 /// - environment(\\.locale, \_:)
 /// - environment(\\.layoutDirection, \_:)
-/// - diffableTextViews_disableAutocorrection(\_:)
+/// - diffableTextViews_autocorrectionDisabled(\_:)
 /// - diffableTextViews_font(\_:)
 /// - diffableTextViews_foregroundColor(\_:)
 /// - diffableTextViews_multilineTextAlignment(\_:)
@@ -34,6 +34,7 @@ import SwiftUI
 /// - diffableTextViews_tint(\_:)
 ///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
+    
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value
 
@@ -85,10 +86,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Context  = DiffableTextKit.Context<Style>
-        @usableFromInline typealias Offset   = DiffableTextKit.Offset <UTF16>
-        @usableFromInline typealias Status   = DiffableTextKit.Status <Style>
-        @usableFromInline typealias Upstream = DiffableTextKitXUIKit.Upstream<Style>
+
+        @usableFromInline typealias Context = DiffableTextKit.Context<Style>
         
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -98,7 +97,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var cache:   Cache!
         @usableFromInline var context: Context!
         
-        @usableFromInline var upstream:    Upstream!
+        @usableFromInline var upstream: Upstream<Style>!
         @usableFromInline let downstream = Downstream()
         @usableFromInline var sidestream = Sidestream()
         
@@ -107,7 +106,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never)
-        func setup(_ parent: DiffableTextField,  _ environment: EnvironmentValues) {
+        func setup(_ parent: DiffableTextField, _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -122,7 +121,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             self.cache = upstream.style.cache()
             self.context = Context(pull(), with: &self.cache)
-            self.push(.text)
+            self.push(Update.text)
         }
         
         @inlinable @inline(never)
@@ -169,9 +168,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Pull
             //=----------------------------------=
             attempt: do {
-                let range: Range<Offset> =
-                Offset(nsrange.lowerBound) ..<
-                Offset(nsrange.upperBound)
+                let range: Range<Offset<UTF16>> =
+                Offset<UTF16>(nsrange.lowerBound) ..<
+                Offset<UTF16>(nsrange.upperBound)
                 
                 let update = try self.context.merge(
                 characters, in: range, with: &cache)
@@ -180,8 +179,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 self.push(update)
                 self.lock.task {
-                    // option + backspace
-                    self.push(.selection)
+                    // see [option + backspace]
+                    self.push(Update.selection)
                 }
             //=----------------------------------=
             // Cancellation
@@ -204,7 +203,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 // Push
                 //=------------------------------=
-                self.push([.text, .selection])
+                self.push([Update.text, .selection])
             //=----------------------------------=
             // Normal
             //=----------------------------------=
@@ -259,7 +258,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.push(update)
         }
         
-        @inlinable func pull() -> Status {
+        @inlinable func pull() -> Status<Style> {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=

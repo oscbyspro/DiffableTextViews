@@ -40,7 +40,7 @@
     /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
         //=--------------------------------------=
-        // Differentiate
+        // Values
         //=--------------------------------------=
         let selection = selection.map(
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
@@ -60,7 +60,7 @@
             self.selection = selection; return
         }
         //=--------------------------------------=
-        // Resolve
+        // Update
         //=--------------------------------------=
         var carets = selection.carets().detached()
         

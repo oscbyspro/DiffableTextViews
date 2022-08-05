@@ -12,6 +12,7 @@
 //*============================================================================*
 
 @usableFromInline struct Formatter<Format: _Format> where Format.FormatInput: _Input {
+    
     @usableFromInline typealias Value = Format.FormatInput
     
     //=------------------------------------------------------------------------=
