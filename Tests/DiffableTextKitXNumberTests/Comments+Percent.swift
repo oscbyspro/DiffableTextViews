@@ -25,16 +25,9 @@ final class CommentsOnPercent: XCTestCase {
     
     func testPercentLabelsAreAlwaysVirtual() {
         for cache in numbers {
-            let  components = cache.interpreter.components
-            func nonvirtual(character:Character) -> Bool {
-                components.signs     [character] !=  nil ||
-                components.digits    [character] !=  nil ||
-                components.separators[character] == .fraction
-            }
-            
-            let locale  = cache.style.locale
-            let percent = IntegerFormatStyle<Int>.Percent(locale: locale)
-            XCTAssertEqual(1, percent.format(0).filter(nonvirtual).count)
+            let components = cache.interpreter.components
+            let percent = IntegerFormatStyle<Int>.Percent(locale:cache.style.locale)
+            XCTAssertEqual(1, percent.format(0).filter(components.nonvirtual).count)
         }
     }
 }

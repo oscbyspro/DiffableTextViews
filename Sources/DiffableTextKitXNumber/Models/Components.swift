@@ -62,4 +62,14 @@ import Foundation
         //=--------------------------------------=
         } else { return nil }
     }
+    
+    @inlinable func virtual(_ character: Character) -> Bool {
+        !nonvirtual(character)
+    }
+    
+    @inlinable func nonvirtual(_ character: Character) -> Bool {
+        signs     [character] != nil ||
+        digits    [character] != nil ||
+        separators[character] == Separator.fraction
+    }
 }

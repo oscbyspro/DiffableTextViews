@@ -27,6 +27,7 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     
     public var locale: Locale
     public var currencyCode: String
+    
     public var bounds: Bounds?
     public var precision: Precision?
     
@@ -89,7 +90,7 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
             // Formatter x Currency x Fractionless
             //=----------------------------------=
             formatter.maximumFractionDigits = .zero
-            self.adjustments = Label.currency(formatter, interpreter.components)
+            self.adjustments = Label.currency(formatter, with: interpreter.components)
         }
         
         //=--------------------------------------------------------------------=

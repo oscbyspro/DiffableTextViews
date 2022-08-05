@@ -29,36 +29,50 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(label: String, direction: Direction) {
+    @inlinable init(_ label: String, direction: Direction) {
         self.label = label;  self.direction = direction
+    }
+    
+    /// Returns an instance if it contains nonvirtual characters; returns nil otherwise.
+    @inlinable init?(_ label: String, zero: String, with components: Components) {
+        if label.allSatisfy(components.virtual) { return nil }
+        //=--------------------------------------=
+        // Contains Nonvirtual Characters
+        //=--------------------------------------=
+        let  digit = components.digits[.zero]
+        let  sides = zero.split(separator: digit, omittingEmptySubsequences: false)
+        self.label = label; self.direction = sides[0].contains(label) ? .forwards : .backwards
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    /// Returns an instance if it is needed, returns nil otherwise.
-    ///
-    /// Correctness is known by tests parsing currency formats for all locale-currency pairs.
-    ///
-    @inlinable static func currency(_ formatter: NumberFormatter, _ components: Components) -> Self? {
+        
+    /// Correctness is asserted by parsing all permutations.
+    @inlinable static func currency(_ formatter: NumberFormatter,
+    with components: Components) -> Self? {
         assert(formatter.numberStyle == .currency)
         assert(formatter.maximumFractionDigits == 0)
         //=--------------------------------------=
-        // Necessity
+        // Return
         //=--------------------------------------=
         let label = formatter.currencySymbol!
-        guard label.contains(components.separators[.fraction]) else { return nil }
-        //=--------------------------------------=
-        // Direction
-        //=--------------------------------------=
-        let sides = formatter.string(from: 0)!.split(
-        separator: components.digits[Digit.zero], omittingEmptySubsequences:  false)
-        let direction: Direction = sides[0].contains(label) ? .forwards : .backwards
+        let zero = formatter.string(from: 0)!
+        return Self(label, zero: zero, with: components)
+    }
+    
+    #warning("This needs tests............................")
+    /// Correctness is asserted by parsing all permutations.
+    @inlinable static func measurement(_ formatter: MeasurementFormatter,
+    unit: some Unit, with components: Components) -> Self? {
+        assert(formatter.numberFormatter.numberStyle == .none);
+        assert(formatter.numberFormatter.maximumFractionDigits  == 0)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Self(label: label, direction: direction)
+        let label = formatter.string(from: unit)
+        let zero  = formatter.string(from: Measurement(value: 0, unit: unit))
+        return Self(label, zero: zero, with: components)
     }
 
     //=------------------------------------------------------------------------=

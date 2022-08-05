@@ -46,6 +46,11 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    @inlinable var locale: Locale {
+        get { base.locale }
+        set { base.locale = newValue }
+    }
+    
     @inlinable var unit: Unit {
         get { item.unit }
         set { item.unit = newValue }
@@ -56,7 +61,24 @@ import Foundation
         set { base.numberFormatStyle! = newValue }
     }
     
-    @inlinable var parseStrategy: Core.Strategy { core.parseStrategy }
+    @inlinable var parseStrategy: Core.Strategy {
+        get { core.parseStrategy }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var options: MeasurementFormatter.UnitOptions {
+        .providedUnit
+    }
+    
+    @inlinable var style: MeasurementFormatter.UnitStyle { switch base.width {
+        case .narrow: return .short
+        case .abbreviated: return .medium
+        case .wide: return .long
+        default: fatalError("Unknown unit width!") }
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -90,7 +112,7 @@ import Foundation
     // MARK: * Item [...]
     //*========================================================================*
     
-    /// A Codable and Hashable wrapper around Unit.
+    /// A `Codable` & `Hashable` wrapper around `Unit.`
     @usableFromInline struct Item: Codable, Hashable {
         
         //=--------------------------------------------------------------------=

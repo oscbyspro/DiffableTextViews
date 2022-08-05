@@ -26,6 +26,7 @@ where Format: _Format & _Standard, Format.FormatInput: _Input {
     //=------------------------------------------------------------------------=
     
     public var locale: Locale
+    
     public var bounds: Bounds?
     public var precision: Precision?
     

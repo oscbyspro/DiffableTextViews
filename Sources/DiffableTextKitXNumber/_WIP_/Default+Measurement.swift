@@ -34,6 +34,7 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
     public var unit: Unit
     public var width: Width
     public var locale: Locale
+    
     public var bounds: Bounds?
     public var precision: Precision?
     
@@ -82,15 +83,9 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
             // Formatter
             //=----------------------------------=
             let formatter = MeasurementFormatter()
-            formatter.locale = style.locale
-            formatter.unitOptions = .providedUnit
-            
-            #warning("........")
-            switch style.width {
-            case .narrow:      formatter.unitStyle = .short
-            case .abbreviated: formatter.unitStyle = .medium
-            case .wide:        formatter.unitStyle = .long
-            default: fatalError("Unknown unit width!") }
+            formatter.locale = format.locale
+            formatter.unitStyle = format.style
+            formatter.unitOptions = format.options
             //=----------------------------------=
             // Formatter x None
             //=----------------------------------=
@@ -100,10 +95,9 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
             //=----------------------------------=
             // Formatter x Fractionless
             //=----------------------------------=
-            #warning("TODO.......................................")
             formatter.numberFormatter.maximumFractionDigits = .zero
-            // self.adjustments = Label.currency(formatter, interpreter.components)
-            fatalError(".........................................................")
+            self.adjustments = Label.measurement(formatter,
+            unit: format.unit, with: interpreter.components)
         }
         
         //=--------------------------------------------------------------------=
