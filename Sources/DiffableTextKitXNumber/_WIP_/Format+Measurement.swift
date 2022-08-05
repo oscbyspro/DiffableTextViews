@@ -73,7 +73,8 @@ import Foundation
         .providedUnit
     }
     
-    @inlinable var style: MeasurementFormatter.UnitStyle { switch base.width {
+    @inlinable var style: MeasurementFormatter.UnitStyle {
+        switch base.width {
         case .narrow: return .short
         case .abbreviated: return .medium
         case .wide: return .long

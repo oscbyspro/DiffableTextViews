@@ -10,45 +10,43 @@
 import DiffableTextKit
 import Foundation
 
-#warning("Update this to accommodate measurements.............................")
 //*============================================================================*
 // MARK: * Label
 //*============================================================================*
 
-/// A model for marking real currency symbols as virtual.
+/// A model for marking labels as virtual.
 @usableFromInline struct Label {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let label: String
+    @usableFromInline let text: String
     @usableFromInline let direction: Direction
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ label: String, direction: Direction) {
-        self.label = label;  self.direction = direction
+    @inlinable init(_ text: String, direction: Direction) {
+        self.text = text; self.direction = direction
     }
     
     /// Returns an instance if it contains nonvirtual characters; returns nil otherwise.
-    @inlinable init?(_ label: String, zero: String, with components: Components) {
-        if label.allSatisfy(components.virtual) { return nil }
+    @inlinable init?(_ text: String, zero: String, with components: Components) {
+        if text.allSatisfy(components.virtual) { return nil }
         //=--------------------------------------=
         // Contains Nonvirtual Characters
         //=--------------------------------------=
-        let  digit = components.digits[.zero]
-        let  sides = zero.split(separator: digit, omittingEmptySubsequences: false)
-        self.label = label; self.direction = sides[0].contains(label) ? .forwards : .backwards
+        let sides = zero.split(separator:components.digits[.zero], omittingEmptySubsequences: false)
+        self.text = text; self.direction = sides[0].contains(text) ? Direction.forwards : .backwards
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
         
-    /// Correctness is asserted by parsing all permutations.
+    /// Correctness is asserted by parsing all combinations.
     @inlinable static func currency(_ formatter: NumberFormatter,
     with components: Components) -> Self? {
         assert(formatter.numberStyle == .currency)
@@ -57,12 +55,12 @@ import Foundation
         // Return
         //=--------------------------------------=
         let label = formatter.currencySymbol!
-        let zero = formatter.string(from: 0)!
+        let zero  = formatter.string(from:0)!
         return Self(label, zero: zero, with: components)
     }
     
     #warning("This needs tests............................")
-    /// Correctness is asserted by parsing all permutations.
+    /// Correctness is asserted by parsing all combinations.
     @inlinable static func measurement(_ formatter: MeasurementFormatter,
     unit: some Unit, with components: Components) -> Self? {
         assert(formatter.numberFormatter.numberStyle == .none);
@@ -70,17 +68,16 @@ import Foundation
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        let label = formatter.string(from: unit)
-        let zero  = formatter.string(from: Measurement(value: 0, unit: unit))
-        return Self(label, zero: zero, with: components)
+        let zero  = formatter.string(from: Measurement(value: 0.0, unit: unit))
+        return Self(formatter.string(from: unit), zero: zero, with: components)
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_  snapshot: inout Snapshot) {
-        if let label = Search.range(of: label, in: snapshot, towards: direction) {
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
+        if let label = Search.range(of: text, in: snapshot, towards: direction) {
             snapshot.transform(attributes: label, with: { $0 = Attribute.phantom })
         }
     }
