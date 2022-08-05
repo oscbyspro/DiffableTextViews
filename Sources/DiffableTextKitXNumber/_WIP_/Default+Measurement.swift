@@ -10,23 +10,30 @@
 import DiffableTextKit
 import Foundation
 
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
+
 //*============================================================================*
-// MARK: * Default x Currency
+// MARK: * Default x Measurement
 //*============================================================================*
 
-public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency
-where Format: _Format & _Currency, Format.FormatInput: _Input {
+public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
     
-    public typealias Graph = Format.FormatInput.NumberTextGraph
-    public typealias Value = Format.FormatInput
-    public typealias Input = Format.FormatInput
+    public typealias Graph = Double.NumberTextGraph
+    public typealias Value = Double
+    public typealias Input = Double
+    
+    public typealias Width = Measurement<Unit>.FormatStyle.UnitWidth
+    @usableFromInline typealias Format = _MeasurementFormat<Unit>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    public var unit: Unit
+    public var width: Width
     public var locale: Locale
-    public var currencyCode: String
     public var bounds: Bounds?
     public var precision: Precision?
     
@@ -34,22 +41,22 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
-        self.locale = locale; self.currencyCode = code
+    @inlinable public init(unit: Unit, width: Width, locale: Locale = .autoupdatingCurrent) {
+        self.unit = unit; self.width = width; self.locale = locale
     }
     
     //*========================================================================*
     // MARK: * Cache
     //*========================================================================*
     
-    public final class Cache: _DefaultCache {        
-        public typealias Value = Format.FormatInput
+    public final class Cache: _DefaultCache {
+        public typealias Value = Double
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style: _CurrencyStyle
+        @usableFromInline var style: _MeasurementStyle
         @usableFromInline let preferences: Preferences<Input>
 
         @usableFromInline let parser: Parser<Format>
@@ -61,8 +68,10 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ style: _CurrencyStyle) {
-            let format = Format(code: style.currencyCode, locale: style.locale)
+        #warning("TODO...........................")
+        @inlinable init(_ style: _MeasurementStyle) {
+            let format = Format(unit: style.unit,
+            width:style.width,locale: style.locale)
             //=----------------------------------=
             // N/A
             //=----------------------------------=
@@ -72,24 +81,29 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
             //=----------------------------------=
             // Formatter
             //=----------------------------------=
-            let formatter = NumberFormatter()
+            let formatter = MeasurementFormatter()
             formatter.locale = style.locale
-            formatter.currencyCode = style.currencyCode
+            formatter.unitOptions = .providedUnit
+            
+            #warning("........")
+            switch style.width {
+            case .narrow:      formatter.unitStyle = .short
+            case .abbreviated: formatter.unitStyle = .medium
+            case .wide:        formatter.unitStyle = .long
+            default: fatalError("Unknown unit width!") }
             //=----------------------------------=
             // Formatter x None
             //=----------------------------------=
-            assert(formatter.numberStyle == .none)
-            self.interpreter = Interpreter.currency(formatter)
+            assert(formatter.numberFormatter.numberStyle == .none)
+            self.interpreter = Interpreter.standard(formatter.numberFormatter)
+            self.preferences = Preferences.standard()
             //=----------------------------------=
-            // Formatter x Currency
+            // Formatter x Fractionless
             //=----------------------------------=
-            formatter.numberStyle = .currency
-            self.preferences = Preferences.currency(formatter)
-            //=----------------------------------=
-            // Formatter x Currency x Fractionless
-            //=----------------------------------=
-            formatter.maximumFractionDigits = .zero
-            self.adjustments = Label.currency(formatter, interpreter.components)
+            #warning("TODO.......................................")
+            formatter.numberFormatter.maximumFractionDigits = .zero
+            // self.adjustments = Label.currency(formatter, interpreter.components)
+            fatalError(".........................................................")
         }
         
         //=--------------------------------------------------------------------=
@@ -97,8 +111,9 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         //=--------------------------------------------------------------------=
         
         @inlinable func compatible(_ style: Style) -> Bool {
-            self.style.locale == style.locale &&
-            self.style.currencyCode == style.currencyCode
+            self.style.unit   == style.unit   &&
+            self.style.width  == style.width  &&
+            self.style.locale == style.locale
         }
         
         @inlinable func snapshot(_ characters: String) -> Snapshot {
