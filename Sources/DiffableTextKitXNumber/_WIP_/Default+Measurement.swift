@@ -63,7 +63,7 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
         @usableFromInline let parser: Parser<Format>
         @usableFromInline let formatter: Formatter<Format>
         @usableFromInline let interpreter: Interpreter
-        @usableFromInline let adjustments: Label?
+        @usableFromInline let label: Label
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -71,7 +71,7 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
         
         #warning("TODO...........................")
         @inlinable init(_ style: _MeasurementStyle) {
-            let format = Format(unit: style.unit,
+            let format = Format(unit: style  .unit,
             width:style.width,locale: style.locale)
             //=----------------------------------=
             // N/A
@@ -89,15 +89,15 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
             //=----------------------------------=
             // Formatter x None
             //=----------------------------------=
-            assert(formatter.numberFormatter.numberStyle == .none)
-            self.interpreter = Interpreter.standard(formatter.numberFormatter)
-            self.preferences = Preferences.standard()
+            assert(formatter.numberFormatter.numberStyle ==  .none)
+            self.interpreter = .standard(formatter.numberFormatter)
+            self.preferences = .standard()
             //=----------------------------------=
             // Formatter x Fractionless
             //=----------------------------------=
             formatter.numberFormatter.maximumFractionDigits = .zero
-            self.adjustments = Label.measurement(formatter,
-            unit: format.unit, with: interpreter.components)
+            self.label = .measurement(formatter, unit:
+            format.unit, with: interpreter.components)
         }
         
         //=--------------------------------------------------------------------=
@@ -113,8 +113,8 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
         @inlinable func snapshot(_ characters: String) -> Snapshot {
             var snapshot = Snapshot(characters,
             as: { interpreter.attributes[$0] })
-            adjustments?.autocorrect(&snapshot)
-            return snapshot
+            label.autocorrect(&snapshot) /*--*/
+            return snapshot /*---------------*/
         }
     }
 }

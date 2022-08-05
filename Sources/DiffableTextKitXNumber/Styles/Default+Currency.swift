@@ -56,7 +56,7 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         @usableFromInline let parser: Parser<Format>
         @usableFromInline let formatter: Formatter<Format>
         @usableFromInline let interpreter: Interpreter
-        @usableFromInline let adjustments: Label?
+        @usableFromInline let label: Label
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -79,18 +79,18 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
             //=----------------------------------=
             // Formatter x None
             //=----------------------------------=
-            assert(formatter.numberStyle == .none)
-            self.interpreter = Interpreter.currency(formatter)
+            assert(formatter.numberStyle ==  .none)
+            self.interpreter = .currency(formatter)
             //=----------------------------------=
             // Formatter x Currency
             //=----------------------------------=
             formatter.numberStyle = .currency
-            self.preferences = Preferences.currency(formatter)
+            self.preferences = .currency(formatter)
             //=----------------------------------=
             // Formatter x Currency x Fractionless
             //=----------------------------------=
             formatter.maximumFractionDigits = .zero
-            self.adjustments = Label.currency(formatter, with: interpreter.components)
+            self.label = .currency(formatter, with: interpreter.components)
         }
         
         //=--------------------------------------------------------------------=
@@ -105,8 +105,8 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         @inlinable func snapshot(_ characters: String) -> Snapshot {
             var snapshot = Snapshot(characters,
             as: { interpreter.attributes[$0] })
-            adjustments?.autocorrect(&snapshot)
-            return snapshot
+            label.autocorrect(&snapshot) /*--*/
+            return snapshot /*---------------*/
         }
     }
 }

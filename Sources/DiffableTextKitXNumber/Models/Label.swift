@@ -23,23 +23,20 @@ import Foundation
     
     @usableFromInline let text: String
     @usableFromInline let direction: Direction
-
+    @usableFromInline let autocorrection: Bool
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ text: String, direction: Direction) {
-        self.text = text; self.direction = direction
+        self.text = text; self.direction = direction; self.autocorrection = true
     }
     
-    /// Returns an instance if it contains nonvirtual characters; returns nil otherwise.
-    @inlinable init?(_ text: String, zero: String, with components: Components) {
-        if text.allSatisfy(components.virtual) { return nil }
-        //=--------------------------------------=
-        // Contains Nonvirtual Characters
-        //=--------------------------------------=
+    @inlinable init(_ text: String, zero: String, with components: Components) {
         let sides = zero.split(separator:components.digits[.zero], omittingEmptySubsequences: false)
         self.text = text; self.direction = sides[0].contains(text) ? Direction.forwards : .backwards
+        self.autocorrection = !text.allSatisfy(components.virtual)
     }
     
     //=------------------------------------------------------------------------=
@@ -48,7 +45,7 @@ import Foundation
         
     /// Correctness is asserted by parsing all combinations.
     @inlinable static func currency(_ formatter: NumberFormatter,
-    with components: Components) -> Self? {
+    with components: Components) -> Self {
         assert(formatter.numberStyle == .currency)
         assert(formatter.maximumFractionDigits == 0)
         //=--------------------------------------=
@@ -62,7 +59,7 @@ import Foundation
     #warning("This needs tests............................")
     /// Correctness is asserted by parsing all combinations.
     @inlinable static func measurement(_ formatter: MeasurementFormatter,
-    unit: some Unit, with components: Components) -> Self? {
+    unit: some Unit, with components: Components) -> Self {
         assert(formatter.numberFormatter.numberStyle == .none);
         assert(formatter.numberFormatter.maximumFractionDigits  == 0)
         //=--------------------------------------=
@@ -77,8 +74,8 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        if let label = Search.range(of: text, in: snapshot, towards: direction) {
-            snapshot.transform(attributes: label, with: { $0 = Attribute.phantom })
-        }
+        guard autocorrection, let label = Search.range(
+        of: text, in: snapshot, towards: direction) else {  return  }
+        snapshot.transform(attributes: label, with: { $0 = .phantom })
     }
 }
