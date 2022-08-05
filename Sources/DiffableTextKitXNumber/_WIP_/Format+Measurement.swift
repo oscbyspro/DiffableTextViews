@@ -17,7 +17,7 @@ import Foundation
 // MARK: * Format x Measurement
 //*============================================================================*
 
-@usableFromInline struct _MeasurementFormat<Unit: Dimension>: _Format, Codable {
+@usableFromInline struct _MeasurementFormat<Unit: Dimension>: _Format {
     
     @usableFromInline typealias FormatInput  = Double
     @usableFromInline typealias FormatOutput = String

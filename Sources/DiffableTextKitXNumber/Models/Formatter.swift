@@ -34,7 +34,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ precision: _NFSC.Precision) -> Self {
-        var result = self; result.base = result.base.precision(precision); return result
+        var S0 = self; S0.base = S0.base.precision(precision); return S0
     }
     
     //=------------------------------------------------------------------------=

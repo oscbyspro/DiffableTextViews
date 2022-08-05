@@ -45,7 +45,7 @@ public extension _Style {
     //=------------------------------------------------------------------------=
     
     @inlinable func bounds(_ bounds: Bounds?) -> Self {
-        var result = self; result.bounds = bounds; return result
+        var S0 = self; S0.bounds = bounds; return S0
     }
     
     //=------------------------------------------------------------------------=
@@ -76,7 +76,7 @@ public extension _Style {
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ precision: Precision?) -> Self {
-        var result = self; result.precision = precision; return result
+        var S0 = self; S0.precision = precision; return S0
     }
     
     //=------------------------------------------------------------------------=

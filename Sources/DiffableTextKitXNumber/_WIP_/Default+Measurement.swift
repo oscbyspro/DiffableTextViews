@@ -24,7 +24,6 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
     public typealias Value = Double
     public typealias Input = Double
     
-    public typealias Width = Measurement<Unit>.FormatStyle.UnitWidth
     @usableFromInline typealias Format = _MeasurementFormat<Unit>
     
     //=------------------------------------------------------------------------=
@@ -32,7 +31,7 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
     //=------------------------------------------------------------------------=
     
     public var unit: Unit
-    public var width: Width
+    public var width: Measurement<Unit>.FormatStyle.UnitWidth
     public var locale: Locale
     
     public var bounds: Bounds?
@@ -42,8 +41,12 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(unit: Unit, width: Width, locale: Locale = .autoupdatingCurrent) {
-        self.unit = unit; self.width = width; self.locale = locale
+    @inlinable public init(unit: Unit,
+    width: Measurement<Unit>.FormatStyle.UnitWidth,
+    locale: Locale = .autoupdatingCurrent) {
+        self.unit = unit
+        self.width = width
+        self.locale = locale
     }
     
     //*========================================================================*
@@ -105,8 +108,8 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
         //=--------------------------------------------------------------------=
         
         @inlinable func compatible(_ style: Style) -> Bool {
-            self.style.unit   == style.unit   &&
-            self.style.width  == style.width  &&
+            self.style.unit == style.unit &&
+            self.style.width == style.width &&
             self.style.locale == style.locale
         }
         

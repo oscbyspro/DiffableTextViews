@@ -28,6 +28,6 @@ public struct Proposal {
     
     /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func merged() -> Snapshot {
-        var result = base; result.replaceSubrange(range, with: replacement); return result
+        var S0 = base; S0.replaceSubrange(range, with: replacement); return S0
     }
 }

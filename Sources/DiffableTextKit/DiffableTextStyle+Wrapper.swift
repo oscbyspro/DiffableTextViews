@@ -35,7 +35,7 @@ public extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func locale(_ locale: Locale) -> Self {
-        var result = self; result.base = result.base.locale(locale); return result
+        var S0 = self; S0.base = S0.base.locale(locale); return S0
     }
     
     //=------------------------------------------------------------------------=

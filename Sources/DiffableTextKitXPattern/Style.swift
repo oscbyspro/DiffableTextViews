@@ -35,12 +35,12 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     //=------------------------------------------------------------------------=
     
     @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
-        var result = self; result.placeholders = .init(placeholders); return result
+        var S0 = self; S0.placeholders = .init(placeholders); return S0
     }
     
     @inlinable public func placeholders(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
-        var result = self; result.placeholders = .init((character, predicate)); return result
+        var S0 = self; S0.placeholders = .init((character, predicate)); return S0
     }
     
     //=------------------------------------------------------------------------=
