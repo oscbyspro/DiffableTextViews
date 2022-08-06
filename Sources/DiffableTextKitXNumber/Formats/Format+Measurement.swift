@@ -33,9 +33,9 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable init(unit: Unit, width: Base.UnitWidth, locale: Locale) {
-        self.base = Base(width: width, locale: locale,
-        usage: .asProvided, numberFormatStyle:.number)
-        self.item = Item(unit)
+        self.item = Item(unit); self.base = Base(width: width, locale:
+        locale, usage: .asProvided, numberFormatStyle: Core(locale: locale))
+        assert(base.locale == core.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -48,8 +48,14 @@ import Foundation
     }
     
     @inlinable var locale: Locale {
-        get { base.locale }
-        set { base.locale = newValue }
+        get {
+            assert(base.locale == core.locale)
+            return base.locale
+        }
+        set {
+            base.locale = newValue
+            core.locale = newValue
+        }
     }
     
     @inlinable var core: Core {

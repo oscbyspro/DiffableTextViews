@@ -86,6 +86,9 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle, _Measurement {
             formatter.locale = format.locale
             formatter.unitStyle = format.style
             formatter.unitOptions = format.options
+
+            formatter.numberFormatter = NumberFormatter()
+            formatter.numberFormatter.locale = format.locale
             //=----------------------------------=
             // Formatter x None
             //=----------------------------------=

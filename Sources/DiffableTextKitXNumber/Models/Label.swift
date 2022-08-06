@@ -65,6 +65,8 @@ import Foundation
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
+        #warning("Rethink this..................")
+        
         let zero  = formatter.string(from: Measurement(value: 0.0, unit: unit))
         return Self(formatter.string(from: unit), zero: zero, with: components)
     }
@@ -74,8 +76,10 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        guard autocorrection, let label = Search.range(
-        of: text, in: snapshot, towards: direction) else {  return  }
-        snapshot.transform(attributes: label, with: { $0 = .phantom })
+        guard autocorrection else { return }
+        
+        if  let label = Search.range(of: text, in: snapshot, towards:  direction ){
+            snapshot.transform(attributes: label, with: { $0 = Attribute.phantom })
+        }
     }
 }
