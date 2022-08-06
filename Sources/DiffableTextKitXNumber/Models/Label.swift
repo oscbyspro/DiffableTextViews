@@ -22,16 +22,14 @@ import Foundation
     
     @usableFromInline let text: String
     @usableFromInline let direction: Direction
-    @usableFromInline var virtual: Bool
+    @usableFromInline var virtual: Bool = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ text: String, direction: Direction, virtual: Bool = false) {
-        self.text = text
-        self.direction = direction
-        self.virtual = virtual
+    @inlinable init(_ text: String, search direction: Direction) {
+        self.text = text; self.direction = direction
     }
     
     @inlinable init(_ text: String, context: String) {
@@ -40,17 +38,16 @@ import Foundation
         let lhs = (match.lowerBound == context.startIndex)
         let rhs = (match.upperBound == context  .endIndex)
         
-        self.init(text, direction: (lhs || !rhs) ? .forwards : .backwards)
+        self.init(text, search: (lhs || !rhs) ? .forwards : .backwards)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
         
-    /// - Tests should parse all combinations.
-    @inlinable static func currency(
-    _ formatter: NumberFormatter) -> Self {
-        assert(formatter.numberStyle == .currency)
+    /// - Test by parsing each combination.
+    @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
+        assert(formatter.numberStyle  ==  .currency)
         assert(formatter.maximumFractionDigits == 0)
         
         let text = formatter.currencySymbol!
@@ -59,15 +56,14 @@ import Foundation
         return Self(text, context: String(body))
     }
     
-    /// - Tests should parse all combinations.
+    /// - Test by parsing each combination.
     @inlinable static func measurement<Unit>(
     _ formatter: Measurement<Unit>.FormatStyle, unit: Unit) -> Self {
         let measurement = Measurement(value: 0, unit: unit)
         let body = formatter.attributed.format(measurement)
         let unit = body.runs.first{$0.measurement == .unit}!
-        let text = String(body[unit.range].characters)
-                
-        return Self(text, context:  String(body.characters))
+        let text = String(body[unit.range].characters) /**/
+        return Self(text, context: String(body.characters))
     }
     
     //=------------------------------------------------------------------------=
