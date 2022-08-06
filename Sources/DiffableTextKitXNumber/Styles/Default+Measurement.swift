@@ -82,18 +82,13 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle, _Measurement {
             //=----------------------------------=
             // Formatter
             //=----------------------------------=
-            let formatter = MeasurementFormatter()
+            let formatter = NumberFormatter()
             formatter.locale = format.locale
-            formatter.unitStyle = format.style
-            formatter.unitOptions = format.options
-
-            formatter.numberFormatter = NumberFormatter()
-            formatter.numberFormatter.locale = format.locale
             //=----------------------------------=
             // Formatter x None
             //=----------------------------------=
-            assert(formatter.numberFormatter.numberStyle ==  .none)
-            self.interpreter = .standard(formatter.numberFormatter)
+            assert(formatter.numberStyle ==  .none)
+            self.interpreter = .standard(formatter)
             self.preferences = .standard()
             //=----------------------------------=
             // N/A

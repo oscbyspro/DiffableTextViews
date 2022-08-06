@@ -42,11 +42,6 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var unit: Unit {
-        get { item.unit }
-        set { item.unit = newValue }
-    }
-    
     @inlinable var locale: Locale {
         get {
             assert(base.locale == core.locale)
@@ -56,6 +51,11 @@ import Foundation
             base.locale = newValue
             core.locale = newValue
         }
+    }
+    
+    @inlinable var unit: Unit {
+        get { item.unit }
+        set { item.unit = newValue }
     }
     
     @inlinable var core: Core {
@@ -68,24 +68,12 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var options: MeasurementFormatter.UnitOptions {
-        .providedUnit
-    }
-    
-    @inlinable var style: MeasurementFormatter.UnitStyle {
-        switch base.width {
-        case .narrow: return .short
-        case .abbreviated: return .medium
-        case .wide: return .long
-        default: fatalError("Unknown!") }
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
+    
+    @inlinable func locale(_ locale: Locale) -> Self {
+        var S0 = self; S0.locale = locale; return S0
+    }
     
     @inlinable func sign(strategy: _NFSC_SignDS) -> Self {
         var S0 = self; S0.core = S0.core.sign(strategy: strategy); return S0
