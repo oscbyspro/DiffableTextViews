@@ -14,7 +14,6 @@ import Foundation
 // MARK: * Label
 //*============================================================================*
 
-/// A model for marking labels as virtual.
 @usableFromInline struct Label {
     
     //=------------------------------------------------------------------------=
@@ -23,20 +22,27 @@ import Foundation
     
     @usableFromInline let text: String
     @usableFromInline let direction: Direction
-    @usableFromInline let autocorrection: Bool
+    @usableFromInline let virtual: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ text: String, direction: Direction) {
-        self.text = text; self.direction = direction; self.autocorrection = true
+        self.text = text
+        self.direction = direction
+        self.virtual = false
     }
     
-    @inlinable init(_ text: String, zero: String, with components: Components) {
-        let sides = zero.split(separator:components.digits[.zero], omittingEmptySubsequences: false)
-        self.text = text; self.direction = sides[0].contains(text) ? Direction.forwards : .backwards
-        self.autocorrection = !text.allSatisfy(components.virtual)
+    @inlinable init(_ text: String, in body: String, virtual: Bool) {
+        let match = body.range(of: text)!
+        
+        let lhs = (match.lowerBound == body.startIndex)
+        let rhs = (match.upperBound == body  .endIndex)
+        
+        self.text = text
+        self.direction = (lhs || !rhs) ? .forwards : .backwards
+        self.virtual = virtual
     }
     
     //=------------------------------------------------------------------------=
@@ -44,31 +50,22 @@ import Foundation
     //=------------------------------------------------------------------------=
         
     /// Correctness is asserted by parsing all combinations.
-    @inlinable static func currency(_ formatter: NumberFormatter,
-    with components: Components) -> Self {
+    @inlinable static func currency(
+    _ formatter: NumberFormatter, with components: Components) -> Self {
         assert(formatter.numberStyle == .currency)
         assert(formatter.maximumFractionDigits == 0)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        let label = formatter.currencySymbol!
-        let zero  = formatter.string(from:0)!
-        return Self(label, zero: zero, with: components)
+        
+        let text = formatter.currencySymbol!
+        let body = formatter.string(from:0)!
+        
+        return Self(text, in: String(body), virtual: text.allSatisfy(components.virtual))
     }
     
-    #warning("This needs tests............................")
-    /// Correctness is asserted by parsing all combinations.
-    @inlinable static func measurement(_ formatter: MeasurementFormatter,
-    unit: some Unit, with components: Components) -> Self {
-        assert(formatter.numberFormatter.numberStyle == .none);
-        assert(formatter.numberFormatter.maximumFractionDigits  == 0)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        #warning("Rethink this..................")
-        
-        let zero  = formatter.string(from: Measurement(value: 0.0, unit: unit))
-        return Self(formatter.string(from: unit), zero: zero, with: components)
+    @inlinable static func measurement<T>(
+    _ formatter: Measurement<T>.FormatStyle, unit: T, with components: Components) -> Self {
+        let body = formatter.attributed.format(Measurement(value: 0, unit: unit))
+        let text = String(body[body.runs.first{$0.measurement == .unit}!.range].characters)
+        return Self(text, in: String(body.characters), virtual: text.allSatisfy(components.virtual))
     }
 
     //=------------------------------------------------------------------------=
@@ -76,7 +73,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        guard autocorrection else { return }
+        if  virtual { return }
         
         if  let label = Search.range(of: text, in: snapshot, towards:  direction ){
             snapshot.transform(attributes: label, with: { $0 = Attribute.phantom })

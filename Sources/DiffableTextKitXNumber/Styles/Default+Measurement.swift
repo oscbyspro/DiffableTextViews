@@ -96,11 +96,10 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle, _Measurement {
             self.interpreter = .standard(formatter.numberFormatter)
             self.preferences = .standard()
             //=----------------------------------=
-            // Formatter x Fractionless
+            // N/A
             //=----------------------------------=
-            formatter.numberFormatter.maximumFractionDigits = .zero
-            self.label = .measurement(formatter, unit:
-            format.unit, with: interpreter.components)
+            self.label = .measurement(format.base,unit:
+            format.unit,  with: interpreter.components)
         }
         
         //=--------------------------------------------------------------------=
