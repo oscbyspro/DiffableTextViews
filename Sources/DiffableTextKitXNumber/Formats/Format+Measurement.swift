@@ -9,10 +9,6 @@
 
 import Foundation
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-
 //*============================================================================*
 // MARK: * Format x Measurement
 //*============================================================================*
@@ -46,14 +42,14 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var locale: Locale {
-        get { base.locale }
-        set { base.locale = newValue }
-    }
-    
     @inlinable var unit: Unit {
         get { item.unit }
         set { item.unit = newValue }
+    }
+    
+    @inlinable var locale: Locale {
+        get { base.locale }
+        set { base.locale = newValue }
     }
     
     @inlinable var core: Core {
@@ -78,7 +74,7 @@ import Foundation
         case .narrow: return .short
         case .abbreviated: return .medium
         case .wide: return .long
-        default: fatalError("Unknown unit width!") }
+        default: fatalError("Unknown!") }
     }
     
     //=------------------------------------------------------------------------=

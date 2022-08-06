@@ -55,13 +55,13 @@ Base: _Style & NullableTextStyle, Base.Value == Base.Input {
 
 extension _OptionalStyle: _Standard where Base: _Standard {
     
-    #warning("Get & Set.......................................................")
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
         get { base.locale }
+        set { base.locale = newValue }
     }
     
     //=------------------------------------------------------------------------=
@@ -79,17 +79,18 @@ extension _OptionalStyle: _Standard where Base: _Standard {
 
 extension _OptionalStyle: _Currency where Base: _Currency {
     
-    #warning("Get & Set.......................................................")
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
         get { base.locale }
+        set { base.locale = newValue }
     }
     
     @inlinable public var currencyCode: String {
         get { base.currencyCode }
+    //  set { base.currencyCode = newValue } // requires custom format styles
     }
     
     //=------------------------------------------------------------------------=
@@ -109,28 +110,32 @@ extension _OptionalStyle: _Measurement where Base: _Measurement {
     
     public typealias Unit = Base.Unit
     
-    #warning("Get & Set.......................................................")
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var unit: Unit {
         get { base.unit }
+        set { base.unit = newValue }
     }
     
     @inlinable public var width: Width {
         get { base.width }
+        set { base.width = newValue }
     }
     
     @inlinable public var locale: Locale {
         get { base.locale }
+        set { base.locale = newValue }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(unit: Unit, width: Width = .abbreviated, locale: Locale = .autoupdatingCurrent) {
+    @inlinable public init(
+    unit: Unit, width: Width = .abbreviated,
+    locale: Locale = .autoupdatingCurrent) {
         self.init(Base(unit: unit, width: width, locale: locale))
     }
 }

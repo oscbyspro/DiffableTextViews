@@ -19,7 +19,7 @@ public protocol _Standard {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var locale: Locale { get }
+    @inlinable var locale: Locale { get set }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -38,7 +38,7 @@ public protocol _Currency {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var locale: Locale { get }
+    @inlinable var locale: Locale { get set }
     
     @inlinable var currencyCode: String { get }
     
@@ -49,12 +49,8 @@ public protocol _Currency {
     @inlinable init(code: String, locale: Locale)
 }
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-
 //*============================================================================*
-// MARK: * Traits x Currency
+// MARK: * Traits x Measurement
 //*============================================================================*
 
 public protocol _Measurement {
@@ -67,11 +63,11 @@ public protocol _Measurement {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var unit: Unit { get }
+    @inlinable var unit: Unit { get set }
     
-    @inlinable var width: Width { get }
+    @inlinable var width: Width { get set }
     
-    @inlinable var locale: Locale  { get }
+    @inlinable var locale: Locale  { get set }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
