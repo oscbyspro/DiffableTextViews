@@ -22,52 +22,54 @@ import Foundation
     
     @usableFromInline let text: String
     @usableFromInline let direction: Direction
-    @usableFromInline let virtual: Bool
+    @usableFromInline var virtual: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ text: String, direction: Direction) {
+    @inlinable init(_ text: String, direction: Direction, virtual: Bool = false) {
         self.text = text
         self.direction = direction
-        self.virtual = false
-    }
-    
-    @inlinable init(_ text: String, in body: String, virtual: Bool) {
-        let match = body.range(of: text)!
-        
-        let lhs = (match.lowerBound == body.startIndex)
-        let rhs = (match.upperBound == body  .endIndex)
-        
-        self.text = text
-        self.direction = (lhs || !rhs) ? .forwards : .backwards
         self.virtual = virtual
     }
     
+    @inlinable init(_ text: String, context: String) {
+        let match = context.range(of: text)!
+
+        let lhs = (match.lowerBound == context.startIndex)
+        let rhs = (match.upperBound == context  .endIndex)
+        
+        self.init(text, direction: (lhs || !rhs) ? .forwards : .backwards)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
         
-    /// Correctness is asserted by parsing all combinations.
+    /// - Tests should parse all combinations.
     @inlinable static func currency(
-    _ formatter: NumberFormatter, with components: Components) -> Self {
+    _ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .currency)
         assert(formatter.maximumFractionDigits == 0)
         
         let text = formatter.currencySymbol!
         let body = formatter.string(from:0)!
         
-        return Self(text, in: String(body), virtual: text.allSatisfy(components.virtual))
+        return Self(text, context: String(body))
     }
     
-    @inlinable static func measurement<T>(
-    _ formatter: Measurement<T>.FormatStyle, unit: T, with components: Components) -> Self {
-        let body = formatter.attributed.format(Measurement(value: 0, unit: unit))
-        let text = String(body[body.runs.first{$0.measurement == .unit}!.range].characters)
-        return Self(text, in: String(body.characters), virtual: text.allSatisfy(components.virtual))
+    /// - Tests should parse all combinations.
+    @inlinable static func measurement<Unit>(
+    _ formatter: Measurement<Unit>.FormatStyle, unit: Unit) -> Self {
+        let measurement = Measurement(value: 0, unit: unit)
+        let body = formatter.attributed.format(measurement)
+        let unit = body.runs.first{$0.measurement == .unit}!
+        let text = String(body[unit.range].characters)
+                
+        return Self(text, context:  String(body.characters))
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=

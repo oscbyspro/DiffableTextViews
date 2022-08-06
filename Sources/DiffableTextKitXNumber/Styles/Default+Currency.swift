@@ -56,7 +56,7 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
         @usableFromInline let parser: Parser<Format>
         @usableFromInline let formatter: Formatter<Format>
         @usableFromInline let interpreter: Interpreter
-        @usableFromInline let label: Label
+        @usableFromInline private(set) var label: Label
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -90,7 +90,8 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
             // Formatter x Currency x Fractionless
             //=----------------------------------=
             formatter.maximumFractionDigits = .zero
-            self.label = .currency(formatter, with: interpreter.components)
+            self.label = .currency(formatter)
+            self.label.virtual = label.text.allSatisfy(interpreter.components.virtual)
         }
         
         //=--------------------------------------------------------------------=

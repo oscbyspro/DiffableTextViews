@@ -63,7 +63,7 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle, _Measurement {
         @usableFromInline let parser: Parser<Format>
         @usableFromInline let formatter: Formatter<Format>
         @usableFromInline let interpreter: Interpreter
-        @usableFromInline let label: Label
+        @usableFromInline private(set) var label: Label
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -93,8 +93,8 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle, _Measurement {
             //=----------------------------------=
             // N/A
             //=----------------------------------=
-            self.label = .measurement(format.base,unit:
-            format.unit,  with: interpreter.components)
+            self.label = .measurement(format.base, unit: format.unit)
+            self.label.virtual = label.text.allSatisfy(interpreter.components.virtual)
         }
         
         //=--------------------------------------------------------------------=
