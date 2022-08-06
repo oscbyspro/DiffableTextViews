@@ -14,39 +14,39 @@ import Foundation
 // MARK: * Optional x Graph
 //*============================================================================*
 
-public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.Value {
-    public typealias Value = Graph.Value?
-    public typealias Input = Graph.Input
+public struct _OptionalGraph<Base: _Graph>: _Graph where Base.Input == Base.Value {
+    public typealias Value = Base.Value?
+    public typealias Input = Base.Input
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let graph: Graph
+    @usableFromInline let base: Base
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init(_ graph: Graph) { self.graph = graph }
+    @inlinable @inline(__always) init(_ base: Base) { self.base = base }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public var min:  Input { graph.min  }
+    @inlinable @inline(__always) public var min:  Input { base.min  }
     
-    @inlinable @inline(__always) public var max:  Input { graph.max  }
+    @inlinable @inline(__always) public var max:  Input { base.max  }
     
-    @inlinable @inline(__always) public var zero: Input { graph.zero }
+    @inlinable @inline(__always) public var zero: Input { base.zero }
     
-    @inlinable @inline(__always) public var precision: Int { graph.precision }
+    @inlinable @inline(__always) public var precision: Int { base.precision }
     
     @inlinable @inline(__always) public var optional: Bool { true }
     
-    @inlinable @inline(__always) public var unsigned: Bool { graph.unsigned }
+    @inlinable @inline(__always) public var unsigned: Bool { base.unsigned }
     
-    @inlinable @inline(__always) public var integer:  Bool { graph.integer  }
+    @inlinable @inline(__always) public var integer:  Bool { base.integer  }
 }
 
 //=----------------------------------------------------------------------------=
@@ -54,30 +54,25 @@ public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.V
 //=----------------------------------------------------------------------------=
 
 extension _OptionalGraph: _Numberable
-where Graph: _Numberable, Graph.Number: NullableTextStyle {
-    public typealias Number = _OptionalStyle<Graph.Number>
+where Base: _Numberable, Base.Number: NullableTextStyle {
+    public typealias Number = _OptionalStyle<Base.Number>
 }
 
 extension _OptionalGraph: _Percentable
-where Graph: _Percentable, Graph.Percent: NullableTextStyle {
-    public typealias Percent = _OptionalStyle<Graph.Percent>
+where Base: _Percentable, Base.Percent: NullableTextStyle {
+    public typealias Percent = _OptionalStyle<Base.Percent>
 }
 
 extension _OptionalGraph: _Currencyable
-where Graph: _Currencyable, Graph.Currency: NullableTextStyle {
-    public typealias Currency = _OptionalStyle<Graph.Currency>
+where Base: _Currencyable, Base.Currency: NullableTextStyle {
+    public typealias Currency = _OptionalStyle<Base.Currency>
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Optional(s)
+// MARK: + Optional(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension Optional: _Value where Wrapped: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
     @inlinable public static var _NumberTextGraph: _OptionalGraph
     <Wrapped.NumberTextGraph> { .init(Wrapped._NumberTextGraph) }
 }

@@ -18,7 +18,7 @@ import Foundation
 // MARK: * Default x Measurement
 //*============================================================================*
 
-public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
+public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle, _Measurement {
     
     public typealias Graph = Double.NumberTextGraph
     public typealias Value = Double
@@ -42,7 +42,7 @@ public struct _MeasurementStyle<Unit: Dimension>: _DefaultStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(unit: Unit, width: Width, locale: Locale = .autoupdatingCurrent) {
+    @inlinable public init(unit: Unit, width: Width = .abbreviated, locale: Locale = .autoupdatingCurrent) {
         self.unit = unit; self.width = width; self.locale = locale
     }
     

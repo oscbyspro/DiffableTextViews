@@ -55,12 +55,13 @@ Base: _Style & NullableTextStyle, Base.Value == Base.Input {
 
 extension _OptionalStyle: _Standard where Base: _Standard {
     
+    #warning("Get & Set.......................................................")
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        base.locale
+        get { base.locale }
     }
     
     //=------------------------------------------------------------------------=
@@ -78,16 +79,17 @@ extension _OptionalStyle: _Standard where Base: _Standard {
 
 extension _OptionalStyle: _Currency where Base: _Currency {
     
+    #warning("Get & Set.......................................................")
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        base.locale
+        get { base.locale }
     }
     
     @inlinable public var currencyCode: String {
-        base.currencyCode
+        get { base.currencyCode }
     }
     
     //=------------------------------------------------------------------------=
@@ -96,5 +98,39 @@ extension _OptionalStyle: _Currency where Base: _Currency {
     
     @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
         self.init(Base(code: code, locale: locale))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Traits x Measurement(s)
+//=----------------------------------------------------------------------------=
+
+extension _OptionalStyle: _Measurement where Base: _Measurement {
+    
+    public typealias Unit = Base.Unit
+    
+    #warning("Get & Set.......................................................")
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var unit: Unit {
+        get { base.unit }
+    }
+    
+    @inlinable public var width: Width {
+        get { base.width }
+    }
+    
+    @inlinable public var locale: Locale {
+        get { base.locale }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(unit: Unit, width: Width = .abbreviated, locale: Locale = .autoupdatingCurrent) {
+        self.init(Base(unit: unit, width: width, locale: locale))
     }
 }

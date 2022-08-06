@@ -57,7 +57,7 @@ public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyab
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Decimal
+// MARK: + Decimal [...]
 //=----------------------------------------------------------------------------=
 
 extension Decimal: _Input { public static let _NumberTextGraph = _DecimalGraph() }

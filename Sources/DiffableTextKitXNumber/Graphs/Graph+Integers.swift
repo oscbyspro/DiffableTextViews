@@ -57,7 +57,7 @@ where Value: _Input & FixedWidthInteger {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Int(s)
+// MARK: + Int(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension Int:   _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
@@ -67,7 +67,7 @@ extension Int32: _Input { public static let _NumberTextGraph = _IntegerGraph<Sel
 extension Int64: _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }
 
 //=----------------------------------------------------------------------------=
-// MARK: + UInt(s)
+// MARK: + UInt(s) [...]
 //=----------------------------------------------------------------------------=
 
 extension UInt:   _Input { public static let _NumberTextGraph = _IntegerGraph<Self>() }

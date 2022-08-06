@@ -39,7 +39,7 @@ public protocol _Graph {
 }
 
 //*============================================================================*
-// MARK: * Graph x Nodes
+// MARK: * Graph x Numberable
 //*============================================================================*
 
 public protocol _Numberable: _Graph {
@@ -49,12 +49,24 @@ public protocol _Numberable: _Graph {
     Number.Input == Input
 }
 
+//*============================================================================*
+// MARK: * Graph x Percentable
+//*============================================================================*
+
 public protocol _Percentable: _Graph {
     associatedtype Percent: _Style where
     Percent:     _Standard,
     Percent.Value == Value,
     Percent.Input == Input
 }
+
+public extension _Style where Graph: _Percentable, Graph: _Numberable, Graph.Number == Self {
+    typealias Percent = Graph.Percent
+}
+
+//*============================================================================*
+// MARK: * Graph x Currency
+//*============================================================================*
 
 public protocol _Currencyable: _Graph {
     associatedtype Currency: _Style where
@@ -63,16 +75,26 @@ public protocol _Currencyable: _Graph {
     Currency.Input == Input
 }
 
-//*============================================================================*
-// MARK: * Graph x Nodes x Style
-//*============================================================================*
-
-extension _Style where Graph: _Percentable,
-Graph: _Numberable, Graph.Number == Self {
-    public typealias Percent = Graph.Percent
+public extension _Style where Graph: _Currencyable, Graph: _Numberable, Graph.Number == Self {
+    typealias Currency = Graph.Currency
 }
 
-extension _Style where Graph: _Currencyable,
-Graph: _Numberable, Graph.Number == Self {
-    public typealias Currency = Graph.Currency
+//*============================================================================*
+// MARK: * Graph x Measurement(s)
+//*============================================================================*
+
+extension _FloatGraph where Value == Double {
+    public typealias Measurement<Unit: Dimension> = _MeasurementStyle<Unit>
+}
+
+extension _OptionalGraph where Base.Value == Double {
+    public typealias Measurement<Unit: Dimension> = _OptionalStyle<_MeasurementStyle<Unit>>
+}
+
+extension _StandardStyle where Value == Double {
+    public typealias Measurement<Unit: Dimension> = _MeasurementStyle<Unit>
+}
+
+extension _OptionalStyle where Base.Value == Double {
+    public typealias Measurement<Unit: Dimension> = _OptionalStyle<_MeasurementStyle<Unit>>
 }

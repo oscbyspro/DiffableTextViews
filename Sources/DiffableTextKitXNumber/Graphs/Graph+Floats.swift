@@ -58,7 +58,7 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Double
+// MARK: + Double [...]
 //=----------------------------------------------------------------------------=
 
 extension Double: _Input { public static let _NumberTextGraph = _FloatGraph<Self>() }
