@@ -44,6 +44,7 @@ public protocol _SignDS_Init { init(_ value: _SignDS) }
 //=----------------------------------------------------------------------------=
 
 extension _NFSC_SignDS: _SignDS_Init {
+    
     @inlinable public init(_ value: _SignDS) { switch value {
         case .always:    self = .always()
         case .automatic: self = .automatic }
@@ -51,6 +52,7 @@ extension _NFSC_SignDS: _SignDS_Init {
 }
 
 extension _CFSC_SignDS: _SignDS_Init {
+    
     @inlinable public init(_ value: _SignDS) { switch value {
         case .always:    self = .always()
         case .automatic: self = .automatic }

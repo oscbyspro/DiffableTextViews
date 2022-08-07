@@ -48,10 +48,6 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
         self.init([content])
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable @inline(__always)
     public init(_  info: @autoclosure () -> Self) {
         self.init([info().description])

@@ -75,3 +75,22 @@ public protocol _Measurement {
     
     @inlinable init(unit: Unit, width: Width, locale: Locale)
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Style
+//=----------------------------------------------------------------------------=
+
+public extension DiffableTextStyle where Self: _Measurement {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func unit(_ unit: Unit) -> Self {
+        var S0 = self; S0.unit = unit; return S0
+    }
+    
+    @inlinable func width(_ width: Width) -> Self {
+        var S0 = self; S0.width  = width; return S0
+    }
+}

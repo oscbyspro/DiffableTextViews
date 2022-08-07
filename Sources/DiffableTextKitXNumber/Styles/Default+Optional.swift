@@ -90,7 +90,7 @@ extension _OptionalStyle: _Currency where Base: _Currency {
     
     @inlinable public var currencyCode: String {
         get { base.currencyCode }
-    //  set { base.currencyCode = newValue } // requires custom format styles
+    //  set { base.currencyCode = newValue } // requires custom formats
     }
     
     //=------------------------------------------------------------------------=
@@ -133,9 +133,7 @@ extension _OptionalStyle: _Measurement where Base: _Measurement {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(
-    unit: Unit, width: Width = .abbreviated,
-    locale: Locale = .autoupdatingCurrent) {
+    @inlinable public init(unit: Unit, width: Width = .abbreviated, locale: Locale = .autoupdatingCurrent) {
         self.init(Base(unit: unit, width: width, locale: locale))
     }
 }

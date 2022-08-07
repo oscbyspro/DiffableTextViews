@@ -42,17 +42,6 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var locale: Locale {
-        get {
-            assert(base.locale == core.locale)
-            return base.locale
-        }
-        set {
-            base.locale = newValue
-            core.locale = newValue
-        }
-    }
-    
     @inlinable var unit: Unit {
         get { item.unit }
         set { item.unit = newValue }
@@ -65,6 +54,20 @@ import Foundation
     
     @inlinable var parseStrategy: Core.Strategy {
         get { core.parseStrategy }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale {
+        get {
+            assert(base.locale == core.locale)
+            return base.locale
+        } set {
+            base.locale = newValue
+            core.locale = newValue
+        }
     }
     
     //=------------------------------------------------------------------------=

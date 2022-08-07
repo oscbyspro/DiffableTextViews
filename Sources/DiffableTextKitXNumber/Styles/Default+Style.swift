@@ -52,7 +52,7 @@ extension _DefaultStyle {
     
     @inlinable public func update(_ cache: inout Cache) {
         switch cache.compatible(self) {
-        case  true: cache.style = self
-        case false: cache = self.cache() }
+        case   true: cache.style = self
+        case  false: cache = self.cache() }
     }
 }
