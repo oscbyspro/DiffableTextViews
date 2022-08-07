@@ -79,7 +79,7 @@ public struct LabelsTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
 extension LabelsTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
-// MARK: * Constant x Style
+// MARK: * Labels x Style
 //*============================================================================*
 
 public extension DiffableTextStyle {
