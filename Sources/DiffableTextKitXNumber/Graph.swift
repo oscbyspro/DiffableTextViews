@@ -78,23 +78,3 @@ public protocol _Currencyable: _Graph {
 public extension _Style where Graph: _Currencyable, Graph: _Numberable, Graph.Number == Self {
     typealias Currency = Graph.Currency
 }
-
-//*============================================================================*
-// MARK: * Graph x Measurement(s)
-//*============================================================================*
-
-extension _FloatGraph where Value == Double {
-    public typealias Measurement<Unit: Dimension> = _MeasurementStyle<Unit>
-}
-
-extension _OptionalGraph where Base.Value == Double {
-    public typealias Measurement<Unit: Dimension> = _OptionalStyle<_MeasurementStyle<Unit>>
-}
-
-extension _StandardStyle where Value == Double {
-    public typealias Measurement<Unit: Dimension> = _MeasurementStyle<Unit>
-}
-
-extension _OptionalStyle where Base.Value == Double {
-    public typealias Measurement<Unit: Dimension> = _OptionalStyle<_MeasurementStyle<Unit>>
-}

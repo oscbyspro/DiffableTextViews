@@ -25,7 +25,11 @@ final class StyleTestsOnCurrency: StyleTests {
     //=------------------------------------------------------------------------=
     
     func XCTAssertCurrencies<T: _Value>(_ value: T) where T.NumberTextGraph: _Currencyable {
-        XCTAssertCurrencies(value, with: T.NumberTextGraph.Currency.init)
+        for locale in locales {
+            for code in currencyCodes {
+                XCTAssert(value, with: T.NumberTextGraph.Currency(code: code, locale: locale))
+            }
+        }
     }
         
     func XCTAssertDefaultFractionLimits(_ limits: ClosedRange<Int>, code: String) {

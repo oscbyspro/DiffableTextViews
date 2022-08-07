@@ -56,16 +56,6 @@ import Foundation
         return Self(text, context: String(body))
     }
     
-    /// - Test by parsing each combination.
-    @inlinable static func measurement<Unit>(
-    _ formatter: Measurement<Unit>.FormatStyle, unit: Unit) -> Self {
-        let measurement = Measurement(value: 0, unit: unit)
-        let body = formatter.attributed.format(measurement)
-        let unit = body.runs.first{$0.measurement == .unit}!
-        let text = String(body[unit.range].characters) /**/
-        return Self(text, context: String(body.characters))
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=

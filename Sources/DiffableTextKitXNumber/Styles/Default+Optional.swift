@@ -101,39 +101,3 @@ extension _OptionalStyle: _Currency where Base: _Currency {
         self.init(Base(code: code, locale: locale))
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Traits x Measurement(s)
-//=----------------------------------------------------------------------------=
-
-extension _OptionalStyle: _Measurement where Base: _Measurement {
-    
-    public typealias Unit = Base.Unit
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var unit: Unit {
-        get { base.unit }
-        set { base.unit = newValue }
-    }
-    
-    @inlinable public var width: Width {
-        get { base.width }
-        set { base.width = newValue }
-    }
-    
-    @inlinable public var locale: Locale {
-        get { base.locale }
-        set { base.locale = newValue }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(unit: Unit, width: Width = .abbreviated, locale: Locale = .autoupdatingCurrent) {
-        self.init(Base(unit: unit, width: width, locale: locale))
-    }
-}

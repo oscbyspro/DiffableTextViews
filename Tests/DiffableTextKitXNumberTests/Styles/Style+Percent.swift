@@ -24,7 +24,9 @@ final class StyleTestsOnPercent: StyleTests {
     //=------------------------------------------------------------------------=
     
     func XCTAssertLocales<T: _Value>(_ value: T) where T.NumberTextGraph: _Percentable {
-        XCTAssertLocales(value, with: T.NumberTextGraph.Percent.init)
+        for locale in locales {
+            XCTAssert(value, with: T.NumberTextGraph.Percent(locale: locale))
+        }
     }
 }
 

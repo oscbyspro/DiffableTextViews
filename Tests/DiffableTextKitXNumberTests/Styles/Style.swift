@@ -41,30 +41,6 @@ class StyleTests: XCTestCase {
         let characters = style.format(value, with: &cache)
         XCTAssertEqual(commit.snapshot.characters, characters, "\(style) x \(value)")
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Locales
-    //=------------------------------------------------------------------------=
-    
-    /// - Iterates about 1k times.
-    func XCTAssertLocales<T: _Style>(_ value: T.Value, with style: (Locale) -> T) {
-        for locale in locales {
-            XCTAssert(value, with: style(locale))
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Locales, Currencies
-    //=------------------------------------------------------------------------=
-    
-    /// - Iterates about 300k times.
-    func XCTAssertCurrencies<T: _Style>(_ value: T.Value, with style: (String, Locale) -> T) {
-        for locale in locales {
-            for code in currencyCodes {
-                XCTAssert(value, with: style(code, locale))
-            }
-        }
-    }
 }
 
 #endif

@@ -24,7 +24,9 @@ final class StyleTestsOnNumber: StyleTests {
     //=------------------------------------------------------------------------=
     
     func XCTAssertLocales<T: _Value>(_ value: T) where T.NumberTextGraph: _Numberable {
-        XCTAssertLocales(value, with: T.NumberTextGraph.Number.init)
+        for locale in locales {
+            XCTAssert(value, with: T.NumberTextGraph.Number(locale: locale))
+        }
     }
 }
 
