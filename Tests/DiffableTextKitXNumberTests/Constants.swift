@@ -26,11 +26,5 @@ let locales: [Locale] = Locale
     .availableIdentifiers.lazy.map(Locale.init)
     .sorted(by: { $0.identifier < $1.identifier })
 
-let numbers: [Standard.Cache] = locales.lazy
+let numbers: [NumberTextStyle<Decimal>.Cache] = locales.lazy
     .map(NumberTextStyle<Decimal>.init).map({ $0.cache() })
-
-//=----------------------------------------------------------------------------=
-// MARK: + Aliases
-//=----------------------------------------------------------------------------=
-
-typealias Standard = NumberTextStyle<Decimal>
