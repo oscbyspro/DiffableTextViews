@@ -21,7 +21,7 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var base: Base
+    public var base:   Base
     public var suffix: String
     
     //=------------------------------------------------------------------------=
@@ -29,7 +29,7 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ base: Base, suffix: String) {
-        self.base = base; self.suffix = suffix
+        self.base = base;  self.suffix = suffix
     }
     
     //=------------------------------------------------------------------------=

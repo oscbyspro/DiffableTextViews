@@ -21,7 +21,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var base: Base
+    public var base:   Base
     public var prefix: String
     
     //=------------------------------------------------------------------------=
@@ -29,7 +29,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ base: Base, prefix: String) {
-        self.base = base; self.prefix = prefix
+        self.base = base;  self.prefix = prefix
     }
     
     //=------------------------------------------------------------------------=
@@ -54,9 +54,6 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     @inlinable func label(_ text: inout String) {
         guard !prefix.isEmpty else { return }
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
         text = prefix + text
     }
     
