@@ -8,11 +8,11 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Labels
+// MARK: * Prefix
 //*============================================================================*
 
-/// Adds a prefix and/or suffix to another style.
-public struct LabelsTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
+/// Adds a prefix to another style.
+public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     public typealias Cache = Base.Cache
     public typealias Value = Base.Value
@@ -21,16 +21,15 @@ public struct LabelsTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var base:   Base
+    public var base: Base
     public var prefix: String
-    public var suffix: String
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ base: Base, prefix: String, suffix: String) {
-        self.base = base; self.prefix = prefix; self.suffix = suffix
+    @inlinable public init(_ base: Base, prefix: String) {
+        self.base = base; self.prefix = prefix
     }
     
     //=------------------------------------------------------------------------=
@@ -53,22 +52,28 @@ public struct LabelsTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func label(_ text: inout String) {
-        if !prefix.isEmpty { text = prefix + text } /*----*/
-        if !suffix.isEmpty { text.append(contentsOf: suffix) }
+    @inlinable func label(_ text: inout String) {
+        guard !prefix.isEmpty else { return }
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
+        text = prefix + text
     }
     
-    @inlinable @inline(__always) func label(_ commit: inout Commit<Value>) {
+    @inlinable func label(_ commit: inout Commit<Value>) {
+        guard !prefix.isEmpty else { return }
         let anchor = commit.snapshot.anchor
-
-        if !prefix.isEmpty { commit.snapshot = Snapshot(prefix, as: .phantom) + commit.snapshot }
-        if !suffix.isEmpty { commit.snapshot.append(contentsOf: suffix, as: .phantom) /*-----*/ }
-        
-        if !prefix.isEmpty, let anchor {
-            var position = commit.snapshot.startIndex
-            commit.snapshot.formIndex(&position, offsetBy: prefix.count + anchor.attribute)
-            commit.snapshot.anchor(at: position)
-        }
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
+        commit.snapshot = Snapshot(prefix, as: .phantom) + commit.snapshot
+        //=--------------------------------------=
+        // Anchor
+        //=--------------------------------------=
+        guard let anchor else { return }
+        var position = commit.snapshot.startIndex
+        commit.snapshot.formIndex(&position, offsetBy: prefix.count + anchor.attribute)
+        commit.snapshot.anchor(at: position)
     }
 }
 
@@ -76,32 +81,22 @@ public struct LabelsTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
 // MARK: + Conditionals
 //=----------------------------------------------------------------------------=
 
-extension LabelsTextStyle: NullableTextStyle where Base: NullableTextStyle { }
+extension PrefixTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
-// MARK: * Labels x Style
+// MARK: * Prefix x Style
 //*============================================================================*
 
 public extension DiffableTextStyle {
     
-    typealias Labels = LabelsTextStyle<Self>
+    typealias Prefix = PrefixTextStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Adds a prefix and suffix to the style.
-    @inlinable func labels(prefix: String, suffix: String) -> Labels {
-        Labels(self, prefix: prefix, suffix: suffix)
-    }
-    
     /// Adds a prefix to the style.
-    @inlinable func prefix(_ prefix: String) -> Labels {
-        Labels(self, prefix: prefix, suffix: String())
-    }
-    
-    /// Adds a suffix to the style.
-    @inlinable func suffix(_ suffix: String) -> Labels {
-        Labels(self, prefix: String(), suffix: suffix)
+    @inlinable func prefix(_ prefix: String) -> Prefix {
+        Prefix(self, prefix: prefix)
     }
 }

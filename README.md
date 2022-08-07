@@ -191,4 +191,5 @@ Decorative styles that modify the behavior of their content.
 | [constant()](Sources/DiffableTextKit/Styles/Constant.swift) | Prevents style transformations |
 | [equals(\_:)](Sources/DiffableTextKit/Styles/Equals.swift) | Binds the style's equality to a proxy value |
 | [isolated()](Sources/DiffableTextKit/Styles/Isolated.swift) | Grants ownership of the style's cache |
-| [labels(prefix:suffix:)](Sources/DiffableTextKit/Styles/Labels.swift) | Adds a prefix and/or suffix to another style |
+| [prefix(_:)](Sources/DiffableTextKit/Styles/Labels.swift) | Adds a prefix the style |
+| [suffix(_:)](Sources/DiffableTextKit/Styles/Labels.swift) | Adds a suffix the style |
