@@ -11,7 +11,7 @@
 // MARK: * Equals
 //*============================================================================*
 
-/// Binds the style's equality to a proxy value.
+/// Binds the style's equality to a proxy.
 ///
 /// Use this modifier to optimize the comparison on view update.
 ///
@@ -27,7 +27,7 @@ where Base: DiffableTextStyle, Equatable: Swift.Equatable {
     
     public var base: Base
     public var equatable: Equatable
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -65,7 +65,7 @@ public extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's equality to a proxy value.
+    /// Binds the style's equality to a proxy.
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///
@@ -73,7 +73,7 @@ public extension DiffableTextStyle {
         Equals(self, equatable: equatable)
     }
     
-    /// Binds the style's equality to a proxy value.
+    /// Binds the style's equality to a proxy.
     ///
     /// Use this modifier to optimize the comparison on view update.
     ///

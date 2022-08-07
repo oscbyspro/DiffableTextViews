@@ -60,17 +60,12 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     @inlinable func label(_ commit: inout Commit<Value>) {
         guard !prefix.isEmpty else { return }
         let anchor = commit.snapshot.anchor
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
+        
         commit.snapshot = Snapshot(prefix, as: .phantom) + commit.snapshot
-        //=--------------------------------------=
-        // Anchor
-        //=--------------------------------------=
+        
         guard let anchor else { return }
-        var position = commit.snapshot.startIndex
-        commit.snapshot.formIndex(&position, offsetBy: prefix.count + anchor.attribute)
-        commit.snapshot.anchor(at: position)
+        commit.snapshot.anchor(at:  commit.snapshot.index(
+        commit.snapshot.startIndex, offsetBy: prefix.count + anchor.attribute))
     }
 }
 
