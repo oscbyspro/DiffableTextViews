@@ -20,6 +20,10 @@
 
 @_exported import struct DiffableTextKit.IsolatedTextStyle
 
+@_exported import struct DiffableTextKit.PrefixTextStyle
+
+@_exported import struct DiffableTextKit.SuffixTextStyle
+
 @_exported import protocol DiffableTextKit.DiffableTextStyle
 
 @_exported import protocol DiffableTextKit.NullableTextStyle
