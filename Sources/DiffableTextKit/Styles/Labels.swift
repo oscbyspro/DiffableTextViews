@@ -60,11 +60,11 @@ public struct LabelsTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     @inlinable @inline(__always) func label(_ commit: inout Commit<Value>) {
         let anchor = commit.snapshot.anchor
-        
+
         if !prefix.isEmpty { commit.snapshot = Snapshot(prefix, as: .phantom) + commit.snapshot }
         if !suffix.isEmpty { commit.snapshot.append(contentsOf: suffix, as: .phantom) /*-----*/ }
         
-        if  let anchor {
+        if !prefix.isEmpty, let anchor {
             var position = commit.snapshot.startIndex
             commit.snapshot.formIndex(&position, offsetBy: prefix.count + anchor.attribute)
             commit.snapshot.anchor(at: position)
