@@ -17,6 +17,8 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     public typealias Cache = Base.Cache
     public typealias Value = Base.Value
     
+    @usableFromInline typealias Characters = Offset<Character>
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -59,13 +61,13 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     @inlinable func label(_ commit: inout Commit<Value>) {
         guard !prefix.isEmpty else { return }
-        let anchor = commit.snapshot.anchor
+        let selection = commit.snapshot.selection
         
         commit.snapshot = Snapshot(prefix, as: .phantom) + commit.snapshot
         
-        guard let anchor else { return }
-        commit.snapshot.anchor(at:  commit.snapshot.index(
-        commit.snapshot.startIndex, offsetBy: prefix.count + anchor.attribute))
+        guard let selection else { return }
+        let offsets = selection.map({ Characters(prefix.count + $0.attribute) })
+        commit.snapshot.select(commit.snapshot.indices(at: offsets.positions()))
     }
 }
 

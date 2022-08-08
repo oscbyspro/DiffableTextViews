@@ -47,8 +47,8 @@ final class SnapshotTests: XCTestCase {
     // MARK: Tests x State
     //=------------------------------------------------------------------------=
     
-    func testAnchorIsNilByDefault() {
-        XCTAssertEqual(snapshot.anchor, nil)
+    func testSelectionIsNilByDefault() {
+        XCTAssertEqual(snapshot.selection, nil)
     }
     
     //=------------------------------------------------------------------------=
@@ -90,23 +90,12 @@ final class SnapshotTests: XCTestCase {
     // MARK: Tests x Transformations x Anchor
     //=------------------------------------------------------------------------=
     
-    func testAnchorAtIndex() {
-        snapshot = Snapshot("ABC")
-        let index = snapshot.index(at: C(1))
-        
-        snapshot.anchor(at: index)
-        XCTAssertEqual(snapshot.anchor, index)
-        
-        snapshot.anchor(at: nil)
-        XCTAssertEqual(snapshot.anchor, nil)
-    }
-    
-    func testAnchorAtEndIndex() {
+    func testSelectEndIndex() {
         snapshot.append(Symbol(" "))
-        snapshot.anchorAtEndIndex()
+        snapshot.select(snapshot.endIndex)
         snapshot.append(Symbol(" "))
         
-        XCTAssertEqual(snapshot.anchor, snapshot.index(at: C(1)))
+        XCTAssertEqual(snapshot.selection, Selection(snapshot.index(at: C(1))))
     }
     
     //=------------------------------------------------------------------------=

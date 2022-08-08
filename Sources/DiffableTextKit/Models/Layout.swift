@@ -13,7 +13,7 @@
 
 /// A model describing a snapshot and a selection in it.
 ///
-/// - Autocorrects selection when the snapshot changes.
+/// - Autocorrects selection when the snapshot  changes.
 /// - Autocorrects selection when the selection changes.
 ///
 @usableFromInline struct Layout {
@@ -29,8 +29,10 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(  _ snapshot: Snapshot) {
-        self.snapshot = snapshot; self.selection = .initial(snapshot) // O(n)
+    @inlinable init(_ snapshot: Snapshot) {
+        self.snapshot  = snapshot /*----------------------------*/
+        let  selection = Selection(Caret.upper(snapshot.endIndex))
+        self.selection = snapshot.resolve(selection) /*---------*/
     }
     
     //=------------------------------------------------------------------------=
@@ -69,6 +71,7 @@
             carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
         }
         
-        self.selection = Selection(unchecked: carets).map(snapshot.resolve(_:))
+        let  unchecked = Selection(unchecked:carets)
+        self.selection = snapshot.resolve(unchecked)
     }
 }

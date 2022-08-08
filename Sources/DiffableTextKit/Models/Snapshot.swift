@@ -18,18 +18,6 @@
 /// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~
 /// ```
 ///
-/// **Anchor**
-///
-/// Set the anchor index to select the caret represented by it. This can be
-/// desirable on snapshots containing only formatting characters. A pattern
-/// style may set the anchor at its first placeholder character, for example.
-///
-/// ```
-///    ↓ == anchor
-/// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
-/// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
-/// ```
-///
 /// **Attributes & Characters**
 ///
 /// The number of attributes must equal the number of joint characters in the
@@ -47,6 +35,18 @@
 /// |➖| + |➖| + |➖| + |➖| -> |➖|➖|➖|➖|~ (BAD)
 /// ```
 ///
+/// **Selection**
+///
+/// Selection is done by differentiation, but it can also be done manually. It
+/// can be appropriate on snapshots containing only formatting characters. A pattern
+/// text style may manually select its first placeholder character, for example.
+///
+/// ```
+///    ↓ == selection
+/// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
+/// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
+/// ```
+///
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
 ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollection {
     
@@ -57,9 +57,9 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     // MARK: State
     //=------------------------------------------------------------------------=
         
-    @usableFromInline var _characters: String
-    @usableFromInline var _attributes: [Attribute]
-    @usableFromInline var _anchor: Self.Index?
+    @usableFromInline private(set) var _characters: String
+    @usableFromInline private(set) var _attributes: [Attribute]
+    public var selection: Selection<Index>?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -92,11 +92,6 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
         _attributes
     }
     
-    @inlinable @inline(__always)
-    public var anchor: Index? {
-        _anchor
-    }
-    
     public var description: String {
         "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
@@ -106,13 +101,13 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public mutating func anchorAtEndIndex() {
-        self._anchor = endIndex
+    public mutating func select(_  position: Index) {
+        self.selection = Selection(position)
     }
     
     @inlinable @inline(__always)
-    public mutating func anchor(at index: Index?) {
-        self._anchor = index
+    public mutating func select(_  positions: Range<Index>) {
+        self.selection = Selection(positions)
     }
     
     //=------------------------------------------------------------------------=
@@ -387,11 +382,11 @@ extension Snapshot {
     // MARK: Resolve
     //=------------------------------------------------------------------------=
     
+    @inlinable func resolve(_ selection: Selection<Caret<Index>>) -> Selection<Index> {
+        self.selection ?? selection.map(resolve)
+    }
+    
     @inlinable func resolve(_ caret: Caret<Index>) -> Index {
-        //=--------------------------------------=
-        // Anchor
-        //=--------------------------------------=
-        if let anchor { return anchor }
         //=--------------------------------------=
         // Inspect Initial Index
         //=--------------------------------------=

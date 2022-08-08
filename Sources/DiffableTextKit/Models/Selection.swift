@@ -44,11 +44,7 @@ public struct Selection<Bound: Comparable>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func initial(_ snapshot: Snapshot) -> Self where Bound == Snapshot.Index {
-        Self(snapshot.resolve(.upper(snapshot.endIndex)))
-    }
-    
-    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Bound {
+    @inlinable public static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Bound {
         Self(unchecked: (collection.startIndex, collection.endIndex))
     }
     
