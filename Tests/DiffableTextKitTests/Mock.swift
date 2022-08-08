@@ -15,13 +15,19 @@ import Foundation
 //*============================================================================*
 
 struct Mock: DiffableTextStyle {
-    typealias Value = Int
+    typealias Value = String
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     var locale: Locale
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(locale: Locale = .autoupdatingCurrent) { self.locale = locale }
         
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -36,15 +42,15 @@ struct Mock: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     func format(_ value: Value, with cache: inout Void) -> String {
-        fatalError()
+        value
     }
     
     func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        fatalError()
+        Commit(value, Snapshot(value))
     }
     
     func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
-        fatalError()
+        interpret(proposal.merged().characters)
     }
 }
 

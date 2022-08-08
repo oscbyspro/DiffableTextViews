@@ -11,7 +11,7 @@
 // MARK: * Snapshot
 //*============================================================================*
 
-/// A collection of characters, attributes and an optional anchor.
+/// A collection of characters, attributes and an optional selection.
 ///
 /// ```
 /// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|#|-|#|#|~

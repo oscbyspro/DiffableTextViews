@@ -7,24 +7,25 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+@testable import DiffableTextKit
+
+import XCTest
+
 //*============================================================================*
-// MARK: * Slice [...]
+// MARK: * Slice x Tests
 //*============================================================================*
 
-extension BidirectionalCollection {
+final class SliceTests: XCTestCase {
     
-    @inlinable public func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
-        try self[startOfSuffix(while: predicate)...]
-    }
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Suffix
+    //=------------------------------------------------------------------------=
     
-    @inlinable func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
-        var position = endIndex
-        
-        backwards: while position != startIndex {
-            let after = position; formIndex(before: &position)
-            if try !predicate(self[position]) { return after }
-        }
-        
-        return position
+    func testSuffixWhile() {
+        XCTAssert("0123456789".suffix(while: { "4" < $0 }).elementsEqual("56789"))
     }
 }
+
+#endif

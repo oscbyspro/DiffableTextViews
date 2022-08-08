@@ -31,9 +31,9 @@ final class StatusTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testMergeReplacesInequalValues() {
-        var status  = Status(en_US, 0, false)
-        let changes = status.merge(Status(sv_SE, 1, true))
-        let result  = Status(sv_SE, 1,  true)
+        var status  = Status(en_US, "0", false)
+        let changes = status.merge(Status(sv_SE, "1", true))
+        let result  = Status(sv_SE, "1",  true)
         
         XCTAssertEqual(status,  result)
         XCTAssertEqual(changes, [.style, .value, .focus])
@@ -43,8 +43,8 @@ final class StatusTests: XCTestCase {
         let en_US = en_US.equals(())
         let sv_SE = sv_SE.equals(())
         
-        var status0 = Status(en_US, 0, false)
-        let status1 = Status(sv_SE, 1,  true)
+        var status0 = Status(en_US, "0", false)
+        let status1 = Status(sv_SE, "1",  true)
         let changes = status0.merge( status1)
         
         XCTAssertEqual(status0, status1)
@@ -58,24 +58,24 @@ final class StatusTests: XCTestCase {
     
     func testMemberWiseInequal() {
         XCTAssertEqual(
-        Status(en_US, 0, false) .!=
-        Status(en_US, 0, false), [])
+        Status(en_US, "0", false) .!=
+        Status(en_US, "0", false), [])
         
         XCTAssertEqual(
-        Status(en_US, 0, false) .!=
-        Status(sv_SE, 0, false), [.style])
+        Status(en_US, "0", false) .!=
+        Status(sv_SE, "0", false), [.style])
         
         XCTAssertEqual(
-        Status(en_US, 0, false) .!=
-        Status(en_US, 1, false), [.value])
+        Status(en_US, "0", false) .!=
+        Status(en_US, "1", false), [.value])
         
         XCTAssertEqual(
-        Status(en_US, 0, false) .!=
-        Status(en_US, 0,  true), [.focus])
+        Status(en_US, "0", false) .!=
+        Status(en_US, "0",  true), [.focus])
         
         XCTAssertEqual(
-        Status(en_US, 0, false) .!=
-        Status(sv_SE, 1,  true), [.style, .value, .focus])
+        Status(en_US, "0", false) .!=
+        Status(sv_SE, "1",  true), [.style, .value, .focus])
         
     }
 }

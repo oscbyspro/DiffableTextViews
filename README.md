@@ -164,7 +164,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    typealias Number = String // [Character]
+    typealias Number = String // Array<Character>
     
     //=------------------------------------------------------------------------=
     

@@ -18,13 +18,26 @@ import XCTest
 //*============================================================================*
 
 final class SuffixTests: XCTestCase {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func OK(value: String, suffix: String, format: String) {
+        let style = Mock().suffix(suffix); XCTAssertEqual(style.format(value), format)
+    }
+    
+    func OK(value: String, suffix: String, interpret: Commit<String>) {
+        let style = Mock().suffix(suffix); XCTAssertEqual(style.interpret(value), interpret)
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x While
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testSuffixWhile() {
-        XCTAssert("0123456789".suffix(while: { "4" < $0 }).elementsEqual("56789"))
+    func test() {
+        OK(value: "🇸🇪", suffix: "🇺🇸", format: "🇸🇪🇺🇸")
+        OK(value: "🇸🇪", suffix: "🇺🇸", interpret: Commit("🇸🇪", "🇸🇪" + Snapshot("🇺🇸", as: .phantom)))
     }
 }
 
