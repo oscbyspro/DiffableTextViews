@@ -62,7 +62,7 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     /// ```
     ///
     @inlinable public func hidden(_ hidden: Bool = true) -> Self {
-        var result = self; result.hidden = hidden; return result
+        var S0 = self;  S0.hidden = hidden; return S0
     }
 }
 

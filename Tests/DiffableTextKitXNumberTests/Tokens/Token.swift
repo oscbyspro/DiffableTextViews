@@ -58,7 +58,7 @@ final class TokenTestsOnString: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func collection<T>(_ type: T.Type = T.self) -> T where T: RangeReplaceableCollection {
-        var result = T(); result.reserveCapacity(digits.count * iterations); return result
+        var S0 = T(); S0.reserveCapacity(digits.count * iterations); return S0
     }
     
     //=------------------------------------------------------------------------=

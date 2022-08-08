@@ -38,22 +38,16 @@ public struct IsolatedTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Value,
-    with cache: inout Void) -> String {
-        base.update(&shared.cache); return
-        base.format(value, with: &shared.cache)
+    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
+        base.update(&shared.cache); return base.format(value, with: &shared.cache)
     }
     
-    @inlinable public func interpret(_ value: Value,
-    with cache: inout Void) -> Commit<Value> {
-        base.update(&shared.cache); return
-        base.interpret(value, with: &shared.cache)
+    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
+        base.update(&shared.cache); return base.interpret(value, with: &shared.cache)
     }
     
-    @inlinable public func resolve(_ proposal: Proposal,
-    with cache: inout Void) throws -> Commit<Value> {
-        base.update(&shared.cache); return
-        try base.resolve(proposal, with: &shared.cache)
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
+        base.update(&shared.cache); return try base.resolve(proposal, with: &shared.cache)
     }
     
     //*========================================================================*

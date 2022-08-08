@@ -37,26 +37,26 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     //=------------------------------------------------------------------------=
 
     @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
-        var text = base.format(value, with: &cache); label(&text); return text
+        var S0 = base.format(value, with: &cache); label(&S0); return S0
     }
     
     @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-        var commit = base.interpret(value, with: &cache); label(&commit); return commit
+        var S0 = base.interpret(value, with: &cache); label(&S0); return S0
     }
     
     @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        var commit = try base.resolve(proposal, with: &cache); label(&commit); return commit
+        var S0 = try base.resolve(proposal, with: &cache); label(&S0); return S0
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func label(_ text: inout String) {
+    @inlinable func label(_ text: inout String) {
         text.append(contentsOf: suffix)
     }
     
-    @inlinable @inline(__always) func label(_ commit: inout Commit<Value>) {
+    @inlinable func label(_ commit: inout Commit<Value>) {
         commit.snapshot.append(contentsOf: suffix, as: .phantom)
     }
 }

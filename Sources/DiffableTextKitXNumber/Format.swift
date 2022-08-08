@@ -33,6 +33,25 @@ public protocol _Format: ParseableFormatStyle where FormatOutput == String {
 }
 
 //*============================================================================*
+// MARK: * Format x Standard
+//*============================================================================*
+
+extension      Decimal.FormatStyle: _Format & _Standard { }
+extension FloatingPointFormatStyle: _Format & _Standard { }
+extension       IntegerFormatStyle: _Format & _Standard { }
+
+extension      Decimal.FormatStyle.Percent: _Format & _Standard { }
+extension FloatingPointFormatStyle.Percent: _Format & _Standard { }
+
+//*============================================================================*
+// MARK: * Format x Currency
+//*============================================================================*
+
+extension      Decimal.FormatStyle.Currency: _Format & _Currency { }
+extension FloatingPointFormatStyle.Currency: _Format & _Currency { }
+extension       IntegerFormatStyle.Currency: _Format & _Currency { }
+
+//*============================================================================*
 // MARK: * Format x Strategy x Sign
 //*============================================================================*
 

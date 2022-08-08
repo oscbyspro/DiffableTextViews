@@ -55,15 +55,13 @@ public protocol DiffableTextStyle<Value>: Equatable {
     ///
     /// This method is called in response to changes upstream while the view is idle.
     ///
-    @inlinable func format(_ value: Value,
-    with cache: inout Cache) -> String
+    @inlinable func format(_ value: Value, with cache: inout Cache) -> String
     
     /// Returns a value and a snapshot describing it.
     ///
     /// This method is called in response to changes upstream while the view is in focus.
     ///
-    @inlinable func interpret(_ value: Value,
-    with cache: inout Cache) -> Commit<Value>
+    @inlinable func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value>
     
     /// Returns a value and a snapshot describing it.
     ///
@@ -72,8 +70,7 @@ public protocol DiffableTextStyle<Value>: Equatable {
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
-    @inlinable func resolve(_ proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value>
+    @inlinable func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value>
 }
 
 //=----------------------------------------------------------------------------=
@@ -135,18 +132,15 @@ Cache.Value == Value, Cache.Cache == Void {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(_ value: Value,
-    with cache: inout Cache) -> String {
+    @inlinable func format(_ value: Value, with cache: inout Cache) -> String {
         cache.format(value)
     }
     
-    @inlinable func interpret(_ value: Value,
-    with cache: inout Cache) -> Commit<Value> {
+    @inlinable func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
         cache.interpret(value)
     }
     
-    @inlinable func resolve(_ proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value> {
+    @inlinable func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
         try cache.resolve(proposal)
     }
 }

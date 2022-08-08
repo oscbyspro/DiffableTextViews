@@ -17,14 +17,11 @@ public protocol NullableTextStyle<Value>: DiffableTextStyle {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(optional value: Value?,
-    with cache: inout Cache) -> String
+    @inlinable func format(optional value: Value?, with cache: inout Cache) -> String
     
-    @inlinable func interpret(optional value: Value?,
-    with cache: inout Cache) -> Commit<Value?>
+    @inlinable func interpret(optional value: Value?, with cache: inout Cache) -> Commit<Value?>
     
-    @inlinable func resolve(optional proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value?>
+    @inlinable func resolve(optional proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?>
 }
 
 //=----------------------------------------------------------------------------=
@@ -37,20 +34,17 @@ public extension NullableTextStyle {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(optional value: Value?,
-    with cache: inout Cache) -> String {
+    @inlinable func format(optional value: Value?, with cache: inout Cache) -> String {
         guard let value else { return "" }
         return format(value, with: &cache)
     }
     
-    @inlinable func interpret(optional value: Value?,
-    with cache: inout Cache) -> Commit<Value?> {
+    @inlinable func interpret(optional value: Value?, with cache: inout Cache) -> Commit<Value?> {
         guard let value else { return Commit() }
         return Commit(interpret(value, with: &cache))
     }
     
-    @inlinable func resolve(optional proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value?> {
+    @inlinable func resolve(optional proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?> {
         //=--------------------------------------=
         // None
         //=--------------------------------------=
@@ -99,18 +93,15 @@ Cache.Value == Value, Cache.Cache == Void {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(optional value: Value?,
-    with cache: inout Cache) -> String {
+    @inlinable func format(optional value: Value?, with cache: inout Cache) -> String {
         cache.format(optional: value)
     }
     
-    @inlinable func interpret(optional value: Value?,
-    with cache: inout Cache) -> Commit<Value?> {
+    @inlinable func interpret(optional value: Value?, with cache: inout Cache) -> Commit<Value?> {
         cache.interpret(optional: value)
     }
     
-    @inlinable func resolve(optional proposal: Proposal,
-    with cache: inout Cache) throws -> Commit<Value?> {
+    @inlinable func resolve(optional proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?> {
         try cache.resolve(optional: proposal)
     }
 }

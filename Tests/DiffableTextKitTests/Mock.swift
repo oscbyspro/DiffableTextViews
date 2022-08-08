@@ -28,7 +28,7 @@ struct Mock: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     func locale(_ locale: Locale) -> Self {
-        var result = self; result.locale = locale; return result
+        var S0 = self; S0.locale = locale; return S0
     }
     
     //=------------------------------------------------------------------------=
