@@ -112,6 +112,7 @@ import SwiftUI
 //*============================================================================*
 
 struct ContentView: View {
+    
     typealias Amount = Decimal // Decimal, Double, (U)Int(8-64), Optional<T>
     
     //=------------------------------------------------------------------------=
@@ -162,7 +163,8 @@ import SwiftUI
 //*============================================================================*
 
 struct ContentView: View {
-    typealias Number = String // Array<Character>
+    
+    typealias Number = String // [Character]
     
     //=------------------------------------------------------------------------=
     
