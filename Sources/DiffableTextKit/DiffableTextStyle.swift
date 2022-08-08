@@ -89,7 +89,9 @@ public extension DiffableTextStyle {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func update(_ cache: inout Cache) { cache = self.cache() }
+    @inlinable func update(_ cache: inout Cache) {
+        cache = self.cache()
+    }
 }
 
 //=----------------------------------------------------------------------------=

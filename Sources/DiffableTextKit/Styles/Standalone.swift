@@ -8,14 +8,14 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Isolated
+// MARK: * Standalone
 //*============================================================================*
 
 /// Grants ownership of the style's cache.
 ///
 /// Use this modifier to control when the cache is created and destroyed.
 ///
-public struct IsolatedTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
+public struct StandaloneTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     public typealias Value = Base.Value
     
@@ -70,15 +70,15 @@ public struct IsolatedTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
 // MARK: + Conditionals
 //=----------------------------------------------------------------------------=
 
-extension IsolatedTextStyle: NullableTextStyle where Base: NullableTextStyle { }
+extension StandaloneTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
-// MARK: * Isolated x Style
+// MARK: * Standalone x Style
 //*============================================================================*
 
 public extension DiffableTextStyle {
     
-    typealias Isolated = IsolatedTextStyle<Self>
+    typealias Standalone = StandaloneTextStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -88,7 +88,7 @@ public extension DiffableTextStyle {
     ///
     /// Use this modifier to control when the cache is created and destroyed.
     ///
-    @inlinable func isolated() -> Isolated {
-        Isolated(self)
+    @inlinable func standalone() -> Standalone {
+        Standalone(self)
     }
 }

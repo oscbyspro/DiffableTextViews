@@ -106,11 +106,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never)
-        func setup(_ parent: DiffableTextField, _ environment: EnvironmentValues) {
+        func setup(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            self.upstream = Upstream(parent, environment)
+            self.upstream = Upstream(upstream, environment)
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
@@ -125,15 +125,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable @inline(never)
-        func update(_ parent: DiffableTextField, _ environment: EnvironmentValues) {
+        func update(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            self.upstream = Upstream(parent, environment)
+            self.upstream = Upstream(upstream, environment)
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream.placeholder(parent.title)
+            self.downstream.placeholder(upstream.title)
             self.downstream.autocorrectionDisabled(environment)
             self.downstream.font(environment)
             self.downstream.foregroundColor(environment)

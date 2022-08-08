@@ -18,7 +18,7 @@
 
 @_exported import struct DiffableTextKit.EqualsTextStyle
 
-@_exported import struct DiffableTextKit.IsolatedTextStyle
+@_exported import struct DiffableTextKit.StandaloneTextStyle
 
 @_exported import struct DiffableTextKit.PrefixTextStyle
 
