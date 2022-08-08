@@ -18,6 +18,18 @@
 /// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~
 /// ```
 ///
+/// **Selection**
+///
+/// Selection is done by differentiation, but it can also be done manually. It
+/// may be appropriate on snapshots containing only formatting characters. A pattern
+/// text style can manually select its first placeholder character, for example.
+///
+/// ```
+///    ↓ == selection
+/// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
+/// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
+/// ```
+///
 /// **Attributes & Characters**
 ///
 /// The number of attributes must equal the number of joint characters in the
@@ -33,18 +45,6 @@
 /// ```
 /// |🇸|   |🇪|   |🇺|   |🇸|    |🇸🇪|🇺🇸|~
 /// |➖| + |➖| + |➖| + |➖| -> |➖|➖|➖|➖|~ (BAD)
-/// ```
-///
-/// **Selection**
-///
-/// Selection is done by differentiation, but it can also be done manually. It
-/// can be appropriate on snapshots containing only formatting characters. A pattern
-/// text style may manually select its first placeholder character, for example.
-///
-/// ```
-///    ↓ == selection
-/// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
-/// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
 /// ```
 ///
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
