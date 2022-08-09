@@ -20,12 +20,13 @@
 ///
 /// **Selection**
 ///
-/// Selection is done by differentiation, but it can also be done manually. It
-/// may be appropriate on snapshots containing only formatting characters. A pattern
-/// text style can manually select its first placeholder character, for example.
+/// Selection is done by differentiation, but it can also be done manually.
+/// Snapshots containing only passthrough characters should always provide
+/// a manual selection, however. A pattern text style may select its first
+/// placeholder, as illustrated:
 ///
 /// ```
-///    ↓ == selection
+///   ↓ == selection
 /// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
 /// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
 /// ```

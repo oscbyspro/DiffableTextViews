@@ -109,7 +109,7 @@ extension PatternTextStyle {
     
     /// - Mismatches are removed.
     @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        reduce(with: value, into:  Commit()) {
+        reduce(with: value, into: Commit()) {
             commit, virtuals, nonvirtual in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
             commit.snapshot.append(nonvirtual)

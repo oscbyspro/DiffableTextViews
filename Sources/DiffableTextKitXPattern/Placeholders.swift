@@ -73,7 +73,7 @@ extension Placeholders {
         
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: (character: Character, predicate: Predicate)
+        @usableFromInline let elements: (Character, Predicate)
         
         //=--------------------------------------------------------------------=
         
@@ -82,11 +82,11 @@ extension Placeholders {
         }
         
         @inlinable subscript(character: Character) -> Predicate? {
-            elements.character == character ? elements.predicate : nil
+            elements.0 == character ? elements.1 : nil
         }
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.elements.character == rhs.elements.character
+            lhs.elements.0 == rhs.elements.0
         }
     }
     
