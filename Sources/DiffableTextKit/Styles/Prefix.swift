@@ -41,11 +41,11 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     }
     
     @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-        var S0 = base.interpret(value, with: &cache); label(&S0); return S0
+        var S0 = base.interpret(value, with: &cache); label(&S0.snapshot); return S0
     }
     
     @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        var S0 = try base.resolve(proposal, with: &cache); label(&S0); return S0
+        var S0 = try base.resolve(proposal, with: &cache); label(&S0.snapshot); return S0
     }
     
     //=------------------------------------------------------------------------=
@@ -57,18 +57,18 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         text = prefix + text
     }
     
-    @inlinable func label(_ commit: inout Commit<Value>) {
+    @inlinable func label(_ snapshot: inout Snapshot) {
         guard !prefix.isEmpty else { return }
-        let base = commit.snapshot
-        commit.snapshot = Snapshot(prefix, as: .phantom)
-        let size = commit.snapshot.count
-        commit.snapshot.append(contentsOf: base)
+        let base = snapshot
+        snapshot = Snapshot(prefix, as: .phantom)
+        let size = snapshot.count
+        snapshot.append(contentsOf: base)
         
         guard let selection = base.selection else { return }
         let offsets = selection.map({ size + $0.attribute })
-        let lower = commit.snapshot.index(commit.snapshot.startIndex, offsetBy: offsets.lower)
-        let upper = commit.snapshot.index(lower, offsetBy: /**/ offsets.upper - offsets.lower)
-        commit.snapshot.select(Range(uncheckedBounds: (lower, upper)))
+        let lower = snapshot.index(snapshot.startIndex, offsetBy:   offsets.lower)
+        let upper = snapshot.index(lower, offsetBy: offsets.upper - offsets.lower)
+        snapshot.select(Range(uncheckedBounds: (lower, upper)))
     }
 }
 

@@ -118,21 +118,21 @@ extension Context {
     // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) var status: Status  { storage.status }
+    @inlinable var status: Status  { storage.status }
     
-    @inlinable @inline(__always) var layout: Layout? { storage.layout }
+    @inlinable var layout: Layout? { storage.layout }
     
-    @inlinable @inline(__always) var backup: String? { storage.backup }
+    @inlinable var backup: String? { storage.backup }
     
     //=------------------------------------------------------------------------=
     // MARK: Status
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public var style: Style { status.style }
+    @inlinable public var style: Style { status.style }
     
-    @inlinable @inline(__always) public var value: Value { status.value }
+    @inlinable public var value: Value { status.value }
     
-    @inlinable @inline(__always) public var focus: Focus { status.focus }
+    @inlinable public var focus: Focus { status.focus }
     
     //=------------------------------------------------------------------------=
     // MARK: Layout
@@ -268,7 +268,7 @@ extension Context {
         // Update
         //=--------------------------------------=
         self.unique()
-        self.storage.layout!.merge(selection: selection,momentums: momentums)
+        self.storage.layout!.merge(selection: selection, momentums: momentums)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
