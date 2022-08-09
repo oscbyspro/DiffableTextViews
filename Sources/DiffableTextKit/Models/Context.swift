@@ -11,7 +11,7 @@
 // MARK: * Context
 //*============================================================================*
 
-/// State of a diffable text view.
+/// A diffable text view state model.
 public struct Context<Style: DiffableTextStyle> {
     
     public typealias Cache = Style.Cache
@@ -75,21 +75,17 @@ public struct Context<Style: DiffableTextStyle> {
     }
     
     //*========================================================================*
-    // MARK: * Transaction
+    // MARK: * Transaction [...]
     //*========================================================================*
     
     @usableFromInline struct Transaction {
         
-        //=--------------------------------------------------------------------=
-        // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline private(set) var status: Status
         @usableFromInline private(set) var base: Snapshot?
         @usableFromInline private(set) var backup: String?
         
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
         //=--------------------------------------------------------------------=
         
         @inlinable init(_ status: Status, with cache: inout Cache,
@@ -122,39 +118,21 @@ extension Context {
     // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    var status: Status {
-        storage.status
-    }
+    @inlinable @inline(__always) var status: Status  { storage.status }
     
-    @inlinable @inline(__always)
-    var layout: Layout? {
-        storage.layout
-    }
+    @inlinable @inline(__always) var layout: Layout? { storage.layout }
     
-    @inlinable @inline(__always)
-    var backup: String? {
-        storage.backup
-    }
+    @inlinable @inline(__always) var backup: String? { storage.backup }
     
     //=------------------------------------------------------------------------=
     // MARK: Status
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public var style: Style {
-        status.style
-    }
+    @inlinable @inline(__always) public var style: Style { status.style }
     
-    @inlinable @inline(__always)
-    public var value: Value {
-        status.value
-    }
+    @inlinable @inline(__always) public var value: Value { status.value }
     
-    @inlinable @inline(__always)
-    public var focus: Focus {
-        status.focus
-    }
+    @inlinable @inline(__always) public var focus: Focus { status.focus }
     
     //=------------------------------------------------------------------------=
     // MARK: Layout
@@ -239,9 +217,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to text.
-    @inlinable public mutating func merge<T>(
-    _ characters: String, in range: Range<Offset<T>>,
-    with cache: inout Cache) throws -> Update {
+    @inlinable public mutating func merge<T>(_ characters: String,
+    in range: Range<Offset<T>>, with cache: inout Cache) throws -> Update {
         //=--------------------------------------=
         // Layout
         //=--------------------------------------=
@@ -286,15 +263,12 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection  = Selection(
-        layout!.snapshot.indices(at: selection))
+        let selection  = Selection(layout!.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.unique()
-        self.storage.layout!.merge(
-        selection: selection,
-        momentums: momentums)
+        self.storage.layout!.merge(selection: selection,momentums: momentums)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

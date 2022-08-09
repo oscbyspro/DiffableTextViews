@@ -52,17 +52,17 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable func label(_  text:  inout String) {
-        if !prefix.isEmpty { text = prefix + text }
+    @inlinable func label(_ text: inout String) {
+        guard !prefix.isEmpty else { return }
+        text = prefix + text
     }
     
     @inlinable func label(_ commit: inout Commit<Value>) {
         guard !prefix.isEmpty else { return }
         let base = commit.snapshot
-        
         commit.snapshot = Snapshot(prefix, as: .phantom)
-        let size = commit.snapshot.count /*-----------*/
-        commit.snapshot.append(contentsOf: /*---*/ base)
+        let size = commit.snapshot.count
+        commit.snapshot.append(contentsOf: base)
         
         guard let selection = base.selection else { return }
         let offsets = selection.map({ size + $0.attribute })
