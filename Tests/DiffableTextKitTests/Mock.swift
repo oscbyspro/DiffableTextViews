@@ -21,13 +21,16 @@ struct Mock: DiffableTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    var locale: Locale
+    var locale:  Locale
+    var selection: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(locale: Locale = .autoupdatingCurrent) { self.locale = locale }
+    init(locale: Locale = .autoupdatingCurrent, selection: Bool = false) {
+        self.locale = locale; self.selection = selection
+    }
         
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -46,7 +49,9 @@ struct Mock: DiffableTextStyle {
     }
     
     func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        Commit(value, Snapshot(value))
+        var snapshot = Snapshot(value)
+        if selection { snapshot.selection = .max(snapshot) }
+        return Commit(value, snapshot)
     }
     
     func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {

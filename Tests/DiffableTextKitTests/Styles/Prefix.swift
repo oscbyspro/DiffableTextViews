@@ -18,26 +18,30 @@ import XCTest
 //*============================================================================*
 
 final class PrefixTests: XCTestCase {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
     
-    func OK(prefix: String, value: String, format: String) {
-        let style = Mock().prefix(prefix); XCTAssertEqual(style.format(value), format)
-    }
-    
-    func OK(prefix: String, value: String, interpret: Commit<String>) {
-        let style = Mock().prefix(prefix); XCTAssertEqual(style.interpret(value), interpret)
-    }
+    typealias C = Offset<Character>
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func test() {
-        OK(prefix: "🇸🇪", value: "🇺🇸", format: "🇸🇪🇺🇸")
-        OK(prefix: "🇸🇪", value: "🇺🇸", interpret: Commit("🇺🇸", Snapshot("🇸🇪", as: .phantom) + "🇺🇸"))
+    func testFormat() {
+        XCTAssertEqual(Mock().prefix("🇸🇪").format("🇺🇸"), "🇸🇪🇺🇸")
+    }
+    
+    func testInterpret() {
+        XCTAssertEqual(Mock().prefix("🇸🇪").interpret("🇺🇸"),
+        Commit("🇺🇸",  Snapshot("🇸🇪", as: .phantom) + "🇺🇸"))
+    }
+    
+    func testSelectionInBaseIsOffsetByPrefixSize() {
+        let characters = "0123456789"
+        
+        let normal = Mock(selection: true)/*----------*/.interpret(characters).snapshot
+        let prefix = Mock(selection: true).prefix("...").interpret(characters).snapshot
+        
+        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< C(10)))
+        XCTAssertEqual(prefix.selection!.positions(), prefix.indices(at: C(3) ..< C(13)))
     }
 }
 

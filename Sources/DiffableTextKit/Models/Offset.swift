@@ -92,7 +92,13 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
 // MARK: * Offset x Int [...]
 //*============================================================================*
 
-public extension Int { @inlinable init<T>(_ offset: Offset<T>) { self = offset.distance } }
+public extension Int {
+    
+    @inlinable @inline(__always)
+    init<T>(_ offset: Offset<T>) {
+        self = offset.distance
+    }
+}
 
 //*============================================================================*
 // MARK: * Offsets [...]

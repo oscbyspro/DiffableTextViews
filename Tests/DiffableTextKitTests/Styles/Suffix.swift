@@ -19,25 +19,29 @@ import XCTest
 
 final class SuffixTests: XCTestCase {
 
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func OK(value: String, suffix: String, format: String) {
-        let style = Mock().suffix(suffix); XCTAssertEqual(style.format(value), format)
-    }
-    
-    func OK(value: String, suffix: String, interpret: Commit<String>) {
-        let style = Mock().suffix(suffix); XCTAssertEqual(style.interpret(value), interpret)
-    }
+    typealias C = Offset<Character>
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func test() {
-        OK(value: "🇸🇪", suffix: "🇺🇸", format: "🇸🇪🇺🇸")
-        OK(value: "🇸🇪", suffix: "🇺🇸", interpret: Commit("🇸🇪", "🇸🇪" + Snapshot("🇺🇸", as: .phantom)))
+    func testFormat() {
+        XCTAssertEqual(Mock().suffix("🇸🇪").format("🇺🇸"), "🇺🇸🇸🇪")
+    }
+    
+    func testInterpret() {
+        XCTAssertEqual(Mock().suffix("🇸🇪").interpret("🇺🇸"),
+        Commit("🇺🇸", "🇺🇸" + Snapshot("🇸🇪", as: .phantom)))
+    }
+    
+    func testSelectionIsSame() {
+        let characters = "0123456789"
+        
+        let normal = Mock(selection: true)/*----------*/.interpret(characters).snapshot
+        let suffix = Mock(selection: true).suffix("...").interpret(characters).snapshot
+        
+        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< C(10)))
+        XCTAssertEqual(suffix.selection!.positions(), suffix.indices(at: C(0) ..< C(10)))
     }
 }
 
