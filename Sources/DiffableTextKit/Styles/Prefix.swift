@@ -59,13 +59,14 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     @inlinable func label(_ commit: inout Commit<Value>) {
         guard !prefix.isEmpty else { return }
-        let selection = commit.snapshot.selection
-        let prefix = Snapshot(prefix,as:.phantom)
+        let base = commit.snapshot
         
-        commit.snapshot = prefix + commit.snapshot
+        commit.snapshot = Snapshot(prefix, as: .phantom)
+        let size = commit.snapshot.count /*-----------*/
+        commit.snapshot.append(contentsOf: /*---*/ base)
         
-        guard let selection else { return }
-        let offsets = selection.map({ prefix.count + $0.attribute })
+        guard let selection = base.selection else { return }
+        let offsets = selection.map({ size + $0.attribute })
         let lower = commit.snapshot.index(commit.snapshot.startIndex, offsetBy: offsets.lower)
         let upper = commit.snapshot.index(lower/*-*/, offsetBy: offsets.upper - offsets.lower)
         commit.snapshot.select(Range(uncheckedBounds: (lower, upper)))
