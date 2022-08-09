@@ -35,13 +35,11 @@ public extension NullableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func format(optional value: Value?, with cache: inout Cache) -> String {
-        guard let value else { return "" }
-        return format(value, with: &cache)
+        guard let value else { return String() }; return format(value, with: &cache)
     }
     
     @inlinable func interpret(optional value: Value?, with cache: inout Cache) -> Commit<Value?> {
-        guard let value else { return Commit() }
-        return Commit(interpret(value, with: &cache))
+        guard let value else { return Commit() }; return Commit(interpret(value, with: &cache))
     }
     
     @inlinable func resolve(optional proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?> {
@@ -86,8 +84,7 @@ public extension NullableTextStyle where Cache == Void {
 // MARK: + Details where Cache: Style
 //=----------------------------------------------------------------------------=
 
-public extension NullableTextStyle where Cache: NullableTextStyle,
-Cache.Value == Value, Cache.Cache == Void {
+public extension NullableTextStyle where Cache: NullableTextStyle, Cache.Value == Value, Cache.Cache == Void {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

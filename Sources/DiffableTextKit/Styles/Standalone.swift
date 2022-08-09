@@ -50,6 +50,14 @@ public struct StandaloneTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         base.update(&shared.cache); return try base.resolve(proposal, with: &shared.cache)
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.base == rhs.base
+    }
+    
     //*========================================================================*
     // MARK: * Storage [...]
     //*========================================================================*
@@ -65,12 +73,6 @@ public struct StandaloneTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         @inlinable init(_ cache: Base.Cache) { self.cache = cache }
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conditionals
-//=----------------------------------------------------------------------------=
-
-extension StandaloneTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Standalone x Style

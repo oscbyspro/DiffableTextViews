@@ -49,23 +49,29 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func label(_ text: inout String) {
+        //=--------------------------------------=
+        // None | Some
+        //=--------------------------------------=
         text.append(contentsOf: suffix)
     }
     
     @inlinable func label(_ snapshot: inout Snapshot) {
+        //=--------------------------------------=
+        // Base x None
+        //=--------------------------------------=
+        if  snapshot.isEmpty {
+            snapshot.select(snapshot.endIndex)
+        }
+        //=--------------------------------------=
+        // None | Some
+        //=--------------------------------------=
         snapshot.append(contentsOf: suffix, as: .phantom)
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conditionals
-//=----------------------------------------------------------------------------=
-
-extension SuffixTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Suffix x Style

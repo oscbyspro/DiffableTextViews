@@ -49,21 +49,42 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func label(_ text: inout String) {
+        //=--------------------------------------=
+        // None
+        //=--------------------------------------=
         guard !prefix.isEmpty else { return }
+        //=--------------------------------------=
+        // Some
+        //=--------------------------------------=
         text = prefix + text
     }
     
     @inlinable func label(_ snapshot: inout Snapshot) {
+        //=--------------------------------------=
+        // None
+        //=--------------------------------------=
         guard !prefix.isEmpty else { return }
+        //=--------------------------------------=
+        // Some
+        //=--------------------------------------=
         let base = snapshot
         snapshot = Snapshot(prefix, as: .phantom)
+        //=--------------------------------------=
+        // Base x None
+        //=--------------------------------------=
+        guard !base.isEmpty else { return snapshot.select(snapshot.endIndex) }
+        //=--------------------------------------=
+        // Base x Some
+        //=--------------------------------------=
         let size = snapshot.count
         snapshot.append(contentsOf: base)
-        
+        //=--------------------------------------=
+        // Base x Some x Selection
+        //=--------------------------------------=
         guard let selection = base.selection else { return }
         let offsets = selection.map({ size + $0.attribute })
         let lower = snapshot.index(snapshot.startIndex, offsetBy:   offsets.lower)
@@ -71,12 +92,6 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         snapshot.select(Range(uncheckedBounds: (lower, upper)))
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conditionals
-//=----------------------------------------------------------------------------=
-
-extension PrefixTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 
 //*============================================================================*
 // MARK: * Prefix x Style

@@ -41,12 +41,6 @@ public struct ConstantTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     @inlinable public func locale(_ locale: Locale) -> Self { self }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Conditionals
-//=----------------------------------------------------------------------------=
-
-extension ConstantTextStyle: NullableTextStyle where Base: NullableTextStyle { }
-
 //*============================================================================*
 // MARK: * Constant x Style
 //*============================================================================*
