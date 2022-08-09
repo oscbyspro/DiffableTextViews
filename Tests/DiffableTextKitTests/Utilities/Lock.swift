@@ -71,7 +71,7 @@ import XCTest
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities x Synchronous
+    // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
     
     func testSynchronousActionLocksUntilCompletion() {
@@ -87,10 +87,6 @@ import XCTest
         //=--------------------------------------=
         XCTAssertFalse(lock.isLocked)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities x Asynchronous
-    //=------------------------------------------------------------------------=
     
     func testAsynchronousOperationLocksUntilCompletion() async {
         XCTAssertFalse(lock.isLocked)

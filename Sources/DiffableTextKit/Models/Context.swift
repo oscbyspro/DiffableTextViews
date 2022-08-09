@@ -11,10 +11,7 @@
 // MARK: * Context
 //*============================================================================*
 
-/// A set of values describing the state of a diffable text view.
-///
-/// - Uses copy-on-write semantics.
-///
+/// State of a diffable text view.
 public struct Context<Style: DiffableTextStyle> {
     
     public typealias Cache = Style.Cache
@@ -41,43 +38,16 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Transformation
     //=------------------------------------------------------------------------=
     
-    /// Writes to storage with copy-on-write behavior.
-    @inlinable mutating func write(_ write: (Storage) -> Void) {
-        //=--------------------------------------=
-        // Unique
-        //=--------------------------------------=
-        if !isKnownUniquelyReferenced(&storage) {
-            self.storage = Storage(status, layout, backup)
-        }
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        write(self.storage)
-    }
-    
-    @inlinable mutating func merge(_ remote: Transaction) {
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if remote.base != nil, layout != nil {
-            self.write { storage in
-                storage.status = remote.status
-                storage.layout!.merge(snapshot: remote.base!)
-            }
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else { self.storage = Storage(remote) }
+    @inlinable mutating func unique() {        
+        if !isKnownUniquelyReferenced(&storage) { self.storage = storage.copy() }
     }
     
     //*========================================================================*
-    // MARK: * Storage
+    // MARK: * Storage [...]
     //*========================================================================*
     
     @usableFromInline final class Storage {
         
-        //=--------------------------------------------------------------------=
-        // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline var status: Status
@@ -85,22 +55,22 @@ public struct Context<Style: DiffableTextStyle> {
         @usableFromInline var backup: String?
         
         //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
         
         @inlinable init(_ status: Status, _ layout: Layout?, _ backup: String?) {
             self.status = status
             self.layout = layout
             self.backup = backup
-            //=----------------------------------=
-            // Invariants
-            //=----------------------------------=
+            
             assert((status.focus ==  true) == (layout != nil))
             assert((status.focus == false) == (backup != nil))
         }
         
         @inlinable convenience init(_ remote: Transaction) {
             self.init(remote.status,  remote.base.map(Layout.init), remote.backup)
+        }
+        
+        @inlinable func copy() -> Storage {
+            Storage(status, layout, backup)
         }
     }
     
@@ -211,7 +181,7 @@ extension Context {
 extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Synchronization
+    // MARK: Status
     //=------------------------------------------------------------------------=
     
     /// Call this on view update.
@@ -238,6 +208,24 @@ extension Context {
         update += .value(changes.contains(.value))
         return update
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transaction
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func merge(_ remote: Transaction) {
+        //=--------------------------------------=
+        // Active
+        //=--------------------------------------=
+        if remote.base != nil, layout != nil {
+            self.unique()
+            self.storage.status = remote.status
+            self.storage.layout!.merge(snapshot: remote.base!)
+        //=--------------------------------------=
+        // Inactive
+        //=--------------------------------------=
+        } else { self.storage = Storage(remote) }
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -251,8 +239,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to text.
-    @inlinable public mutating func merge(_   characters: String, in range:
-    Range<Offset<some Encoding>>, with cache: inout Cache) throws -> Update {
+    @inlinable public mutating func merge<T>(
+    _ characters: String, in range: Range<Offset<T>>,
+    with cache: inout Cache) throws -> Update {
         //=--------------------------------------=
         // Layout
         //=--------------------------------------=
@@ -271,11 +260,10 @@ extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.write { storage in
-            storage.status.value = commit.value
-            storage.layout!.selection.collapse()
-            storage.layout!.merge(snapshot: commit.snapshot)
-        }
+        self.unique()
+        self.storage.status.value = commit.value
+        self.storage.layout!.selection.collapse()
+        self.storage.layout!.merge(snapshot: commit.snapshot)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -289,8 +277,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to selection.
-    @inlinable public mutating func merge(
-    selection: Range<Offset<some Encoding>>, momentums: Bool) -> Update {
+    @inlinable public mutating func merge<T>(
+    selection: Range<Offset<T>>, momentums: Bool) -> Update {
         //=--------------------------------------=
         // Layout
         //=--------------------------------------=
@@ -298,15 +286,15 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = Selection(layout!.snapshot.indices(at: selection))
+        let selection  = Selection(
+        layout!.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.write { storage in
-            storage.layout!.merge(
-            selection: selection,
-            momentums: momentums)
-        }
+        self.unique()
+        self.storage.layout!.merge(
+        selection: selection,
+        momentums: momentums)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

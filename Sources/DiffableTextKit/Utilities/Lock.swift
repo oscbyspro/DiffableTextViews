@@ -47,16 +47,12 @@ public final class Lock {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities x Synchronous
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable public func perform(action: () throws -> Void) {
         self.lock(); try? action(); self.open()
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities x Asynchronous
-    //=------------------------------------------------------------------------=
     
     @inlinable public func task(operation: @escaping () async throws -> Void) {
         asynchronous(operation: operation)

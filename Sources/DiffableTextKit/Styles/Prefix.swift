@@ -52,9 +52,8 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable func label(_ text: inout String) {
-        guard !prefix.isEmpty else { return }
-        text = prefix + text
+    @inlinable func label(_  text:  inout String) {
+        if !prefix.isEmpty { text = prefix + text }
     }
     
     @inlinable func label(_ commit: inout Commit<Value>) {
@@ -68,7 +67,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         guard let selection = base.selection else { return }
         let offsets = selection.map({ size + $0.attribute })
         let lower = commit.snapshot.index(commit.snapshot.startIndex, offsetBy: offsets.lower)
-        let upper = commit.snapshot.index(lower/*-*/, offsetBy: offsets.upper - offsets.lower)
+        let upper = commit.snapshot.index(lower, offsetBy: /**/ offsets.upper - offsets.lower)
         commit.snapshot.select(Range(uncheckedBounds: (lower, upper)))
     }
 }
@@ -86,7 +85,7 @@ extension PrefixTextStyle: NullableTextStyle where Base: NullableTextStyle { }
 public extension DiffableTextStyle {
     
     typealias Prefix = PrefixTextStyle<Self>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
