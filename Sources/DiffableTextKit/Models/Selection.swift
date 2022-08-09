@@ -15,7 +15,7 @@
 ///
 /// Equal bounds represent an upper bound.
 ///
-public struct Selection<Bound: Comparable>: Equatable {
+public struct Selection<Bound: Comparable>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -49,6 +49,14 @@ public struct Selection<Bound: Comparable>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    public var description: String {
+        String(describing: detached())
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -66,15 +74,11 @@ public struct Selection<Bound: Comparable>: Equatable {
     
     @inlinable public func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Selection<T> {
         let max = upper(self.upper); var min = max
-        //=--------------------------------------=
-        // Double
-        //=--------------------------------------=
+        
         if  self.lower != self.upper {
             min = Swift.min(lower(self.lower),max)
         }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
+        
         return Selection<T>(unchecked: (min, max))
     }
     

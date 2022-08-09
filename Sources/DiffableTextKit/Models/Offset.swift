@@ -89,30 +89,16 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
 }
 
 //*============================================================================*
-// MARK: * Offset x Int
+// MARK: * Offset x Int [...]
 //*============================================================================*
 
-public extension Int {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    init<T>(_ offset: Offset<T>) {
-        self = offset.distance
-    }
-}
+public extension Int { @inlinable init<T>(_ offset: Offset<T>) { self = offset.distance } }
 
 //*============================================================================*
-// MARK: * Offsets
+// MARK: * Offsets [...]
 //*============================================================================*
 
 public protocol Offsets<Index>: Collection {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) func distance<T>(
     from start: Index, to end: Index) -> Offset<T>
@@ -122,14 +108,10 @@ public protocol Offsets<Index>: Collection {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: + Details [...]
 //=----------------------------------------------------------------------------=
 
 public extension Offsets {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) func distance<T>(
     from start: Index, to end: Index, as type: T.Type) -> Offset<T> {
@@ -142,10 +124,6 @@ public extension Offsets {
         let count: Offset<T> = distance(from: indices.lowerBound, to: indices.upperBound)
         return lower ..< lower + count
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) func index<T>(
     from start: Index, move distance: Offset<T>, as type: T.Type) -> Index {
@@ -165,17 +143,13 @@ public extension Offsets {
 }
 
 //*============================================================================*
-// MARK: * Offsets x String, String.SubSequence
+// MARK: * Offsets x String, String.SubSequence [...]
 //*============================================================================*
 
 extension String: Offsets { }
 extension String.SubSequence: Offsets { }
 public extension StringProtocol {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
     @inlinable @inline(__always) func distance<T>(
     from start: Index, to end: Index) -> Offset<T> {
         T.distance(from: start, to: end, in: self)
@@ -188,16 +162,12 @@ public extension StringProtocol {
 }
 
 //*============================================================================*
-// MARK: * Offsets x Snapshot
+// MARK: * Offsets x Snapshot [...]
 //*============================================================================*
 
 extension Snapshot: Offsets { }
 public extension Snapshot {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
     @inlinable @inline(__always) func distance<T>(
     from start: Index, to end: Index) -> Offset<T> {
         T.distance(from: start, to: end, in: self)
@@ -210,14 +180,10 @@ public extension Snapshot {
 }
 
 //*============================================================================*
-// MARK: * Encoding
+// MARK: * Encoding [...]
 //*============================================================================*
 
 public protocol Encoding {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
@@ -226,10 +192,6 @@ public protocol Encoding {
     @inlinable @inline(__always) static func index(
     from start: String.Index, move distance: Offset<Self>,
     in collection: some StringProtocol) -> String.Index
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: Snapshot.Index, to end: Snapshot.Index,
@@ -241,14 +203,10 @@ public protocol Encoding {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: + Details [...]
 //=----------------------------------------------------------------------------=
 
 public extension Encoding {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: Snapshot.Index, to end: Snapshot.Index,
@@ -271,15 +229,11 @@ public extension Encoding {
 }
 
 //*============================================================================*
-// MARK: * Encoding x Character
+// MARK: * Encoding x Character [...]
 //*============================================================================*
 
 extension Character: Encoding { }
 public extension Character {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
@@ -292,10 +246,6 @@ public extension Character {
     in collection: some StringProtocol) -> String.Index {
         collection.index(start, offsetBy: Int(distance))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: Snapshot.Index, to end: Snapshot.Index,
@@ -311,15 +261,11 @@ public extension Character {
 }
 
 //*============================================================================*
-// MARK: * Encoding x Unicode.Scalar
+// MARK: * Encoding x Unicode.Scalar [...]
 //*============================================================================*
 
 extension Unicode.Scalar: Encoding { }
 public extension Unicode.Scalar {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
@@ -335,15 +281,11 @@ public extension Unicode.Scalar {
 }
 
 //*============================================================================*
-// MARK: * Encoding x UTF16
+// MARK: * Encoding x UTF16 [...]
 //*============================================================================*
 
 extension UTF16: Encoding { }
 public extension UTF16 {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
@@ -359,15 +301,11 @@ public extension UTF16 {
 }
 
 //*============================================================================*
-// MARK: * Encoding x UTF8
+// MARK: * Encoding x UTF8 [...]
 //*============================================================================*
 
 extension UTF8: Encoding { }
 public extension UTF8 {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,

@@ -8,21 +8,17 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Index
+// MARK: * Index [...]
 //*============================================================================*
 
 /// A character encoded index and offset.
-public struct Index: Comparable {
+public struct Index: Comparable, CustomStringConvertible {
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let character: String.Index
     @usableFromInline let attribute: Int
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     /// Creates an instance describing a character's position.
@@ -37,9 +33,9 @@ public struct Index: Comparable {
         self.attribute = attribute
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
+    public var description: String {
+        String(describing: attribute)
+    }
     
     @inlinable @inline(__always)
     public static func == (lhs: Self, rhs: Self) -> Bool {

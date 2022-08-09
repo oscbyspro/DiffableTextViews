@@ -66,8 +66,7 @@ public struct Status<Style: DiffableTextStyle>: Equatable {
         style.update(&cache); return style.interpret(value, with: &cache)
     }
     
-    @inlinable func resolve(_  proposal: Proposal, with
-    cache: inout Cache) throws -> Commit<Style.Value> {
+    @inlinable func resolve(_  proposal: Proposal, with cache: inout Cache) throws -> Commit<Style.Value> {
         style.update(&cache); return try style.resolve(proposal, with: &cache)
     }
     

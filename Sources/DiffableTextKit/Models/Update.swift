@@ -8,32 +8,21 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Update
+// MARK: * Update [...]
 //*============================================================================*
 
 /// A message describing which remote properties need to be updated.
 @frozen public struct Update: OptionSet {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
+        
     public static let text      = Self(rawValue: 1 << 0)
     public static let selection = Self(rawValue: 1 << 1)
     public static let value     = Self(rawValue: 1 << 2)
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
     
     public let rawValue: UInt8
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public init(rawValue: UInt8) {
-        self.rawValue = rawValue
-    }
+    @inlinable public init(rawValue: UInt8) { self.rawValue = rawValue }
 }
