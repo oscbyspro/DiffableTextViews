@@ -83,18 +83,18 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         //=--------------------------------------=
         // Base x Some
         //=--------------------------------------=
-        let size = snapshot.count
+        let start = snapshot.endIndex
         snapshot.append(contentsOf: base)
         //=--------------------------------------=
         // Base x Some x Selection
         //=--------------------------------------=
         guard let selection = base.selection else { return }
-        let min = selection.lower.attribute + size // offset
-        let max = selection.upper.attribute + size // offset
-
-        let lower = snapshot.index(snapshot.startIndex, offsetBy: min)
-        let upper = snapshot.index(lower, /*---*/ offsetBy: max - min)
-        snapshot.selection = Selection.init(unchecked: (lower, upper))
+        let min = selection .lower.attribute
+        let max = selection .upper.attribute
+        
+        let lower = snapshot.index(start, offsetBy: min)
+        let upper = snapshot.index(lower, offsetBy: max - min)
+        snapshot.select(Range(uncheckedBounds:(lower, upper)))
     }
 }
 
