@@ -14,10 +14,10 @@
 public extension Sequence {
     
     @inlinable func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
-        var S0 = 0; for x in self { if try predicate(x) { S0 += 1 } }; return S0
+        var S0 = 0; for S1 in self { if try predicate(S1) { S0 += 1 } }; return S0
     }
     
     @inlinable func count(while predicate: (Element) throws -> Bool) rethrows -> Int {
-        var S0 = 0; for x in self { if try predicate(x) { S0 += 1 } else { break } }; return S0
+        var S0 = 0; for S1 in self { if try predicate(S1) { S0 += 1 } else { break } }; return S0
     }
 }
