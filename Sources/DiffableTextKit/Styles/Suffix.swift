@@ -61,7 +61,7 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     /// This transformation assumes that the base style
     /// provides a manual selection when all attributes
-    /// are passtrough, to avoid duplicate computations.
+    /// are passthrough to avoid duplicate computations.
     @inlinable func label(_ snapshot: inout Snapshot) {
         //=--------------------------------------=
         // Base x None

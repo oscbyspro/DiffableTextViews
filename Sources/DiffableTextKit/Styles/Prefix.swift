@@ -65,7 +65,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     
     /// This transformation assumes that the base style
     /// provides a manual selection when all attributes
-    /// are passtrough, to avoid duplicate computations.
+    /// are passthrough to avoid duplicate computations.
     @inlinable func label(_ snapshot: inout Snapshot) {
         //=--------------------------------------=
         // None
@@ -94,7 +94,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
 
         let lower = snapshot.index(snapshot.startIndex, offsetBy: min)
         let upper = snapshot.index(lower, /*---*/ offsetBy: max - min)
-        snapshot.select(Range(uncheckedBounds: (lower, upper))) /*--*/
+        snapshot.selection = Selection.init(unchecked: (lower, upper))
     }
 }
 
