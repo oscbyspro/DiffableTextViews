@@ -117,7 +117,12 @@ extension PatternTextStyle {
         } none: {
             commit, virtuals in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
-            commit.snapshot.select(commit.snapshot.endIndex)
+            //=----------------------------------=
+            // Selection
+            //=----------------------------------=
+            switch virtuals.endIndex != pattern.endIndex { // real vs fake
+            case  true: commit.snapshot.select(commit.snapshot  .endIndex)
+            case false: commit.snapshot.select(commit.snapshot.startIndex) }
         } done: {
             commit, virtuals, mismatches in
             //=----------------------------------=
