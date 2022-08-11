@@ -86,7 +86,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         let start = snapshot.endIndex
         snapshot.append(contentsOf: base)
         //=--------------------------------------=
-        // Base x Some x Selection
+        // Base x Selection
         //=--------------------------------------=
         guard let selection = base.selection else { return }
         let min = selection .lower.attribute
