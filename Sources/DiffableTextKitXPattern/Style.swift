@@ -117,12 +117,7 @@ extension PatternTextStyle {
         } none: {
             commit, virtuals in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
-            //=----------------------------------=
-            // Selection
-            //=----------------------------------=
-            switch virtuals.endIndex != pattern.endIndex { // real vs fake
-            case  true: commit.snapshot.select(commit.snapshot  .endIndex)
-            case false: commit.snapshot.select(commit.snapshot.startIndex) }
+            commit.snapshot.select(commit.snapshot.endIndex)
         } done: {
             commit, virtuals, mismatches in
             //=----------------------------------=
@@ -231,8 +226,18 @@ extension PatternTextStyle {
         // (!) None
         //=--------------------------------------=
         if  pIndex == pattern.startIndex {
-            none(&result, pattern[pIndex ..< qIndex])
-            pIndex = qIndex
+            //=----------------------------------=
+            // Placeholders == 0
+            //=----------------------------------=
+            if  qIndex == pattern.endIndex {
+                none(&result, pattern[pIndex ..< pIndex])
+            //=----------------------------------=
+            // Placeholder >= 1
+            //=----------------------------------=
+            } else {
+                none(&result, pattern[pIndex ..< qIndex])
+                pIndex = qIndex
+            }
         }
         //=--------------------------------------=
         // (!) Done
