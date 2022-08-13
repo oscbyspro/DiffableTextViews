@@ -300,7 +300,7 @@ public extension Character {
     @inlinable @inline(__always) static func distance(
     from start: Snapshot.Index, to end: Snapshot.Index,
     in collection: Snapshot) -> Offset<Self> {
-        Offset(end.attribute - start.attribute)
+        Offset(collection.distance(from: start, to: end))
     }
     
     @inlinable @inline(__always) static func index(

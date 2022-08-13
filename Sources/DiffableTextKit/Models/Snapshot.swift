@@ -187,7 +187,7 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: After, Before, Distance
+    // MARK: After, Before
     //=------------------------------------------------------------------------=
     
     @inlinable public func index(after position: Index) -> Index {
@@ -207,25 +207,11 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Count
+    // MARK: Distance, Count
     //=------------------------------------------------------------------------=
     
-    /// - Complexity: O(1).
-    @inlinable @inline(__always)
-    public var isEmpty: Bool {
-        _attributes.isEmpty
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable @inline(__always)
-    public var count: Int {
-        _attributes.count
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable @inline(__always)
-    public var underestimatedCount: Int {
-        _attributes.underestimatedCount
+    @inlinable public func distance(from start: Index, to end: Index) -> Int {
+        _attributes.distance(from: start.attribute,to: end.attribute)
     }
 }
 

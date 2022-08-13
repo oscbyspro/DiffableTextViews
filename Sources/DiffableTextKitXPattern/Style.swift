@@ -232,7 +232,7 @@ extension PatternTextStyle {
             if  qIndex == pattern.endIndex {
                 none(&result, pattern[pIndex ..< pIndex])
             //=----------------------------------=
-            // Placeholder >= 1
+            // Placeholders >= 1
             //=----------------------------------=
             } else {
                 none(&result, pattern[pIndex ..< qIndex])
