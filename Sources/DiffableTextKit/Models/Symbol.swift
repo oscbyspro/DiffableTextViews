@@ -62,3 +62,35 @@ ExpressibleByExtendedGraphemeClusterLiteral {
         "(\(character), \(attribute))"
     }
 }
+
+//*============================================================================*
+// MARK: * Symbol x Sequence
+//*============================================================================*
+
+extension Sequence where Element == Symbol {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// A sequence of nonvirtual characters.
+    @inlinable public func nonvirtuals() -> String {
+        String(lazy.filter({!$0.attribute.contains(.virtual)}).map({$0.character}))
+    }
+}
+
+//*============================================================================*
+// MARK: * Symbol x Sequence x Lazy
+//*============================================================================*
+
+extension LazySequenceProtocol where Element == Symbol {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// A lazy sequence of nonvirtual characters.
+    @inlinable public func nonvirtuals() -> LazyMapSequence<LazyFilterSequence<Elements>, Character> {
+        filter({!$0.attribute.contains(.virtual)}).map({$0.character})
+    }
+}

@@ -142,31 +142,33 @@ extension PatternTextStyle {
     /// - Mismatches throw an error.
     @inlinable @inline(never) public func resolve(_ proposal:
     Proposal, with cache: inout Void) throws -> Commit<Value> {
-        var value = Value(); let proposal = proposal.merged()
-        var nonvirtuals = proposal.nonvirtuals.makeIterator()
+        var value = Value()
         //=--------------------------------------=
-        // Parse
+        // Content
         //=--------------------------------------=
-        parse: for character in pattern {
-            if let predicate = placeholders[character] {
-                guard let nonvirtual = nonvirtuals.next() else { break parse }
-                //=------------------------------=
-                // Predicate
-                //=------------------------------=
-                guard predicate(nonvirtual) else {
-                    throw Info([.mark(nonvirtual), "is invalid"])
-                }
-                //=------------------------------=
-                // Insertion
-                //=------------------------------=
-                value.append(nonvirtual)
+        var nonvirtuals = proposal.lazy.merged().nonvirtuals().makeIterator()
+        //=--------------------------------------=
+        // Matches
+        //=--------------------------------------=
+        for character in pattern {
+            guard let predicate  = placeholders[character] else { continue }
+            guard let nonvirtual = nonvirtuals.next() /**/ else { break    }
+            //=------------------------------=
+            // Predicate
+            //=------------------------------=
+            guard predicate(nonvirtual) else {
+                throw Info([.mark(nonvirtual), "is invalid"])
             }
+            //=------------------------------=
+            // Insertion
+            //=------------------------------=
+            value.append(nonvirtual)
         }
         //=--------------------------------------=
         // Capacity
         //=--------------------------------------=
         guard nonvirtuals.next() == nil else {
-            throw Info([.mark(proposal.characters), "exceeded pattern capacity \(value.count)"])
+            throw Info([.mark(proposal.merged().characters), "exceeded pattern capacity \(value.count)"])
         }
         //=--------------------------------------=
         // Interpret

@@ -61,19 +61,16 @@ final class SnapshotTests: XCTestCase {
     
     func testInitWithCharacters() {
         snapshot = Snapshot("AB")
-        
         Assert("AB", [.content, .content])
     }
     
     func testInitAsArrayLiteral() {
         snapshot = [Symbol("A"), Symbol("B", as: .phantom)]
-        
         Assert("AB", [.content, .phantom])
     }
     
     func testInitAsStringLiteral() {
-        snapshot = "AB" as Snapshot
-        
+        snapshot = "AB"
         Assert("AB", [.content, .content])
     }
     
@@ -83,7 +80,7 @@ final class SnapshotTests: XCTestCase {
     
     func testNonvirtualsIgnoresVirtualSymbols() {
         snapshot = ["A", Symbol("_", as:  .virtual),  "B"]
-        XCTAssertEqual(String(snapshot.nonvirtuals), "AB")
+        XCTAssertEqual(snapshot.nonvirtuals(), "AB")
     }
     
     //=------------------------------------------------------------------------=
@@ -92,10 +89,10 @@ final class SnapshotTests: XCTestCase {
     
     func testSelectEndIndex() {
         snapshot.append(Symbol(" "))
-        snapshot.select(snapshot.endIndex)
+        let index = snapshot.endIndex;snapshot.select(index)
         snapshot.append(Symbol(" "))
         
-        XCTAssertEqual(snapshot.selection, Selection(snapshot.index(at: C(1))))
+        XCTAssertEqual(snapshot.selection, Selection(index))
     }
     
     //=------------------------------------------------------------------------=
@@ -105,14 +102,12 @@ final class SnapshotTests: XCTestCase {
     func testAppendSymbol() {
         snapshot.append(Symbol("A"))
         snapshot.append(Symbol("B", as: .phantom))
-        
         Assert("AB", [.content, .phantom])
     }
     
     func testAppendCharacter() {
         snapshot.append(Character("A"))
         snapshot.append(Character("B"), as: .phantom)
-        
         Assert("AB", [.content, .phantom])
     }
     
@@ -123,14 +118,12 @@ final class SnapshotTests: XCTestCase {
     func testAppendContentsOfSymbols() {
         snapshot.append(contentsOf: Snapshot("A", as: .content))
         snapshot.append(contentsOf: Snapshot("B", as: .phantom))
-        
         Assert("AB", [.content, .phantom])
     }
     
     func testAppendContentsOfCharacters() {
         snapshot.append(contentsOf: String("A"))
         snapshot.append(contentsOf: String("B"), as: .phantom)
-        
         Assert("AB", [.content, .phantom])
     }
     
@@ -141,14 +134,12 @@ final class SnapshotTests: XCTestCase {
     func testInsertSymbol() {
         snapshot.insert(Symbol("B", as: .phantom), at: snapshot.startIndex)
         snapshot.insert(Symbol("A", as: .content), at: snapshot.startIndex)
-        
         Assert("AB", [.content, .phantom])
     }
     
     func testInsertCharacter() {
         snapshot.insert(Character("B"), at: snapshot.startIndex, as: .phantom)
         snapshot.insert(Character("A"), at: snapshot.startIndex)
-        
         Assert("AB", [.content, .phantom])
     }
     
@@ -159,14 +150,12 @@ final class SnapshotTests: XCTestCase {
     func testInsertContentsOfSymbols() {
         snapshot.insert(contentsOf: Snapshot("B", as: .phantom), at: snapshot.startIndex)
         snapshot.insert(contentsOf: Snapshot("A", as: .content), at: snapshot.startIndex)
-        
         Assert("AB", [.content, .phantom])
     }
     
     func testInsertContentsOfCharacters() {
         snapshot.insert(contentsOf: String("B"), at: snapshot.startIndex, as: .phantom)
         snapshot.insert(contentsOf: String("A"), at: snapshot.startIndex)
-        
         Assert("AB", [.content, .phantom])
     }
     
@@ -178,7 +167,6 @@ final class SnapshotTests: XCTestCase {
         snapshot = Snapshot(repeating: " ", count: 4)
         snapshot.replaceSubrange(snapshot.indices(at: C(0) ..< 2), with: Snapshot("AA", as: .content))
         snapshot.replaceSubrange(snapshot.indices(at: C(2) ..< 4), with: Snapshot("BB", as: .phantom))
-        
         Assert("AABB", [.content, .content, .phantom, .phantom])
     }
     
@@ -186,7 +174,6 @@ final class SnapshotTests: XCTestCase {
         snapshot = Snapshot(repeating: " ", count: 4)
         snapshot.replaceSubrange(snapshot.indices(at: C(0) ..< 2), with: Snapshot("AA", as: .content))
         snapshot.replaceSubrange(snapshot.indices(at: C(2) ..< 4), with: Snapshot("BB", as: .phantom))
-        
         Assert("AABB", [.content, .content, .phantom, .phantom])
     }
     

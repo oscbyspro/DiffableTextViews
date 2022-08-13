@@ -50,16 +50,19 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func number(_ snapshot: Snapshot, as value: (some _Value).Type) throws -> Number? {
-        try .init(unformatted: snapshot.nonvirtuals,signs: components.signs.tokens,
+    @inlinable func number(_ symbols: some Sequence<Symbol>,
+    as value: (some _Value).Type) throws -> Number? {
+        let unformatted = symbols.lazy.nonvirtuals() /*--------------------------*/
+        return try Number(unformatted: unformatted, signs: components.signs.tokens,
         digits: components.digits.tokens, separators: components.separators.tokens,
         optional: value.optional, unsigned: value.unsigned, integer: value.integer)
     }
     
-    @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
+    @inlinable func number(_ /**/ proposal: Proposal,
+    as value: (some _Value).Type) throws -> Number? {
         var proposal = proposal; translator.translate(&proposal)
         let sign   = components.process(&proposal) /*---------*/
-        var number = try number(proposal.merged(), as:    value)
+        var number = try number(proposal.lazy.merged(),as:value)
         if  sign  != nil { number?.sign = sign! }; return number
     }
 }

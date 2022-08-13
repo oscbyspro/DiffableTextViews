@@ -110,15 +110,6 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     public mutating func select(_  positions: Range<Index>) {
         self.selection = Selection(positions)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    /// A lazy sequence of nonvirtual characters.
-    @inlinable public var nonvirtuals: some BidirectionalCollection<Character> {
-        self.lazy.filter({!$0.attribute.contains(.virtual)}).map({$0.character})
-    }
 }
 
 //=----------------------------------------------------------------------------=
