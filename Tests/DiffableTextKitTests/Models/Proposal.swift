@@ -18,8 +18,7 @@ import XCTest
 //*============================================================================*
 
 final class ProposalTests: XCTestCase {
-    typealias C = Offset<Character>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
@@ -27,9 +26,17 @@ final class ProposalTests: XCTestCase {
     func testMerged() {
         let snapshot    = Snapshot("AxxxE")
         let replacement = Snapshot( "BCD" )
-        let range = snapshot.indices(at: C(1) ..< 4)
+        let range = snapshot.indices(at:  Offset<Character>(1) ..< 4)
         let proposal = Proposal(snapshot, with: replacement, in: range)
         XCTAssertEqual(proposal.merged(), "ABCDE")
+    }
+    
+    func testLazyMerged() {
+        let snapshot    = Snapshot("AxxxE")
+        let replacement = Snapshot( "BCD" )
+        let range = snapshot.indices(at:  Offset<Character>(1) ..< 4)
+        let proposal = Proposal(snapshot, with: replacement, in: range)
+        XCTAssertEqual(Snapshot(proposal.lazy.merged()), "ABCDE")
     }
 }
 

@@ -64,22 +64,14 @@ public struct Proposal {
         @inlinable init(_ proposal: Proposal) { self.proposal = proposal }
         
         //=--------------------------------------------------------------------=
-        // MARK: Accessors
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public var base: Snapshot { proposal.base }
-        
-        @inlinable public var replacement: Snapshot { proposal.replacement }
-        
-        @inlinable public var range: Range<Snapshot.Index> { proposal.range }
-        
-        //=--------------------------------------------------------------------=
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
         /// Returns a lazy snapshot with the proposed change applied to it.
-        @inlinable public func merged() -> LazySequence<FlattenSequence<[Snapshot.SubSequence]>> {
-            [base[..<range.lowerBound], replacement[...], base[range.upperBound...]].lazy.joined()
+        @inlinable public func merged() -> LazySequence<FlattenSequence<[Slice<Snapshot>]>> {[
+            proposal.base[..<proposal.range.lowerBound],
+            proposal.replacement[...], /*-------------*/
+            proposal.base[proposal.range.upperBound...]].lazy.joined()
         }
     }
 }
