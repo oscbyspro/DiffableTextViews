@@ -140,10 +140,8 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches throw an error.
-    @inlinable public func resolve(_ proposal:
-    Proposal, with cache: inout Void) throws -> Commit<Value> {
-        let nonvirtuals = proposal.lazy.merged().nonvirtuals()
-        return try reduce(with: nonvirtuals, into: Commit()) {
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
+        try reduce(with: proposal.lazy.merged().nonvirtuals(), into: Commit()) {
             commit, virtuals, nonvirtual in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
             commit.snapshot.append(nonvirtual)
@@ -165,12 +163,12 @@ extension PatternTextStyle {
             //=----------------------------------=
             if !mismatches.isEmpty {
                 //=------------------------------=
-                // Value <= Capacity
+                // Content <= Capacity
                 //=------------------------------=
                 if !virtuals.isEmpty {
                     throw Info([.mark(mismatches.first!), "is invalid."])
                 //=------------------------------=
-                // Value >> Capacity
+                // Content >  Capacity
                 //=------------------------------=
                 } else {
                     let capacity = Info.note(commit.value.count)
