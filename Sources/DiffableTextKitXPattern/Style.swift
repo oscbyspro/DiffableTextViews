@@ -153,15 +153,10 @@ extension PatternTextStyle {
         for character in pattern {
             guard let predicate  = placeholders[character] else { continue }
             guard let nonvirtual = nonvirtuals.next() /**/ else { break    }
-            //=------------------------------=
-            // Predicate
-            //=------------------------------=
-            guard predicate(nonvirtual) else {
-                throw Info([.mark(nonvirtual), "is invalid"])
-            }
-            //=------------------------------=
-            // Insertion
-            //=------------------------------=
+            guard predicate(nonvirtual) else { throw Info([.mark(nonvirtual), "is invalid"]) }
+            //=----------------------------------=
+            // Some
+            //=----------------------------------=
             value.append(nonvirtual)
         }
         //=--------------------------------------=
