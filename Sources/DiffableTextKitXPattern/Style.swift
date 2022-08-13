@@ -140,35 +140,45 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches throw an error.
-    @inlinable @inline(never) public func resolve(_ proposal:
+    @inlinable public func resolve(_ proposal:
     Proposal, with cache: inout Void) throws -> Commit<Value> {
-        var value = Value()
-        //=--------------------------------------=
-        // Content
-        //=--------------------------------------=
-        var nonvirtuals = proposal.lazy.merged().nonvirtuals().makeIterator()
-        //=--------------------------------------=
-        // Matches
-        //=--------------------------------------=
-        for character in pattern {
-            guard let predicate  = placeholders[character] else { continue }
-            guard let nonvirtual = nonvirtuals.next() /**/ else { break    }
-            guard predicate(nonvirtual) else { throw Info([.mark(nonvirtual), "is invalid"]) }
+        let nonvirtuals = proposal.lazy.merged().nonvirtuals()
+        return try reduce(with: nonvirtuals, into: Commit()) {
+            commit, virtuals, nonvirtual in
+            commit.snapshot.append(contentsOf: virtuals, as: .phantom)
+            commit.snapshot.append(nonvirtual)
+            commit.value   .append(nonvirtual)
+        } none: {
+            commit, virtuals in
+            commit.snapshot.append(contentsOf: virtuals, as: .phantom)
+            commit.snapshot.select(commit.snapshot.endIndex)
+        } done: {
+            commit, virtuals, mismatches in
             //=----------------------------------=
-            // Some
+            // Pattern
             //=----------------------------------=
-            value.append(nonvirtual)
+            if !hidden {
+                commit.snapshot.append(contentsOf: virtuals, as: .phantom)
+            }
+            //=----------------------------------=
+            // Mismatches
+            //=----------------------------------=
+            if !mismatches.isEmpty {
+                //=------------------------------=
+                // Value <= Capacity
+                //=------------------------------=
+                if !virtuals.isEmpty {
+                    throw Info([.mark(mismatches.first!), "is invalid."])
+                //=------------------------------=
+                // Value >> Capacity
+                //=------------------------------=
+                } else {
+                    let capacity = Info.note(commit.value.count)
+                    let elements = Info.mark(commit.snapshot.characters + mismatches)
+                    throw Info(["\(elements) exceeded pattern capacity \(capacity)"])
+                }
+            }
         }
-        //=--------------------------------------=
-        // Capacity
-        //=--------------------------------------=
-        guard nonvirtuals.next() == nil else {
-            throw Info([.mark(proposal.merged().characters), "exceeded pattern capacity \(value.count)"])
-        }
-        //=--------------------------------------=
-        // Interpret
-        //=--------------------------------------=
-        return interpret(value)
     }
 }
 
@@ -182,16 +192,17 @@ extension PatternTextStyle {
     // MARK: Reduce
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(never) func reduce<Result>(
-    with  value: Value,  into result: Result,
+    @inlinable @inline(never) func reduce<Content, Result>(
+    with content: Content, into result: Result,
     some: (inout Result, Substring, Character) -> Void,
     none: (inout Result, Substring) -> Void,
-    done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
+    done: (inout Result, Substring, Content.SubSequence) throws -> Void)
+    rethrows -> Result where Content: Collection<Character> {
         //=--------------------------------------=
         // State
         //=--------------------------------------=
         var result = result
-        var vIndex = value  .startIndex
+        var cIndex = content.startIndex
         var pIndex = pattern.startIndex
         var qIndex = pIndex // position
         //=--------------------------------------=
@@ -199,21 +210,21 @@ extension PatternTextStyle {
         //=--------------------------------------=
         matches: while qIndex != pattern.endIndex {
             //=----------------------------------=
-            // Placeholder
+            // Position == Placeholder
             //=----------------------------------=
             if let predicate = placeholders[pattern[qIndex]] {
-                guard vIndex != value.endIndex else { break matches }
-                let nonvirtual = value[vIndex]
-                guard    predicate(nonvirtual) else { break matches }
+                guard cIndex != content.endIndex else { break matches }
+                let nonvirtual = content[cIndex]
+                guard predicate(nonvirtual) /**/ else { break matches }
                 //=------------------------------=
                 // (!) Some
                 //=------------------------------=
                 some(&result, pattern[pIndex ..< qIndex], nonvirtual)
-                value  .formIndex(after: &vIndex)
+                content.formIndex(after: &cIndex)
                 pattern.formIndex(after: &qIndex)
                 pIndex = qIndex
             //=----------------------------------=
-            // Miscellaneous
+            // Position != Placeholder
             //=----------------------------------=
             } else {
                 pattern.formIndex(after: &qIndex)
@@ -239,7 +250,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // (!) Done
         //=--------------------------------------=
-        done(&result, pattern[pIndex...], value[vIndex...]); return result
+        try done(&result, pattern[pIndex...], content[cIndex...]); return result
     }
 }
 
