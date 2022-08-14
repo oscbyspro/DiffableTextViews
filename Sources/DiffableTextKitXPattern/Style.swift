@@ -210,7 +210,7 @@ extension PatternTextStyle {
             //=----------------------------------=
             // Position == Placeholder
             //=----------------------------------=
-            if let predicate = placeholders[pattern[qIndex]] {
+            if  let predicate = placeholders[pattern[qIndex]] {
                 guard cIndex != content.endIndex else { break matches }
                 let nonvirtual = content[cIndex]
                 guard predicate(nonvirtual) /**/ else { break matches }

@@ -70,7 +70,7 @@ public struct Proposal {
         /// Returns a lazy snapshot with the proposed change applied to it.
         @inlinable public func merged() -> LazySequence<FlattenSequence<[Slice<Snapshot>]>> {[
             proposal.base[..<proposal.range.lowerBound],
-            proposal.replacement[...], /*-------------*/
+            proposal.replacement[...],
             proposal.base[proposal.range.upperBound...]].lazy.joined()
         }
     }

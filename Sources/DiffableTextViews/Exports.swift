@@ -18,6 +18,8 @@
 
 @_exported import struct DiffableTextKit.EqualsTextStyle
 
+@_exported import struct DiffableTextKit.NormalTextStyle
+
 @_exported import struct DiffableTextKit.StandaloneTextStyle
 
 @_exported import struct DiffableTextKit.PrefixTextStyle
