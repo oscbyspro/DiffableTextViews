@@ -23,16 +23,16 @@ public struct Attribute: CustomStringConvertible, OptionSet {
     // MARK: Instances
     //=------------------------------------------------------------------------=
 
-    /// Signifies that the symbol is not real and should not be parsed.
+    /// Marks that a symbol is not real and should not be parsed.
     public static let virtual = Self(rawValue: 1 << 0)
     
-    /// Signifies that the symbol should be ignored when it is inserted.
+    /// Marks that a symbol should be ignored when inserted.
     public static let insertable = Self(rawValue: 1 << 1)
     
-    /// Signifies that the symbol should be ignored when it is removed.
+    /// Marks that a symbol should be ignored when removed.
     public static let removable = Self(rawValue: 1 << 2)
 
-    /// Signifies that the symbol has no interactive size and should be passed through.
+    /// Marks that a symbol has no real size and should be passed through.
     public static let passthrough = Self(rawValue: 1 << 3)
     
     //=------------------------------------------------------------------------=

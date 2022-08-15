@@ -18,6 +18,7 @@ import UIKit
 //*============================================================================*
 
 @usableFromInline final class Downstream {
+    
     @usableFromInline typealias Offset = DiffableTextKit.Offset<UTF16>
 
     //=------------------------------------------------------------------------=

@@ -178,20 +178,13 @@ extension PatternTextStyle {
             }
         }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Reduce
+    // MARK: Inactive, Active, Interactive x Reduce
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(never) func reduce<Content, Result>(
-    with content: Content, into result: Result,
+    with content: Content,into result: Result,
     some: (inout Result, Substring, Character) -> Void,
     none: (inout Result, Substring) -> Void,
     done: (inout Result, Substring, Content.SubSequence) throws -> Void)

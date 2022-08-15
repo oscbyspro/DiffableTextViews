@@ -75,7 +75,7 @@ extension Sequence where Element == Symbol {
     
     /// A sequence of nonvirtual characters.
     @inlinable public func nonvirtuals() -> String {
-        String(lazy.filter({!$0.attribute.contains(.virtual)}).map({$0.character}))
+        String(lazy.nonvirtuals())
     }
 }
 

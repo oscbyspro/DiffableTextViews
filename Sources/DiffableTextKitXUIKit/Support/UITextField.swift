@@ -17,6 +17,7 @@ import UIKit
 //*============================================================================*
 
 extension UITextField {
+    
     @usableFromInline typealias Offset = DiffableTextKit.Offset<UTF16>
     
     //=------------------------------------------------------------------------=

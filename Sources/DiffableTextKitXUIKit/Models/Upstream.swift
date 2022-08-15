@@ -17,12 +17,11 @@ import SwiftUI
 //*============================================================================*
 
 @usableFromInline struct Upstream<Style: DiffableTextStyle> {
-    @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     
     @usableFromInline let style: Style
-    @usableFromInline let value: Binding<Value>
+    @usableFromInline let value: Binding<Style.Value>
     
     //=------------------------------------------------------------------------=
     

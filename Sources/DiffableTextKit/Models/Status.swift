@@ -39,18 +39,15 @@ public struct Status<Style: DiffableTextStyle>: Equatable {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Merges member-wise inequalities.
+    /// Merges member inequalities on a case-by-case basis.
+    ///
+    /// A style marked as equals(()) will not be compared or merged.
+    ///
     @inlinable mutating func merge(_ other: Self) -> Changes {
-        let changes = (self .!= other)
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        if changes.contains(.style) { self.style = other.style }
-        if changes.contains(.value) { self.value = other.value }
-        if changes.contains(.focus) { self.focus = other.focus }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
+        let changes = self .!= other
+        if  changes.contains(.style) { self.style = other.style }
+        if  changes.contains(.value) { self.value = other.value }
+        if  changes.contains(.focus) { self.focus = other.focus }
         return changes
     }
     
@@ -77,6 +74,6 @@ public struct Status<Style: DiffableTextStyle>: Equatable {
     @inlinable static func .!= (lhs: Self, rhs: Self) -> Changes {[
         .style(lhs.style != rhs.style),
         .value(lhs.value != rhs.value),
-        .focus(lhs.focus != rhs.focus),
-    ]}
+        .focus(lhs.focus != rhs.focus)]
+    }
 }

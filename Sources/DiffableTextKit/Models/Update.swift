@@ -11,7 +11,7 @@
 // MARK: * Update [...]
 //*============================================================================*
 
-/// A message describing which remote properties need to be updated.
+/// A message describing which properties should be updated.
 @frozen public struct Update: OptionSet {
         
     public static let text      = Self(rawValue: 1 << 0)

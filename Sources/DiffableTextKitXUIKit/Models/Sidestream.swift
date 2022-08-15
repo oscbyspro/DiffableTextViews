@@ -26,7 +26,7 @@ import SwiftUI
     
     @inlinable init() { }
     
-    @inlinable init(_ environment: EnvironmentValues) {
+    @inlinable init(  _ environment: EnvironmentValues) {
         self.onSubmit = environment.diffableTextViews_onSubmit
     }
 }

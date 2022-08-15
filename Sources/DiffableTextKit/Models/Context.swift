@@ -263,12 +263,14 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection  = Selection(layout!.snapshot.indices(at: selection))
+        let selection = Selection(layout!.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.unique()
-        self.storage.layout!.merge(selection: selection, momentums: momentums)
+        self.storage.layout!.merge(
+        selection: selection, /*-*/
+        momentums: momentums) /*-*/
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

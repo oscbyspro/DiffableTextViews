@@ -29,11 +29,11 @@
         self.option = .none
     }
     
-    @inlinable init(_ some: (Character, Predicate)) {
+    @inlinable init(_ some: Some.Elements) {
         self.option = .some(Some(some))
     }
     
-    @inlinable init(_ many: [Character: Predicate]) {
+    @inlinable init(_ many: Many.Elements) {
         self.option = .many(Many(many))
     }
     
@@ -71,13 +71,15 @@ extension Placeholders {
     
     @usableFromInline struct Some: Equatable {
         
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let elements: (Character, Predicate)
+        @usableFromInline typealias Elements = (Character, Predicate)
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ elements: (Character, Predicate)) {
+        @usableFromInline let elements: Elements
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(  _ elements: Elements) {
             self.elements = elements
         }
         
@@ -96,13 +98,15 @@ extension Placeholders {
 
     @usableFromInline struct Many: Equatable {
         
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let elements: [Character: Predicate]
+        @usableFromInline typealias Elements = [Character: Predicate]
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ elements: [Character: Predicate]) {
+        @usableFromInline let elements: Elements
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(  _ elements: Elements) {
             self.elements = elements
         }
         
