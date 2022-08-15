@@ -14,6 +14,7 @@ import Foundation
 //*============================================================================*
 
 public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyable {
+    
     public typealias Value = Decimal
     public typealias Input = Decimal
     
@@ -24,7 +25,7 @@ public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyab
     public typealias Number   = _StandardStyle<Value.FormatStyle         >
     public typealias Percent  = _StandardStyle<Value.FormatStyle.Percent >
     public typealias Currency = _CurrencyStyle<Value.FormatStyle.Currency>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -32,7 +33,7 @@ public final class _DecimalGraph: _Graph, _Numberable, _Percentable, _Currencyab
     public let min: Value
     public let max: Value
     public let precision: Int
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=

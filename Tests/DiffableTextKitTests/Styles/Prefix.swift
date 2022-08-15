@@ -19,8 +19,6 @@ import XCTest
 
 final class PrefixTextStyleTests: XCTestCase {
     
-    typealias C = Offset<Character>
-    
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
@@ -35,11 +33,8 @@ final class PrefixTextStyleTests: XCTestCase {
     }
     
     func testResolve() {
-        let snapshot = Snapshot("")
-        let proposal = Proposal(snapshot, with: "🇺🇸", in: snapshot.endIndex ..<  snapshot.endIndex)
-        
-        let mock = Mock().prefix("🇸🇪")
-        let resolved = try! mock.resolve(proposal)
+        let proposal = Proposal("", with: "🇺🇸", in: C(0) ..< 0)
+        let resolved = try! Mock().prefix("🇸🇪").resolve(proposal)
         
         XCTAssertEqual(resolved.value,    "🇺🇸")
         XCTAssertEqual(resolved.snapshot, Snapshot("🇸🇪", as: .phantom) + "🇺🇸")
@@ -51,8 +46,8 @@ final class PrefixTextStyleTests: XCTestCase {
         let normal = Mock(selection: true)/*----------*/.interpret(characters).snapshot
         let prefix = Mock(selection: true).prefix("...").interpret(characters).snapshot
         
-        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< C(10)))
-        XCTAssertEqual(prefix.selection!.positions(), prefix.indices(at: C(3) ..< C(13)))
+        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< 10))
+        XCTAssertEqual(prefix.selection!.positions(), prefix.indices(at: C(3) ..< 13))
     }
 }
 

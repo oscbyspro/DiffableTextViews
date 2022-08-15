@@ -18,8 +18,6 @@ import XCTest
 //*============================================================================*
 
 final class SuffixTextStyleTests: XCTestCase {
-
-    typealias C = Offset<Character>
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -35,12 +33,9 @@ final class SuffixTextStyleTests: XCTestCase {
     }
     
     func testResolve() {
-        let snapshot = Snapshot("")
-        let proposal = Proposal(snapshot, with: "🇺🇸", in: snapshot.endIndex ..<  snapshot.endIndex)
-        
-        let mock = Mock().suffix("🇸🇪")
-        let resolved = try! mock.resolve(proposal)
-        
+        let proposal = Proposal("", with: "🇺🇸", in: C(0) ..< 0)
+        let resolved = try! Mock().suffix("🇸🇪").resolve(proposal)
+
         XCTAssertEqual(resolved.value,    "🇺🇸")
         XCTAssertEqual(resolved.snapshot, "🇺🇸" + Snapshot("🇸🇪", as: .phantom))
     }
@@ -51,8 +46,8 @@ final class SuffixTextStyleTests: XCTestCase {
         let normal = Mock(selection: true)/*----------*/.interpret(characters).snapshot
         let suffix = Mock(selection: true).suffix("...").interpret(characters).snapshot
         
-        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< C(10)))
-        XCTAssertEqual(suffix.selection!.positions(), suffix.indices(at: C(0) ..< C(10)))
+        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< 10))
+        XCTAssertEqual(suffix.selection!.positions(), suffix.indices(at: C(0) ..< 10))
     }
 }
 

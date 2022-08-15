@@ -15,6 +15,7 @@ import Foundation
 //*============================================================================*
 
 public struct _OptionalGraph<Base: _Graph>: _Graph where Base.Input == Base.Value {
+    
     public typealias Value = Base.Value?
     public typealias Input = Base.Input
     

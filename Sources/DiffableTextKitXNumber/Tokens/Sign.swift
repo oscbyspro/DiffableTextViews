@@ -34,7 +34,7 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(ascii: UInt8) { self.ascii = ascii }
+    private init(ascii: UInt8) { self.ascii = ascii }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations

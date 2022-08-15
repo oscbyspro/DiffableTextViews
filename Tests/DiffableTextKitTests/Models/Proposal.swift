@@ -24,18 +24,12 @@ final class ProposalTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testMerged() {
-        let snapshot    = Snapshot("AxxxE")
-        let replacement = Snapshot( "BCD" )
-        let range = snapshot.indices(at:  Offset<Character>(1) ..< 4)
-        let proposal = Proposal(snapshot, with: replacement, in: range)
+        let proposal = Proposal("AxE", with: "BCD", in: C(1) ..< 2)
         XCTAssertEqual(proposal.merged(), "ABCDE")
     }
     
     func testLazyMerged() {
-        let snapshot    = Snapshot("AxxxE")
-        let replacement = Snapshot( "BCD" )
-        let range = snapshot.indices(at:  Offset<Character>(1) ..< 4)
-        let proposal = Proposal(snapshot, with: replacement, in: range)
+        let proposal = Proposal("AxE", with: "BCD", in: C(1) ..< 2)
         XCTAssertEqual(Snapshot(proposal.lazy.merged()), "ABCDE")
     }
 }

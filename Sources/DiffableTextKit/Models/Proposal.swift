@@ -26,8 +26,12 @@ public struct Proposal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ base: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) {
+    @inlinable public init(_ base: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) {
         self.base = base; self.replacement = replacement; self.range = range
+    }
+    
+    @inlinable public init<T>(_ base: Snapshot, with replacement: Snapshot, in range: Range<Offset<T>>) {
+        self.init(base, with: replacement,  in: base.indices(at:  range))
     }
     
     //=------------------------------------------------------------------------=

@@ -39,8 +39,7 @@ final class NormalTextStyleTests: XCTestCase {
     
     func testResolve() {
         let snapshot = Snapshot("13") + Snapshot("o(><)o", as: .phantom)
-        let position = snapshot.index(snapshot.startIndex, offsetBy: 01)
-        let proposal = Proposal(snapshot, with: "2", in: position ..< position)
+        let proposal = Proposal(snapshot,  with: "2", in: C(1) ..< C(1))
         
         let resolved = try! normal.resolve(proposal)
         

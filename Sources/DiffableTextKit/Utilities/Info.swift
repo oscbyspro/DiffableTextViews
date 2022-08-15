@@ -33,21 +33,25 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init(_ content: @autoclosure () -> [String] = []) {
+    @inlinable @inline(__always) init(_ content: @autoclosure () -> [String]) {
         #if DEBUG
         self.content = content()
         #endif
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers x Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public init() {
+        self.init([String]())
     }
     
     @inlinable @inline(__always) public init(stringLiteral content: String) {
         self.init([content])
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) init(_ instance: @autoclosure () -> Self) {
+    @inlinable @inline(__always) public init(_ instance: @autoclosure () -> Self) {
         self = instance()
     }
         
@@ -64,7 +68,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Initializers x Builder
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public init(@Info _ instance: () -> Self) {
@@ -76,11 +80,11 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Initializers x Special
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public static func note(_ item: @autoclosure () -> Any) -> Self {
-        self.init([String(describing: item())])
+        Self(["\(item())"])
     }
     
     @inlinable @inline(__always) public static func mark(_ item: @autoclosure () -> Any) -> Self {

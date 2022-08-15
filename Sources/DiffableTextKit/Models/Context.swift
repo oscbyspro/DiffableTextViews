@@ -227,8 +227,7 @@ extension Context {
         // Values
         //=--------------------------------------=
         let proposal = Proposal(layout!.snapshot,
-        with: Snapshot(characters, as: .content),
-        in: layout!.snapshot.indices(at:  range))
+        with: Snapshot(characters), in: range)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=

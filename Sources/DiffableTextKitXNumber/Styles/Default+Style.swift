@@ -39,7 +39,7 @@ extension _DefaultStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var S0 = self; S0.locale = locale; return S0
+        var S0 = self;  S0.locale = locale; return S0
     }
     
     //=------------------------------------------------------------------------=
@@ -52,7 +52,7 @@ extension _DefaultStyle {
     
     @inlinable public func update(_ cache: inout Cache) {
         switch cache.compatible(self) {
-        case   true: cache.style = self
-        case  false: cache = self.cache() }
+        case  true: cache.style = self
+        case false: cache = self.cache() }
     }
 }
