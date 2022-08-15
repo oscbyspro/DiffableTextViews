@@ -17,7 +17,7 @@ import XCTest
 // MARK: * Prefix x Tests
 //*============================================================================*
 
-final class PrefixTests: XCTestCase {
+final class PrefixTextStyleTests: XCTestCase {
     
     typealias C = Offset<Character>
     
@@ -32,6 +32,17 @@ final class PrefixTests: XCTestCase {
     func testInterpret() {
         XCTAssertEqual(Mock().prefix("🇸🇪").interpret("🇺🇸"),
         Commit("🇺🇸",  Snapshot("🇸🇪", as: .phantom) + "🇺🇸"))
+    }
+    
+    func testResolve() {
+        let snapshot = Snapshot("")
+        let proposal = Proposal(snapshot, with: "🇺🇸", in: snapshot.endIndex ..<  snapshot.endIndex)
+        
+        let mock = Mock().prefix("🇸🇪")
+        let resolved = try! mock.resolve(proposal)
+        
+        XCTAssertEqual(resolved.value,    "🇺🇸")
+        XCTAssertEqual(resolved.snapshot, Snapshot("🇸🇪", as: .phantom) + "🇺🇸")
     }
     
     func testSelectionInBaseIsOffsetByPrefixSize() {

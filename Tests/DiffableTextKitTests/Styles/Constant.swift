@@ -17,7 +17,7 @@ import XCTest
 // MARK: * Constant x Tests
 //*============================================================================*
 
-final class ConstantTests: XCTestCase {
+final class ConstantTextStyleTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

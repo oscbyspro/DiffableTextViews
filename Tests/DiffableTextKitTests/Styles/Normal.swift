@@ -17,7 +17,7 @@ import XCTest
 // MARK: * Normal x Tests
 //*============================================================================*
 
-final class NormalTests: XCTestCase {
+final class NormalTextStyleTests: XCTestCase {
             
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -38,9 +38,9 @@ final class NormalTests: XCTestCase {
     }
     
     func testResolve() {
-        let base = Snapshot("13") + Snapshot("o(><)o", as: .phantom)
-        let middle = base.index(base.startIndex, offsetBy: 1)
-        let proposal = Proposal(base, with: "2", in: middle ..< middle)
+        let snapshot = Snapshot("13") + Snapshot("o(><)o", as: .phantom)
+        let position = snapshot.index(snapshot.startIndex, offsetBy: 01)
+        let proposal = Proposal(snapshot, with: "2", in: position ..< position)
         
         let resolved = try! normal.resolve(proposal)
         

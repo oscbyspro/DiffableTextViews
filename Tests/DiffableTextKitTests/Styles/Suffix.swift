@@ -17,7 +17,7 @@ import XCTest
 // MARK: * Suffix x Tests
 //*============================================================================*
 
-final class SuffixTests: XCTestCase {
+final class SuffixTextStyleTests: XCTestCase {
 
     typealias C = Offset<Character>
     
@@ -32,6 +32,17 @@ final class SuffixTests: XCTestCase {
     func testInterpret() {
         XCTAssertEqual(Mock().suffix("🇸🇪").interpret("🇺🇸"),
         Commit("🇺🇸", "🇺🇸" + Snapshot("🇸🇪", as: .phantom)))
+    }
+    
+    func testResolve() {
+        let snapshot = Snapshot("")
+        let proposal = Proposal(snapshot, with: "🇺🇸", in: snapshot.endIndex ..<  snapshot.endIndex)
+        
+        let mock = Mock().suffix("🇸🇪")
+        let resolved = try! mock.resolve(proposal)
+        
+        XCTAssertEqual(resolved.value,    "🇺🇸")
+        XCTAssertEqual(resolved.snapshot, "🇺🇸" + Snapshot("🇸🇪", as: .phantom))
     }
     
     func testSelectionIsSame() {

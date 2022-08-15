@@ -39,28 +39,36 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
         #endif
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable @inline(__always) public init(stringLiteral content: String) {
         self.init([content])
     }
     
-    @inlinable @inline(__always) public init(@Info _ info: () -> Self) {
-        self.init(info())
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) init(_ instance: @autoclosure () -> Self) {
+        self = instance()
+    }
+        
+    @inlinable @inline(__always) public init(_ error: @autoclosure () -> any Error) {
+        self.init([String(describing: error())])
+    }
+        
+    @inlinable @inline(__always) public init(_ instances: @autoclosure () -> [Self]) {
+        self.init(instances().map(\.description))
     }
     
     @inlinable @inline(__always) public init(_ transform: (inout Self) -> Void) {
         self.init({ var instance = Self(); transform(&instance); return instance }())
     }
     
-    @inlinable @inline(__always) public init(_ error: @autoclosure () -> any Error) {
-        self.init([String(describing: error())])
-    }
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public init(_ instances: @autoclosure () -> [Self]) {
-        self.init(instances().map(\.description))
+    @inlinable @inline(__always) public init(@Info _ instance: () -> Self) {
+        self.init(instance())
     }
     
     @inlinable @inline(__always) public static func buildBlock(_ instances: Self...) -> Self {

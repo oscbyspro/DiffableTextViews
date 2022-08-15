@@ -55,7 +55,7 @@ struct Mock: DiffableTextStyle {
     }
     
     func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
-        interpret(proposal.merged().characters)
+        interpret(proposal.lazy.merged().nonvirtuals())
     }
 }
 

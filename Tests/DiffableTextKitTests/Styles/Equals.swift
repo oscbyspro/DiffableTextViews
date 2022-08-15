@@ -17,7 +17,7 @@ import XCTest
 // MARK: * Equals x Tests
 //*============================================================================*
 
-final class EqualsTests: XCTestCase {
+final class EqualsTextStyleTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
