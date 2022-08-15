@@ -26,8 +26,9 @@ ExpressibleByExtendedGraphemeClusterLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ character: Character, as attribute: Attribute = .content) {
-        self.character = character; self.attribute =  attribute
+    @inlinable @inline(__always) public init(
+    _ character: Character, as attribute: Attribute = .content) {
+        self.character = character;  self.attribute = attribute
     }
     
     @inlinable public init(extendedGraphemeClusterLiteral character: Character) {
@@ -38,23 +39,19 @@ ExpressibleByExtendedGraphemeClusterLiteral {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public var virtual: Bool {
+    @inlinable @inline(__always) public var virtual: Bool {
         self.attribute.contains(.virtual)
     }
     
-    @inlinable @inline(__always)
-    public var nonvirtual: Bool {
+    @inlinable @inline(__always) public var nonvirtual: Bool {
         self.attribute.contains(.virtual) == false
     }
     
-    @inlinable @inline(__always)
-    public func contains(_ character: Character) -> Bool {
+    @inlinable @inline(__always) public func contains(_ character: Character) -> Bool {
         self.character == character
     }
     
-    @inlinable @inline(__always)
-    public func contains(_ attribute: Attribute) -> Bool {
+    @inlinable @inline(__always) public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
     }
     
@@ -64,14 +61,10 @@ ExpressibleByExtendedGraphemeClusterLiteral {
 }
 
 //*============================================================================*
-// MARK: * Symbol x Sequence
+// MARK: * Symbol x Sequence [...]
 //*============================================================================*
 
 extension Sequence where Element == Symbol {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     /// A sequence of nonvirtual characters.
     @inlinable public func nonvirtuals() -> String {
@@ -80,14 +73,10 @@ extension Sequence where Element == Symbol {
 }
 
 //*============================================================================*
-// MARK: * Symbol x Sequence x Lazy
+// MARK: * Symbol x Sequence x Lazy [...]
 //*============================================================================*
 
 extension LazySequenceProtocol where Element == Symbol {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
     
     /// A lazy sequence of nonvirtual characters.
     @inlinable public func nonvirtuals() -> LazyMapSequence<LazyFilterSequence<Elements>, Character> {

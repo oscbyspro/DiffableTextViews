@@ -83,13 +83,11 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public var characters: String {
+    @inlinable @inline(__always) public var characters: String {
         _characters
     }
     
-    @inlinable @inline(__always)
-    public var attributes: [Attribute] {
+    @inlinable @inline(__always) public var attributes: [Attribute] {
         _attributes
     }
     
@@ -101,13 +99,11 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public mutating func select(_  position: Index) {
+    @inlinable @inline(__always) public mutating func select(_ position: Index) {
         self.selection = Selection(position)
     }
     
-    @inlinable @inline(__always)
-    public mutating func select(_  positions: Range<Index>) {
+    @inlinable @inline(__always) public mutating func select(_ positions: Range<Index>) {
         self.selection = Selection(positions)
     }
 }

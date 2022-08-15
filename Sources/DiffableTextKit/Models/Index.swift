@@ -27,8 +27,7 @@ public struct Index: Comparable, CustomStringConvertible {
     ///   - character: The character encoded index.
     ///   - attribute: The character encoded offset.
     ///
-    @inlinable @inline(__always)
-    init(_ character: String.Index, as attribute: Int) {
+    @inlinable @inline(__always) init(_ character: String.Index, as attribute: Int) {
         self.character = character
         self.attribute = attribute
     }
@@ -37,13 +36,11 @@ public struct Index: Comparable, CustomStringConvertible {
         String(describing: attribute)
     }
     
-    @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.attribute == rhs.attribute
     }
     
-    @inlinable @inline(__always)
-    public static func <  (lhs: Self, rhs: Self) -> Bool {
+    @inlinable @inline(__always) public static func <  (lhs: Self, rhs: Self) -> Bool {
         lhs.attribute <  rhs.attribute
     }
 }

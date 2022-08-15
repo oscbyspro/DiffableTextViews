@@ -13,7 +13,7 @@
 
 public struct Offset<Encoding: DiffableTextKit.Encoding>: Strideable,
 AdditiveArithmetic, ExpressibleByIntegerLiteral {
-        
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -24,18 +24,15 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public init(_ distance: Int) {
+    @inlinable @inline(__always) public init(_ distance: Int) {
         self.distance = distance
     }
     
-    @inlinable @inline(__always)
-    public init(_ distance: Int, as type: Encoding.Type) {
+    @inlinable @inline(__always) public init(_ distance: Int, as type: Encoding.Type) {
         self.distance = distance
     }
     
-    @inlinable @inline(__always)
-    public init(integerLiteral distance: Int) {
+    @inlinable @inline(__always) public init(integerLiteral distance: Int) {
         self.distance = distance
     }
     
@@ -43,13 +40,11 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func advanced(by units: Int) -> Self {
+    @inlinable @inline(__always) public func advanced(by units: Int) -> Self {
         Self(distance + units)
     }
     
-    @inlinable @inline(__always)
-    public func distance(to other: Self) -> Int {
+    @inlinable @inline(__always) public func distance(to other: Self) -> Int {
         other.distance - distance
     }
     
@@ -57,33 +52,27 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public static func < (lhs: Self, rhs: Self) -> Bool {
+    @inlinable @inline(__always) public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.distance < rhs.distance
     }
     
-    @inlinable @inline(__always)
-    public static prefix func - (instance: Self) -> Self {
+    @inlinable @inline(__always) public static prefix func - (instance: Self) -> Self {
         Self(-instance.distance)
     }
     
-    @inlinable @inline(__always)
-    public static func + (lhs: Self, rhs: Self) -> Self {
+    @inlinable @inline(__always) public static func + (lhs: Self, rhs: Self) -> Self {
         Self(lhs.distance + rhs.distance)
     }
     
-    @inlinable @inline(__always)
-    public static func - (lhs: Self, rhs: Self) -> Self {
+    @inlinable @inline(__always) public static func - (lhs: Self, rhs: Self) -> Self {
         Self(lhs.distance - rhs.distance)
     }
     
-    @inlinable @inline(__always)
-    public static func += (lhs: inout Self, rhs: Self) {
+    @inlinable @inline(__always) public static func += (lhs: inout Self, rhs: Self) {
         lhs = lhs + rhs
     }
     
-    @inlinable @inline(__always)
-    public static func -= (lhs: inout Self, rhs: Self) {
+    @inlinable @inline(__always) public static func -= (lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
     }
 }
@@ -98,8 +87,7 @@ public extension Int {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init<T>(_ offset: Offset<T>) {
+    @inlinable @inline(__always) init<T>(_ offset: Offset<T>) {
         self = offset.distance
     }
 }
@@ -108,7 +96,7 @@ public extension Int {
 // MARK: * Offsets
 //*============================================================================*
 
-public protocol Offsets<Index>: Collection {
+public protocol Offsets: Collection {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
