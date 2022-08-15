@@ -11,16 +11,34 @@
 // MARK: * Style x Nullable
 //*============================================================================*
 
+/// This protocol formalizes the implementation of optional values.
+///
+/// Wrapper styles may not know how to support optionality without also knowing
+/// the details of the styles they wrap. As a result, it makes sense to support
+/// both standard and optional values and let wrappers pick the implementation.
+///
 public protocol NullableTextStyle<Value>: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    /// Returns formatted text.
+    ///
+    /// A wrapper may use this method.
+    ///
     @inlinable func format(optional value: Value?, with cache: inout Cache) -> String
     
+    /// Returns an optional value and a snapshot describing it.
+    ///
+    /// A wrapper may use this method.
+    ///
     @inlinable func interpret(optional value: Value?, with cache: inout Cache) -> Commit<Value?>
     
+    /// Returns an optional value and a snapshot describing it.
+    ///
+    /// A wrapper may use this method.
+    ///
     @inlinable func resolve(optional proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?>
 }
 

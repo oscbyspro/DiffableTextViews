@@ -28,15 +28,13 @@ public struct Brrr: Equatable {
     
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public init(_ context: @autoclosure () -> String) {
+    @inlinable @inline(__always) public init(_ context: @autoclosure () -> String) {
         #if DEBUG
         self.context = context()
         #endif
     }
     
-    @inlinable @inline(__always)
-    public static func << (brrr: Self, message: @autoclosure () -> Any) {
+    @inlinable @inline(__always) public static func << (brrr: Self, message: @autoclosure () -> Any) {
         #if DEBUG
         Swift.print(brrr.context, message())
         #endif

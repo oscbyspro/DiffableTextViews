@@ -17,6 +17,7 @@
 ///
 @resultBuilder public struct Info: CustomStringConvertible, Error, Equatable,
 ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
+    
     public static let unknown = "[REDACTED]"
     public static let separator = "\u{0020}"
     
@@ -32,8 +33,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(_ content: @autoclosure () -> [String] = []) {
+    @inlinable @inline(__always) init(_ content: @autoclosure () -> [String] = []) {
         #if DEBUG
         self.content = content()
         #endif
@@ -43,38 +43,27 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public init(stringLiteral content: String) {
+    @inlinable @inline(__always) public init(stringLiteral content: String) {
         self.init([content])
     }
     
-    @inlinable @inline(__always)
-    public init(_  info: @autoclosure () -> Self) {
-        self.init([info().description])
-    }
-    
-    @inlinable @inline(__always)
-    public init(@Info _ info: () -> Self) {
+    @inlinable @inline(__always) public init(@Info _ info: () -> Self) {
         self.init(info())
     }
     
-    @inlinable @inline(__always)
-    public init(_ transform: (inout Self) -> Void) {
-        self.init({ var info = Self(); transform(&info); return info }())
+    @inlinable @inline(__always) public init(_ transform: (inout Self) -> Void) {
+        self.init({ var instance = Self(); transform(&instance); return instance }())
     }
     
-    @inlinable @inline(__always)
-    public init(_ many: @autoclosure () -> [Self]) {
-        self.init(many().map(\.description))
-    }
-    
-    @inlinable @inline(__always)
-    public init(_ error: @autoclosure () -> any Error) {
+    @inlinable @inline(__always) public init(_ error: @autoclosure () -> any Error) {
         self.init([String(describing: error())])
     }
     
-    @inlinable @inline(__always)
-    public static func buildBlock(_ instances: Self...) -> Self {
+    @inlinable @inline(__always) public init(_ instances: @autoclosure () -> [Self]) {
+        self.init(instances().map(\.description))
+    }
+    
+    @inlinable @inline(__always) public static func buildBlock(_ instances: Self...) -> Self {
         Self(instances)
     }
     
@@ -82,13 +71,11 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public static func note(_ item: @autoclosure () -> Any) -> Self {
+    @inlinable @inline(__always) public static func note(_ item: @autoclosure () -> Any) -> Self {
         self.init([String(describing: item())])
     }
     
-    @inlinable @inline(__always)
-    public static func mark(_ item: @autoclosure () -> Any) -> Self {
+    @inlinable @inline(__always) public static func mark(_ item: @autoclosure () -> Any) -> Self {
         Self(["« \(item()) »"])
     }
     
@@ -96,8 +83,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public var description: String {
+    @inlinable @inline(__always) public var description: String {
         #if DEBUG
         self.content.joined(separator: Self.separator)
         #else
@@ -109,8 +95,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    mutating func transform(_ transform: (inout [String]) -> Void) {
+    @inlinable @inline(__always) mutating func transform(_ transform: (inout [String]) -> Void) {
         #if DEBUG
         transform(&self.content)
         #endif
@@ -120,18 +105,18 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public mutating func join(separator: @autoclosure () -> String = Self.separator) {
+    @inlinable @inline(__always) public mutating func join(
+    separator: @autoclosure () -> String = Self.separator){
         self.transform({ $0 = [$0.joined(separator: separator())] })
     }
     
-    @inlinable @inline(__always)
-    public func joined(separator: @autoclosure () -> String = Self.separator) -> Self {
+    @inlinable @inline(__always) public func joined(
+    separator: @autoclosure () -> String = Self.separator) -> Self {
         Self({ $0.join(separator: separator()) })
     }
     
-    @inlinable @inline(__always)
-    public static func += (info: inout Self, other: @autoclosure () -> Self) {
-        info.transform({ $0.append(other().description) })
+    @inlinable @inline(__always) public static func += (
+    instance: inout Self, other: @autoclosure () -> Self) {
+        instance.transform({ $0.append(other().description) })
     }
 }
