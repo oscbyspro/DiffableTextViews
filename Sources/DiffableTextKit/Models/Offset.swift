@@ -11,8 +11,7 @@
 // MARK: * Offset
 //*============================================================================*
 
-public struct Offset<Encoding: DiffableTextKit.Encoding>: Strideable,
-AdditiveArithmetic, ExpressibleByIntegerLiteral {
+public struct Offset<Encoding: DiffableTextKit.Encoding>: Strideable, Numeric {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -35,6 +34,16 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     @inlinable @inline(__always) public init(integerLiteral distance: Int) {
         self.distance = distance
     }
+    
+    public init?(exactly source: some BinaryInteger) {
+        guard let distance = Int(exactly: source) else { return nil }; self.distance = distance
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var magnitude: UInt { distance.magnitude }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -74,6 +83,14 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     
     @inlinable @inline(__always) public static func -= (lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
+    }
+    
+    @inlinable @inline(__always) public static func * (lhs: Self, rhs: Self) -> Self {
+        Self(lhs.distance * rhs.distance)
+    }
+    
+    @inlinable @inline(__always) public static func *= (lhs: inout Self, rhs: Self) {
+        lhs = lhs * rhs
     }
 }
 

@@ -11,18 +11,16 @@
 // MARK: * Attribute
 //*============================================================================*
 
-/// A set of behavioral options.
+/// A set of behavioral options, such that plain text has no attributes.
 ///
-/// Plain text has no attributes.
-///
-/// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
+/// The easiest way to unformat text is to filter characters marked as virtual.
 ///
 public struct Attribute: CustomStringConvertible, OptionSet {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
-
+    
     /// Marks that a symbol is not real and should not be parsed.
     public static let virtual = Self(rawValue: 1 << 0)
     

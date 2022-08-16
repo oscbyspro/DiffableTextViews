@@ -41,7 +41,7 @@ where Value: _Input & FixedWidthInteger {
         let limit = Value(clamping: Int.max)
         self.precision = Int(floor(log10(Double(limit))))
         self.max = Value(String(repeating: "9", count: precision))!
-        self.min = Value(clamping: -1) * max // zero when unsigned
+        self.min = Value(clamping: -1) * self.max // unsigned: zero
     }
     
     //=------------------------------------------------------------------------=

@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Mask x Tests
+// MARK: * Options x Tests
 //*============================================================================*
 
-final class MaskTests: XCTestCase {
+final class OptionsTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -29,8 +29,23 @@ final class MaskTests: XCTestCase {
         XCTAssertEqual(max( false),  [ ])
     }
     
+    func testPlusEqualsFormsUnion() {
+        var options = Options()
+        options += Options(rawValue: 1 << 0)
+        options += Options(rawValue: 1 << 1)
+        options += Options(rawValue: 1 << 1)
+        options += Options(rawValue: 1 << 1)
+        options += Options(rawValue: 1 << 2)
+        XCTAssertEqual(options.rawValue, 0b111)
+    }
+    
+    func testNotMeansSameAsIsEmpty() {
+        XCTAssertEqual(!Options(rawValue: 0b0),  true)
+        XCTAssertEqual(!Options(rawValue: 0b1), false)
+    }
+    
     //*========================================================================*
-    // MARK: * Elements
+    // MARK: * Options [...]
     //*========================================================================*
     
     struct Options: OptionSet { let rawValue: UInt8 }

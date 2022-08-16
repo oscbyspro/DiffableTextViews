@@ -13,15 +13,15 @@
 
 public extension OptionSet {
     
-    @inlinable func callAsFunction(_ mask: Bool) -> Self {
+    @inlinable @inline(__always) func callAsFunction(_ mask: Bool) -> Self {
         mask ? self : Self()
     }
     
-    @inlinable static func += (lhs: inout Self, rhs: Self) {
+    @inlinable @inline(__always) static func += (lhs: inout Self, rhs: Self) {
         lhs.formUnion(rhs)
     }
     
-    @inlinable static prefix func !(instance: Self) -> Bool {
+    @inlinable @inline(__always) static prefix func !(instance: Self) -> Bool {
         instance.isEmpty
     }
 }

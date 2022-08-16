@@ -31,7 +31,7 @@ public struct Proposal {
     }
     
     @inlinable public init<T>(_ base: Snapshot, with replacement: Snapshot, in range: Range<Offset<T>>) {
-        self.init(base, with: replacement,  in: base.indices(at:  range))
+        self.base = base; self.replacement = replacement; self.range = base.indices(at: range)
     }
     
     //=------------------------------------------------------------------------=

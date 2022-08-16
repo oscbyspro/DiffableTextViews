@@ -102,22 +102,22 @@ final class EncodingTests: XCTestCase {
         XCTAssertEqual(lhs.attribute, rhs.attribute)
     }
     
-    func AssertDistanceWorks<T>(_ encoding: T.Type, _ distances: (Offset<T>, Offset<T>, Offset<T>)) {
-        XCTAssertEqual(T.distance(from:  start, to:  start, in: emojis),  distances.0)
-        XCTAssertEqual(T.distance(from: middle, to: middle, in: emojis),  distances.0)
-        XCTAssertEqual(T.distance(from:    end, to:    end, in: emojis),  distances.0)
+    func AssertDistancePerEmoji<T>(_ type: T.Type, _ stride: Offset<T>) {
+        XCTAssertEqual(T.distance(from:  start, to:  start, in: emojis),  stride * 0)
+        XCTAssertEqual(T.distance(from: middle, to: middle, in: emojis),  stride * 0)
+        XCTAssertEqual(T.distance(from:    end, to:    end, in: emojis),  stride * 0)
 
-        XCTAssertEqual(T.distance(from:  start, to: middle, in: emojis), +distances.1)
-        XCTAssertEqual(T.distance(from: middle, to:  start, in: emojis), -distances.1)
+        XCTAssertEqual(T.distance(from:  start, to: middle, in: emojis),  stride * 1)
+        XCTAssertEqual(T.distance(from: middle, to:  start, in: emojis), -stride * 1)
 
-        XCTAssertEqual(T.distance(from: middle, to:    end, in: emojis), +distances.1)
-        XCTAssertEqual(T.distance(from:    end, to: middle, in: emojis), -distances.1)
+        XCTAssertEqual(T.distance(from: middle, to:    end, in: emojis),  stride * 1)
+        XCTAssertEqual(T.distance(from:    end, to: middle, in: emojis), -stride * 1)
 
-        XCTAssertEqual(T.distance(from:  start, to:    end, in: emojis), +distances.2)
-        XCTAssertEqual(T.distance(from:    end, to:  start, in: emojis), -distances.2)
+        XCTAssertEqual(T.distance(from:  start, to:    end, in: emojis),  stride * 2)
+        XCTAssertEqual(T.distance(from:    end, to:  start, in: emojis), -stride * 2)
     }
 
-    func AssertIndexWorks(_ type: (some Encoding).Type) {
+    func AssertIndexAwayFromIndexWorks(_ type: (some Encoding).Type) {
         let max = type.distance(from: start, to:    end, in: emojis)
         let mid = type.distance(from: start, to: middle, in: emojis)
         let i = { type.index(from: $0, move: $1, in:    self.emojis) }
@@ -143,8 +143,8 @@ final class EncodingTests: XCTestCase {
     }
 
     func AssertIndexClampsToStartOfCharacter(_ type: (some Encoding).Type) {
-        let i = { type.index(from: $0,  move: $1, in: self.emojis) }
-        let d = { type.distance(from: $0, to: $1, in: self.emojis) }
+        let i = { type   .index(from: $0, move: $1, in: self.emojis) }
+        let d = { type.distance(from: $0,   to: $1, in: self.emojis) }
         //=--------------------------------------=
         // Forwards
         //=--------------------------------------=
@@ -176,11 +176,11 @@ final class EncodingTests: XCTestCase {
     //=------------------------------------------------------------------------=
 
     func testCharacterDistance() {
-        AssertDistanceWorks(Character.self, (0, 1, 2))
+        AssertDistancePerEmoji(Character.self, 1)
     }
 
     func testCharacterIndex() {
-        AssertIndexWorks(Character.self)
+        AssertIndexAwayFromIndexWorks(Character.self)
     }
 
     func testCharacterIndexClampsToStartOfCharacter() {
@@ -192,11 +192,11 @@ final class EncodingTests: XCTestCase {
     //=------------------------------------------------------------------------=
 
     func testUnicodeScalarDistance() {
-        AssertDistanceWorks(Unicode.Scalar.self, (0, 2, 4))
+        AssertDistancePerEmoji(Unicode.Scalar.self, 2)
     }
 
     func testUnicodeScalarIndex() {
-        AssertIndexWorks(Unicode.Scalar.self)
+        AssertIndexAwayFromIndexWorks(Unicode.Scalar.self)
     }
 
     func testUnicodeScalarIndexClampsToStartOfCharacter() {
@@ -208,11 +208,11 @@ final class EncodingTests: XCTestCase {
     //=------------------------------------------------------------------------=
 
     func testUTF16Distance() {
-        AssertDistanceWorks(UTF16.self, (0, 4, 8))
+        AssertDistancePerEmoji(UTF16.self, 4)
     }
 
     func testUTF16Index() {
-        AssertIndexWorks(UTF16.self)
+        AssertIndexAwayFromIndexWorks(UTF16.self)
     }
 
     func testUTF16IndexClampsToStartOfCharacter() {
@@ -224,11 +224,11 @@ final class EncodingTests: XCTestCase {
     //=------------------------------------------------------------------------=
 
     func testUTF8Distance() {
-        AssertDistanceWorks(UTF8.self, (0, 8, 16))
+        AssertDistancePerEmoji(UTF8.self, 8)
     }
 
     func testUTF8Index() {
-        AssertIndexWorks(UTF8.self)
+        AssertIndexAwayFromIndexWorks(UTF8.self)
     }
     
     func testUTF8IndexClampsToStartOfCharacter() {
