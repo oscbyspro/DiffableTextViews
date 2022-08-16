@@ -23,8 +23,8 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable init(from source: Components, to target: Components) {
-        source.signs     .tokens.forEach { self.singular[$0] = target.signs     [$1] }
-        source.digits    .tokens.forEach { self.singular[$0] = target.digits    [$1] }
+        source.signs/*-*/.tokens.forEach { self.singular[$0] = target.signs/*-*/[$1] }
+        source.digits/**/.tokens.forEach { self.singular[$0] = target.digits/**/[$1] }
         source.separators.tokens.forEach { self.singular[$0] = target.separators[$1] }
         
         let fraction = target.separators.characters[.fraction]

@@ -17,9 +17,10 @@ import Foundation
 public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency
 where Format: _Format & _Currency, Format.FormatInput: _Input {
     
-    public typealias Graph = Format.FormatInput.NumberTextGraph
     public typealias Value = Format.FormatInput
     public typealias Input = Format.FormatInput
+    
+    public typealias Graph = Format.FormatInput.NumberTextGraph
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -17,35 +17,35 @@ import Foundation
 @usableFromInline struct Components {
     
     @usableFromInline static let ascii = Self(
-    signs:      .ascii(),
-    digits:     .ascii(),
+    signs:/*-*/ .ascii(),
+    digits:/**/ .ascii(),
     separators: .ascii())
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let signs:      Links<Sign>
-    @usableFromInline let digits:     Links<Digit>
+    @usableFromInline let signs:/*-*/ Links<Sign>
+    @usableFromInline let digits:/**/ Links<Digit>
     @usableFromInline let separators: Links<Separator>
 
     //=------------------------------------------------------------------------=
     
     @inlinable init(signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
-        self.signs      = signs
-        self.digits     = digits
+        self.signs/*-*/ = signs
+        self.digits/**/ = digits
         self.separators = separators
     }
     
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self.init(
-        signs:      .standard(formatter),
-        digits:     .standard(formatter),
+        signs:/*-*/ .standard(formatter),
+        digits:/**/ .standard(formatter),
         separators: .standard(formatter))
     }
     
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self.init(
-        signs:      .currency(formatter),
-        digits:     .currency(formatter),
+        signs:/*-*/ .currency(formatter),
+        digits:/**/ .currency(formatter),
         separators: .currency(formatter))
     }
     
@@ -68,8 +68,8 @@ import Foundation
     }
     
     @inlinable func nonvirtual(_ character: Character) -> Bool {
-        signs     [character] != nil ||
-        digits    [character] != nil ||
+        signs/*-*/[character] != nil ||
+        digits/**/[character] != nil ||
         separators[character] == Separator.fraction
     }
 }

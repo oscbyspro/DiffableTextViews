@@ -40,7 +40,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers x Indirect
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public init() {
@@ -68,7 +68,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers x Builder
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public init(@Info _ instance: () -> Self) {
@@ -80,7 +80,7 @@ ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers x Special
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public static func note(_ item: @autoclosure () -> Any) -> Self {

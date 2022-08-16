@@ -36,7 +36,7 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// - Limited by `Double.max` due to `FloatingPointFormatStyle`.
+    /// - Limited by Double.max due to FloatingPointFormatStyle.
     fileprivate init() where Value: LosslessStringConvertible {
         let size = Swift.min(Value.significandBitCount, Double.significandBitCount)
         self.precision = Int(log10(pow(2, Double.init(size))))/*-*/

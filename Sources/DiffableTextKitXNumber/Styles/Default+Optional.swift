@@ -17,10 +17,11 @@ import Foundation
 public struct _OptionalStyle<Base>: _Style, WrapperTextStyle where
 Base: _Style & NullableTextStyle, Base.Value == Base.Input {
     
-    public typealias Graph = _OptionalGraph<Base.Graph>
     public typealias Cache = Base .Cache
     public typealias Value = Graph.Value
     public typealias Input = Graph.Input
+    
+    public typealias Graph = _OptionalGraph<Base.Graph>
     
     //=------------------------------------------------------------------------=
     // MARK: State

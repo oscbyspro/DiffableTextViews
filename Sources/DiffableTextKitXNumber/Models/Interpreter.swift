@@ -52,7 +52,7 @@ import Foundation
     
     @inlinable func number(_ symbols: some Sequence<Symbol>,
     as value: (some _Value).Type) throws -> Number? {
-        let unformatted = symbols.lazy.nonvirtuals() /*--------------------------*/
+        let unformatted = symbols.lazy.nonvirtuals()
         return try Number(unformatted: unformatted, signs: components.signs.tokens,
         digits: components.digits.tokens, separators: components.separators.tokens,
         optional: value.optional, unsigned: value.unsigned, integer: value.integer)
