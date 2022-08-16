@@ -39,16 +39,9 @@ where Value: _Input & FixedWidthInteger {
     /// - Limited by longest sequence of 9s due to IntegerFormatStyle.
     fileprivate init() where Value: LosslessStringConvertible {
         let limit = Value(clamping: Int.max)
-        //=--------------------------------------=
-        // Precision
-        //=--------------------------------------=
         self.precision = Int(floor(log10(Double(limit))))
-        let nines = String(repeating: "9", count: precision)
-        //=--------------------------------------=
-        // Bounds
-        //=--------------------------------------=
-        self.max = Value(nines)! // max <= precision, 9s <= Int.max
-        self.min = Value.isSigned ? Value("-" + nines)! : Value.min
+        self.max = Value(String(repeating: "9", count: precision))!
+        self.min = Value(clamping: -1) * max // zero when unsigned
     }
     
     //=------------------------------------------------------------------------=
