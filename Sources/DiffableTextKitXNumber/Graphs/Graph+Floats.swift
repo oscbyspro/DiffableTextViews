@@ -39,8 +39,8 @@ where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     /// - Limited by `Double.max` due to `FloatingPointFormatStyle`.
     fileprivate init() where Value: LosslessStringConvertible {
         let size = Swift.min(Value.significandBitCount, Double.significandBitCount)
-        self.precision = Int.init(log10(pow(2.0, Double.init(size))))
-        self.max = Value(String(repeating:  "9", count: precision ))!
+        self.precision = Int(log10(pow(2, Double.init(size))))/*-*/
+        self.max = Value(String(repeating: "9", count: precision))!
         self.min = -(max)
     }
     

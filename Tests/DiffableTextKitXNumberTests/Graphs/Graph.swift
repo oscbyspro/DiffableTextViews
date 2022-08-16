@@ -24,15 +24,15 @@ final class GraphTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testBounds_Decimal_Double_Int64() {
-        XCTAssertEqual(Decimal.max, Decimal(string: String(repeating: "9", count: 38))!)
-        XCTAssertEqual(Double .max, Double(         String(repeating: "9", count: 15))!)
-        XCTAssertEqual(Int64  .max, Int64.max)
+        XCTAssertEqual(Decimal._NumberTextGraph.max, Decimal(string: String(repeating: "9", count: 38))!)
+        XCTAssertEqual(Double ._NumberTextGraph.max, Double    .init(String(repeating: "9", count: 15))!)
+        XCTAssertEqual(Int64  ._NumberTextGraph.max, Int64     .init(String(repeating: "9", count: 18))!)
     }
     
     func testPrecision_Decimal_Double_Int64() {
-        XCTAssertEqual(Decimal.precision, 38)
-        XCTAssertEqual(Double .precision, 15)
-        XCTAssertEqual(Int64  .precision, 19)
+        XCTAssertEqual(Decimal._NumberTextGraph.precision, 38)
+        XCTAssertEqual(Double ._NumberTextGraph.precision, 15)
+        XCTAssertEqual(Int64  ._NumberTextGraph.precision, 18)
     }
 }
 

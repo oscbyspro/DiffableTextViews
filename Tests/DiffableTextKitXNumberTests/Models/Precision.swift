@@ -86,20 +86,38 @@ final class PrecisionTests: XCTestCase {
     }
     
     func testInt() {
-        let digits   = 1...19
-        let integer  = 1...19
+        let digits   = 1...18 // 9s
+        let integer  = 1...18 // 9s
         let fraction = 0...00
         
         var precision = _Precision<Int>()
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
         
-        precision = _Precision<Int>(7...7)
+        precision = _Precision<Int>( 7...7)
         XCTAssert(precision, digits: 7...7, integer: integer, fraction: fraction)
         
         precision = _Precision<Int>(integer: 7...7, fraction: 7...7)
         XCTAssert(precision, digits: digits, integer: 7...7, fraction: fraction)
         
         precision = _Precision<Int>(integer: (-99)...99, fraction: (-99)...99)
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
+    }
+    
+    func testUInt() {
+        let digits   = 1...18 // 9s
+        let integer  = 1...18 // 9s
+        let fraction = 0...00
+        
+        var precision = _Precision<UInt>()
+        XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
+        
+        precision = _Precision<UInt>(7...7)
+        XCTAssert(precision, digits: 7...7, integer: integer, fraction: fraction)
+        
+        precision = _Precision<UInt>(integer: 7...7, fraction: 7...7)
+        XCTAssert(precision, digits: digits, integer: 7...7, fraction: fraction)
+        
+        precision = _Precision<UInt>(integer: (-99)...99, fraction: (-99)...99)
         XCTAssert(precision, digits: digits, integer: integer, fraction: fraction)
     }
 }

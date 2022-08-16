@@ -35,12 +35,20 @@ where Value: _Input & FixedWidthInteger {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// - Limited by `Int.max` due to `IntegerFormatStyle`.
-    fileprivate init() {
-        let large = Value.bitWidth >= Int.bitWidth
-        self.max = large  ? Value(Int.max) : Value.max
-        self.min = large && Value.isSigned ? Value(Int.min) : Value.min
-        self.precision = Int(ceil(log10(Double(max))))
+    /// - Limited by Int.max due to IntegerFormatStyle.
+    /// - Limited by longest sequence of 9s due to IntegerFormatStyle.
+    fileprivate init() where Value: LosslessStringConvertible {
+        let limit = Value(clamping: Int.max)
+        //=--------------------------------------=
+        // Precision
+        //=--------------------------------------=
+        self.precision = Int(floor(log10(Double(limit))))
+        let nines = String(repeating: "9", count: precision)
+        //=--------------------------------------=
+        // Bounds
+        //=--------------------------------------=
+        self.max = Value(nines)! // max <= precision, 9s <= Int.max
+        self.min = Value.isSigned ? Value("-" + nines)! : Value.min
     }
     
     //=------------------------------------------------------------------------=

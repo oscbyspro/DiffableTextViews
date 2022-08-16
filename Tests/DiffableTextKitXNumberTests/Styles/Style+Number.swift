@@ -75,7 +75,7 @@ extension StyleTestsOnNumber {
     }
     
     func testInt8() {
-        XCTAssertLocales(-123 as Int8)
+        XCTAssertLocales(-012 as Int8) // 9s
     }
     
     func testInt16() {
@@ -106,7 +106,7 @@ extension StyleTestsOnNumber {
     }
     
     func testUInt8() {
-        XCTAssertLocales(123 as UInt8)
+        XCTAssertLocales(012 as UInt8) // 9s
     }
     
     func testUInt16() {
