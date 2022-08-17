@@ -53,8 +53,8 @@ final class SuffixTextStyleTests: XCTestCase {
         let normal = Mock(selection: true)/*----------*/.interpret(characters)
         let suffix = Mock(selection: true).suffix("...").interpret(characters)
         
-        XCTAssertEqual(normal.selection!.positions(), normal.snapshot.indices(at: C(0) ..< 10))
-        XCTAssertEqual(suffix.selection!.positions(), suffix.snapshot.indices(at: C(0) ..< 10))
+        XCTAssertEqual(normal.selection!.range(), normal.snapshot.range(at: C(0) ..< 10))
+        XCTAssertEqual(suffix.selection!.range(), suffix.snapshot.range(at: C(0) ..< 10))
     }
 }
 

@@ -155,17 +155,17 @@ final class SnapshotTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testReplaceSubrangeWithSymbols() {
-        snapshot = Snapshot(repeating: " ", count: 4)
-        snapshot.replaceSubrange(snapshot.indices(at: C(0) ..< 2), with: Snapshot("AA", as: .content))
-        snapshot.replaceSubrange(snapshot.indices(at: C(2) ..< 4), with: Snapshot("BB", as: .phantom))
+        snapshot = Snapshot(repeating: " ",  count: 4)
+        snapshot.replaceSubrange(snapshot.range(at: C(0) ..< 2), with: Snapshot("AA", as: .content))
+        snapshot.replaceSubrange(snapshot.range(at: C(2) ..< 4), with: Snapshot("BB", as: .phantom))
         
         Assert("AABB", [.content, .content, .phantom, .phantom])
     }
     
     func testReplaceSubrangeWithCharacters() {
-        snapshot = Snapshot(repeating: " ", count: 4)
-        snapshot.replaceSubrange(snapshot.indices(at: C(0) ..< 2), with: "AA", as: .content)
-        snapshot.replaceSubrange(snapshot.indices(at: C(2) ..< 4), with: "BB", as: .phantom)
+        snapshot = Snapshot(repeating: " ",  count: 4)
+        snapshot.replaceSubrange(snapshot.range(at: C(0) ..< 2), with: "AA", as: .content)
+        snapshot.replaceSubrange(snapshot.range(at: C(2) ..< 4), with: "BB", as: .phantom)
         
         Assert("AABB", [.content, .content, .phantom, .phantom])
     }

@@ -28,23 +28,23 @@ public struct Selection<Bound: Comparable>: CustomStringConvertible, Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(unchecked:(lower: Bound, upper: Bound)) {
+    @inlinable public init(unchecked: (lower: Bound, upper: Bound)){
         (self.lower, self.upper) = unchecked; assert(lower <= upper)
     }
     
-    @inlinable public init(_ position: Bound) {
-        self.init(unchecked:(position, position))
+    @inlinable public init(_ bound: Bound){
+        self.init(unchecked:(bound, bound))
     }
     
-    @inlinable public init(_ positions: Range<Bound>) {
-        self.init(unchecked:(positions.lowerBound, positions.upperBound))
+    @inlinable public init(_ range: Range<Bound>) {
+        self.init(unchecked:(range.lowerBound, range.upperBound))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Bound {
+    @inlinable public static func max<T>(_ collection: T) -> Self where T: Collection, Bound == T.Index {
         Self(unchecked: (collection.startIndex, collection.endIndex))
     }
     
@@ -91,14 +91,14 @@ public struct Selection<Bound: Comparable>: CustomStringConvertible, Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable public func carets() -> Selection<Caret<Bound>> {
-        Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
+        Selection<Caret>(unchecked:(.lower(lower), .upper(upper)))
     }
     
     @inlinable public func detached() -> (lower: Bound, upper: Bound) {
         (lower, upper)
     }
 
-    @inlinable public func positions() -> Range<Bound> {
-        Range(uncheckedBounds: (lower, upper))
+    @inlinable public func range() -> Range<Bound> {
+        Range(uncheckedBounds:(lower, upper))
     }
 }

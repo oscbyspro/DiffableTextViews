@@ -37,8 +37,8 @@ import UIKit
     }
     
     @inlinable var selection: Range<Offset> {
-        get { view.offsets(at: view.selectedTextRange!) }
-        set { view.selectedTextRange = view.positions(at: newValue) }
+        get { view.range(to: view.selectedTextRange!) /*-----*/ }
+        set { view.selectedTextRange = view.range(at: newValue) }
     }
     
     @inlinable var focus: Focus {

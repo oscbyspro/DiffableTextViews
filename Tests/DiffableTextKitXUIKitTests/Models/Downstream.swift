@@ -47,7 +47,7 @@ final class DownstreamTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func size() -> Int {
-        Int(downstream.view.offset(at: downstream.view.endOfDocument))
+        Int(downstream.view.distance(to: downstream.view.endOfDocument))
     }
 }
 

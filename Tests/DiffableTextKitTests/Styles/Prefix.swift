@@ -53,8 +53,8 @@ final class PrefixTextStyleTests: XCTestCase {
         let normal = Mock(selection: true)/*----------*/.interpret(characters)
         let prefix = Mock(selection: true).prefix("...").interpret(characters)
         
-        XCTAssertEqual(normal.selection!.positions(), normal.snapshot.indices(at: C(0) ..< 10))
-        XCTAssertEqual(prefix.selection!.positions(), prefix.snapshot.indices(at: C(3) ..< 13))
+        XCTAssertEqual(normal.selection!.range(), normal.snapshot.range(at: C(0) ..< 10))
+        XCTAssertEqual(prefix.selection!.range(), prefix.snapshot.range(at: C(3) ..< 13))
     }
 }
 

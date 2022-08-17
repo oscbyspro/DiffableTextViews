@@ -141,10 +141,10 @@ public extension Offsets {
         distance(from: start, to: end)
     }
     
-    @inlinable @inline(__always) func distances<T>(
-    to indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
-        let lower: Offset<T> = distance(from:         startIndex, to: indices.lowerBound)
-        let count: Offset<T> = distance(from: indices.lowerBound, to: indices.upperBound)
+    @inlinable @inline(__always) func range<T>(
+    to  positions: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
+        let lower: Offset<T> = distance(from: /*-----*/ startIndex, to: positions.lowerBound)
+        let count: Offset<T> = distance(from: positions.lowerBound, to: positions.upperBound)
         return lower ..< lower + count
     }
     
@@ -158,12 +158,12 @@ public extension Offsets {
     }
     
     @inlinable @inline(__always) func index<T>(
-    at distances: Offset<T>, as type: T.Type = T.self) -> Index {
-        index(from: startIndex, move: distances)
+    at  distance: Offset<T>, as type: T.Type = T.self) -> Index {
+        index(from: startIndex, move: distance)
     }
     
-    @inlinable @inline(__always) func indices<T>(
-    at distances: Range<Offset<T>>, as type: T.Type = T.self) -> Range<Index> {
+    @inlinable @inline(__always) func range<T>(
+    at  distances: Range<Offset<T>>, as type: T.Type = T.self) -> Range<Index> {
         let lower = index(from: startIndex, move: distances.lowerBound)
         return lower ..< index(from: lower, move: Offset<T>(distances.count))
     }
@@ -257,13 +257,13 @@ public extension Encoding {
     
     @inlinable @inline(__always) static func distance(
     from start: Snapshot.Index, to end: Snapshot.Index,
-    in collection: Snapshot) -> Offset<Self> {
+    in  collection: Snapshot) -> Offset<Self> {
         distance(from: start.character, to: end.character, in: collection.characters)
     }
     
     @inlinable static func index(
     from start: Snapshot.Index, move distance: Offset<Self>,
-    in collection: Snapshot) -> Snapshot.Index {
+    in  collection: Snapshot) -> Snapshot.Index {
         var character  = index(from: start.character, move: distance, in: collection.characters)
         if  character != collection.characters.endIndex {
             character  = collection.characters.rangeOfComposedCharacterSequence(at: character).lowerBound
@@ -288,13 +288,13 @@ public extension Character {
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
-    in collection: some StringProtocol) -> Offset<Self> {
+    in  collection: some StringProtocol) -> Offset<Self> {
         Offset(collection.distance(from: start, to: end))
     }
     
     @inlinable @inline(__always) static func index(
     from start: String.Index, move distance: Offset<Self>,
-    in collection: some StringProtocol) -> String.Index {
+    in  collection: some StringProtocol) -> String.Index {
         collection.index(start, offsetBy: Int(distance))
     }
     
@@ -304,13 +304,13 @@ public extension Character {
     
     @inlinable @inline(__always) static func distance(
     from start: Snapshot.Index, to end: Snapshot.Index,
-    in collection: Snapshot) -> Offset<Self> {
+    in  collection: Snapshot) -> Offset<Self> {
         Offset(collection.distance(from: start, to: end))
     }
     
     @inlinable @inline(__always) static func index(
     from start: Snapshot.Index, move distance: Offset<Self>,
-    in collection: Snapshot) -> Snapshot.Index {
+    in  collection: Snapshot) -> Snapshot.Index {
         collection.index(start, offsetBy: Int(distance))
     }
 }
@@ -328,13 +328,13 @@ public extension Unicode.Scalar {
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
-    in collection: some StringProtocol) -> Offset<Self> {
+    in  collection: some StringProtocol) -> Offset<Self> {
         Offset(collection.unicodeScalars.distance(from: start, to: end))
     }
     
     @inlinable @inline(__always) static func index(
     from start: String.Index, move distance: Offset<Self>,
-    in collection: some StringProtocol) -> String.Index {
+    in  collection: some StringProtocol) -> String.Index {
         collection.unicodeScalars.index(start, offsetBy: Int(distance))
     }
 }
@@ -352,13 +352,13 @@ public extension UTF16 {
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
-    in collection: some StringProtocol) -> Offset<Self> {
+    in  collection: some StringProtocol) -> Offset<Self> {
         Offset(collection.utf16.distance(from: start, to: end))
     }
     
     @inlinable @inline(__always) static func index(
     from start: String.Index, move distance: Offset<Self>,
-    in collection: some StringProtocol) -> String.Index {
+    in  collection: some StringProtocol) -> String.Index {
         collection.utf16.index(start, offsetBy: Int(distance))
     }
 }
@@ -376,13 +376,13 @@ public extension UTF8 {
     
     @inlinable @inline(__always) static func distance(
     from start: String.Index, to end: String.Index,
-    in collection: some StringProtocol) -> Offset<Self> {
+    in  collection: some StringProtocol) -> Offset<Self> {
         Offset(collection.utf8.distance(from: start, to: end))
     }
     
     @inlinable @inline(__always) static func index(
     from start: String.Index, move distance: Offset<Self>,
-    in collection: some StringProtocol) -> String.Index {
+    in  collection: some StringProtocol) -> String.Index {
         collection.utf8.index(start, offsetBy: Int(distance))
     }
 }

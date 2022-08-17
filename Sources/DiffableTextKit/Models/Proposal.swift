@@ -20,18 +20,18 @@ public struct Proposal {
     
     public let base: Snapshot
     public var replacement: Snapshot
-    public var range: Range<Snapshot.Index>
+    public var range: Range<Index>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ base: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) {
+    @inlinable public init(_ base: Snapshot, with replacement: Snapshot, in range: Range<Index>) {
         self.base = base; self.replacement = replacement; self.range = range
     }
     
     @inlinable public init<T>(_ base: Snapshot, with replacement: Snapshot, in range: Range<Offset<T>>) {
-        self.base = base; self.replacement = replacement; self.range = base.indices(at: range)
+        self.base = base; self.replacement = replacement; self.range = base.range(at: range)
     }
     
     //=------------------------------------------------------------------------=

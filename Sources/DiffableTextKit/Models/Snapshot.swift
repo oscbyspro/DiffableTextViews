@@ -335,9 +335,9 @@ extension Snapshot {
         //=--------------------------------------=
         // Inspect Initial Index
         //=--------------------------------------=
-        let positions = self.indices
+        let indices = self.indices
         
-        if let adjacent = positions.index(
+        if let adjacent = indices.index(
         from: caret.position,
         towards: caret.affinity,
         jumping: caret.affinity == .forwards ? .to : .through,
@@ -348,7 +348,7 @@ extension Snapshot {
         //=--------------------------------------=
         var direction = caret.momentum ?? caret.affinity
 
-        if let index = positions.index(
+        if let index = indices.index(
         from: caret.position,
         towards: direction,
         jumping: direction == caret.affinity ? .to : .through,
@@ -358,7 +358,7 @@ extension Snapshot {
         //=--------------------------------------=
         direction = direction.reversed()
         
-        if let index = positions.index(
+        if let index = indices.index(
         from: caret.position,
         towards: direction,
         jumping: Jump.to, // direction independent

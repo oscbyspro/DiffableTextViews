@@ -48,8 +48,8 @@ public struct Context<Style: DiffableTextStyle> {
             self.unique()
             self.storage.status = remote.status
             self.storage.layout!.merge(
-            snapshot:   remote.commit!.snapshot,
-            preference: remote.commit!.selection)
+            snapshot:/**/remote.commit!.snapshot,
+            preference:  remote.commit!.selection)
         //=--------------------------------------=
         // Inactive
         //=--------------------------------------=
@@ -128,12 +128,12 @@ extension Context {
     }
     
     @inlinable public var selection: Range<String.Index> {
-        let selection = layout?.selection.map(\.character).positions()
-        return selection ?? Selection(backup! .startIndex).positions()
+        let selection = layout?.selection.map(\.character).range()
+        return selection ?? Selection(backup! .startIndex).range()
     }
     
     @inlinable public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
-        layout.map({$0.snapshot.distances(to:$0.selection.positions())}) ?? 0 ..< 0
+        layout.map({ $0.snapshot.range(to: $0.selection .range()) }) ?? 0 ..< 0
     }
 }
 
@@ -206,8 +206,8 @@ extension Context {
         self.storage.status.value = commit.value
         self.storage.layout!.selection.collapse()
         self.storage.layout!.merge(
-        snapshot:   commit.snapshot,
-        preference: commit.selection)
+        snapshot:/**/commit.snapshot,
+        preference:  commit.selection)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -230,7 +230,8 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = Selection(layout!.snapshot.indices(at: selection))
+        let selection = Selection(
+        layout!.snapshot.range(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
