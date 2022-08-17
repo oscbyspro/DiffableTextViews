@@ -31,7 +31,10 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?) {
-        self.snapshot = snapshot; self.preference = preference; self.selection = .initial(snapshot)
+        self.snapshot   = snapshot
+        self.preference = preference
+        self.selection  = Selection(snapshot.endIndex)
+        self.merge(selection: self.selection)
     }
     
     //=------------------------------------------------------------------------=

@@ -48,10 +48,6 @@ public struct Selection<Bound: Comparable>: CustomStringConvertible, Equatable {
         Self(unchecked: (collection.startIndex, collection.endIndex))
     }
     
-    @inlinable static func initial(_ collection: Snapshot) -> Self where Bound == Snapshot.Index {
-        Self(collection.resolve(Caret.upper(collection.endIndex)))
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
