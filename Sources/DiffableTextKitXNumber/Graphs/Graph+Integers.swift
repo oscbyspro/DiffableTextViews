@@ -38,10 +38,9 @@ where Value: _Input & FixedWidthInteger {
     /// - Limited by Int.max due to IntegerFormatStyle.
     /// - Limited by the longest representable sequence of 9s due to IntegerFormatStyle.
     fileprivate init() {
-        let limit = Value(clamping: Int.max)
-        self.precision = Int(floor(log10(Double(limit))))
-        self.max = Value(String(repeating: "9", count: precision))!
-        self.min = Value(clamping: -1) * self.max // unsigned: zero
+        self.precision = Int(log10(Double(Value(clamping: Int.max))))
+        self.max = Value(String(repeating: "9", count: self.precision))!
+        self.min = Value(clamping: -1) * self.max // zero when unsigned
     }
     
     //=------------------------------------------------------------------------=
