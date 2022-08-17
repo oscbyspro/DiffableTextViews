@@ -30,15 +30,33 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    /// Use this on view setup.
     @inlinable public init(_ status: Status, with cache: inout Cache) {
-        self.storage = Storage(Transaction(status, with: &cache))
+        var  changes = Changes() // it's too infrequent to worry about the comparison
+        self.storage = Storage(Transaction(status, with: &cache, observing: &changes))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformation
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func unique() {        
+    @inlinable mutating func merge(_ remote: Transaction<Style>) {
+        //=--------------------------------------=
+        // Active
+        //=--------------------------------------=
+        if  layout != nil, remote.commit != nil {
+            self.unique()
+            self.storage.status = remote.status
+            self.storage.layout!.merge(
+            snapshot:   remote.commit!.snapshot,
+            preference: remote.commit!.selection)
+        //=--------------------------------------=
+        // Inactive
+        //=--------------------------------------=
+        } else { self.storage = Storage(remote) }
+    }
+    
+    @inlinable mutating func unique() {
         if !isKnownUniquelyReferenced(&storage) { self.storage = storage.copy() }
     }
     
@@ -51,59 +69,26 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @usableFromInline var status: Status
-        @usableFromInline var layout: Layout?
         @usableFromInline var backup: String?
+        @usableFromInline var layout: Layout?
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ status: Status, _ layout: Layout?, _ backup: String?) {
+        @inlinable init(_ status: Status, _ backup: String?, _ layout: Layout?) {
             self.status = status
-            self.layout = layout
             self.backup = backup
+            self.layout = layout
             
             assert((status.focus ==  true) == (layout != nil))
             assert((status.focus == false) == (backup != nil))
         }
         
-        @inlinable convenience init(_ remote: Transaction) {
-            self.init(remote.status,  remote.base.map(Layout.init), remote.backup)
+        @inlinable convenience init(_ remote: Transaction<Style>) {
+            self.init(remote.status,  remote.backup, remote.layout())
         }
         
         @inlinable func copy() -> Storage {
-            Storage(status, layout, backup)
-        }
-    }
-    
-    //*========================================================================*
-    // MARK: * Transaction [...]
-    //*========================================================================*
-    
-    @usableFromInline struct Transaction {
-        
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline private(set) var status: Status
-        @usableFromInline private(set) var base: Snapshot?
-        @usableFromInline private(set) var backup: String?
-        
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ status: Status, with cache: inout Cache,
-        observing changes: UnsafeMutablePointer<Changes>? = nil) {
-            self.status = status
-            //=----------------------------------=
-            // Active
-            //=----------------------------------=
-            if status.focus == true {
-                let commit = status.interpret(with: &cache)
-                changes?.pointee += .value(status.value != commit.value)
-                
-                self.base = commit.snapshot
-                self.status.value = commit.value
-            //=----------------------------------=
-            // Inactive
-            //=----------------------------------=
-            } else { self.backup = status.format(with: &cache) }
+            Storage(status, backup, layout)
         }
     }
 }
@@ -173,9 +158,8 @@ extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        var changes = Changes(); withUnsafeMutablePointer(to: &changes) {
-            self.merge(Transaction(status, with: &cache, observing:$0))
-        }
+        var changes = Changes()
+        self.merge(Transaction(status, with: &cache, observing: &changes))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -185,24 +169,6 @@ extension Context {
         update += .selection
         update += .value(changes.contains(.value))
         return update
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transaction
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func merge(_ remote: Transaction) {
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if remote.base != nil, layout != nil {
-            self.unique()
-            self.storage.status = remote.status
-            self.storage.layout!.merge(snapshot: remote.base!)
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else { self.storage = Storage(remote) }
     }
 }
 
@@ -239,7 +205,9 @@ extension Context {
         self.unique()
         self.storage.status.value = commit.value
         self.storage.layout!.selection.collapse()
-        self.storage.layout!.merge(snapshot: commit.snapshot)
+        self.storage.layout!.merge(
+        snapshot:   commit.snapshot,
+        preference: commit.selection)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -268,8 +236,8 @@ extension Context {
         //=--------------------------------------=
         self.unique()
         self.storage.layout!.merge(
-        selection: selection, /*-*/
-        momentums: momentums) /*-*/
+        selection: selection,
+        momentums: momentums)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

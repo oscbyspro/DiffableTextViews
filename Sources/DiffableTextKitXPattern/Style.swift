@@ -117,7 +117,7 @@ extension PatternTextStyle {
         } none: {
             commit, virtuals in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
-            commit.snapshot.select(commit.snapshot.endIndex)
+            commit.select({ $0.endIndex })
         } done: {
             commit, virtuals, mismatches in
             //=----------------------------------=
@@ -149,7 +149,7 @@ extension PatternTextStyle {
         } none: {
             commit, virtuals in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
-            commit.snapshot.select(commit.snapshot.endIndex)
+            commit.select({ $0.endIndex })
         } done: {
             commit, virtuals, mismatches in
             //=----------------------------------=

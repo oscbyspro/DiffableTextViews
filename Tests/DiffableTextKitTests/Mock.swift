@@ -29,7 +29,7 @@ struct Mock: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     init(locale: Locale = .autoupdatingCurrent, selection: Bool = false) {
-        self.locale = locale; self.selection = selection
+        self.locale = locale;  self.selection = selection
     }
         
     //=------------------------------------------------------------------------=
@@ -49,9 +49,13 @@ struct Mock: DiffableTextStyle {
     }
     
     func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        var snapshot = Snapshot(value)
-        if selection { snapshot.selection = .max(snapshot) }
-        return Commit(value, snapshot)
+        var commit = Commit(value, Snapshot(value))
+        
+        if  selection {
+            commit.selection = .max(commit.snapshot)
+        }
+        
+        return commit
     }
     
     func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {

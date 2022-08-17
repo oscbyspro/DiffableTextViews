@@ -41,11 +41,11 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     }
     
     @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-        var S0 = base.interpret(value, with: &cache); label(&S0.snapshot); return S0
+        var S0 = base.interpret(value, with: &cache); label(&S0); return S0
     }
     
     @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        var S0 = try base.resolve(proposal, with: &cache); label(&S0.snapshot); return S0
+        var S0 = try base.resolve(proposal, with: &cache); label(&S0); return S0
     }
     
     //=------------------------------------------------------------------------=
@@ -66,7 +66,7 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     /// This transformation assumes that the base style
     /// provides a manual selection when all attributes
     /// are passthrough to avoid duplicate computations.
-    @inlinable func label(_ snapshot: inout Snapshot) {
+    @inlinable func label(_ commit: inout Commit<Value>) {
         //=--------------------------------------=
         // None
         //=--------------------------------------=
@@ -74,27 +74,31 @@ public struct PrefixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
         //=--------------------------------------=
         // Some
         //=--------------------------------------=
-        let base = snapshot
-        snapshot = Snapshot(prefix, as: .phantom)
+        let base = commit.snapshot
+        commit.snapshot = Snapshot(prefix, as: .phantom)
         //=--------------------------------------=
         // Base x None
         //=--------------------------------------=
-        guard !base.isEmpty else { return snapshot.select(snapshot.endIndex) }
+        guard !base.isEmpty else {
+            commit.select({ $0.endIndex }); return
+        }
         //=--------------------------------------=
         // Base x Some
         //=--------------------------------------=
-        let start = snapshot.endIndex
-        snapshot.append(contentsOf: base)
+        let start = commit.snapshot.endIndex
+        commit.snapshot.append(contentsOf: base)
         //=--------------------------------------=
         // Base x Selection
         //=--------------------------------------=
-        guard let selection = base.selection else { return }
-        let min = selection .lower.attribute
-        let max = selection .upper.attribute
+        guard let selection = commit.selection else { return }
         
-        let lower = snapshot.index(start, offsetBy: min)
-        let upper = snapshot.index(lower, offsetBy: max - min)
-        snapshot.select(Range(uncheckedBounds:(lower, upper)))
+        let min = selection.lower.attribute
+        let max = selection.upper.attribute
+        
+        let lower = commit.snapshot.index(start, offsetBy: min)
+        let upper = commit.snapshot.index(lower, offsetBy: max - min)
+        
+        commit.selection = Selection(unchecked: (lower, upper))
     }
 }
 

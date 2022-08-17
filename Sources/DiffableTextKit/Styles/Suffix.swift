@@ -41,11 +41,11 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     }
     
     @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-        var S0 = base.interpret(value, with: &cache); label(&S0.snapshot); return S0
+        var S0 = base.interpret(value, with: &cache); label(&S0); return S0
     }
     
     @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        var S0 = try base.resolve(proposal, with: &cache); label(&S0.snapshot); return S0
+        var S0 = try base.resolve(proposal, with: &cache); label(&S0); return S0
     }
     
     //=------------------------------------------------------------------------=
@@ -62,17 +62,17 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     /// This transformation assumes that the base style
     /// provides a manual selection when all attributes
     /// are passthrough to avoid duplicate computations.
-    @inlinable func label(_ snapshot: inout Snapshot) {
+    @inlinable func label(_ commit: inout Commit<Value>) {
         //=--------------------------------------=
         // Base x None
         //=--------------------------------------=
-        if  snapshot.isEmpty {
-            snapshot.select(snapshot.endIndex)
+        if  commit.snapshot.isEmpty {
+            commit.select({ $0.endIndex })
         }
         //=--------------------------------------=
         // None | Some
         //=--------------------------------------=
-        snapshot.append(contentsOf: suffix, as: .phantom)
+        commit.snapshot.append(contentsOf: suffix, as: .phantom)
     }
 }
 

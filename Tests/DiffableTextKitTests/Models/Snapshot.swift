@@ -43,14 +43,6 @@ final class SnapshotTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x State
-    //=------------------------------------------------------------------------=
-    
-    func testSelectionIsNilByDefault() {
-        XCTAssertEqual(snapshot.selection, nil)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
@@ -84,18 +76,6 @@ final class SnapshotTests: XCTestCase {
         snapshot = ["A", Symbol("B", as: .virtual)]
         
         XCTAssertEqual(snapshot.nonvirtuals(), "A")
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests x Transformations x Anchor
-    //=------------------------------------------------------------------------=
-    
-    func testSelectEndIndex() {
-        snapshot.append(Symbol(" "))
-        let index = snapshot.endIndex;snapshot.select(index)
-        snapshot.append(Symbol(" "))
-        
-        XCTAssertEqual(snapshot.selection, Selection(index))
     }
     
     //=------------------------------------------------------------------------=

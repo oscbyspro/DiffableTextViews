@@ -22,25 +22,24 @@
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var snapshot:  Snapshot
-    @usableFromInline var selection: Selection<Index>
-    
+    @usableFromInline var snapshot:   Snapshot
+    @usableFromInline var preference: Selection<Index>?
+    @usableFromInline var selection:  Selection<Index>
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot) {
-        self.snapshot  = snapshot /*----------------------------*/
-        let  selection = Selection(Caret.upper(snapshot.endIndex))
-        self.selection = snapshot.resolve(selection) /*---------*/
+    @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?) {
+        self.snapshot = snapshot; self.preference = preference; self.selection = .initial(snapshot)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
+        
     /// Use this on changes to text.
-    @inlinable mutating func merge(snapshot: Snapshot) {
+    @inlinable mutating func merge(snapshot: Snapshot, preference: Selection<Index>?) {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
@@ -50,7 +49,9 @@
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.snapshot = snapshot; self.merge(selection: selection)
+        self.snapshot = snapshot
+        self.preference = preference
+        self.merge(selection: selection)
     }
     
     /// Use this on changes to selection.
@@ -62,6 +63,12 @@
             self.selection = selection; return
         }
         //=--------------------------------------=
+        // Manual
+        //=--------------------------------------=
+        if  let preference {
+            self.selection = preference; return
+        }
+        //=--------------------------------------=
         // Update
         //=--------------------------------------=
         var carets = selection.carets().detached()
@@ -71,7 +78,6 @@
             carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
         }
         
-        let  unchecked = Selection(unchecked:carets)
-        self.selection = snapshot.resolve(unchecked)
+        self.selection = Selection(unchecked: carets).map(snapshot.resolve(_:))
     }
 }

@@ -24,12 +24,19 @@ final class SuffixTextStyleTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testFormat() {
-        XCTAssertEqual(Mock().suffix("🇸🇪").format("🇺🇸"), "🇺🇸🇸🇪")
+        let suffix = Mock().suffix("🇸🇪")
+        let result = suffix.format("🇺🇸")
+        let expectation = "🇺🇸🇸🇪"
+        
+        XCTAssertEqual(result, expectation)
     }
     
     func testInterpret() {
-        XCTAssertEqual(Mock().suffix("🇸🇪").interpret("🇺🇸"),
-        Commit("🇺🇸", "🇺🇸" + Snapshot("🇸🇪", as: .phantom)))
+        let suffix = Mock().suffix("🇸🇪")
+        let result = suffix.interpret("🇺🇸")
+        let expectation = Commit("🇺🇸",  "🇺🇸" + Snapshot("🇸🇪", as: .phantom))
+        
+        XCTAssertEqual(result, expectation)
     }
     
     func testResolve() {
@@ -43,11 +50,11 @@ final class SuffixTextStyleTests: XCTestCase {
     func testSelectionIsSame() {
         let characters = "0123456789"
         
-        let normal = Mock(selection: true)/*----------*/.interpret(characters).snapshot
-        let suffix = Mock(selection: true).suffix("...").interpret(characters).snapshot
+        let normal = Mock(selection: true)/*----------*/.interpret(characters)
+        let suffix = Mock(selection: true).suffix("...").interpret(characters)
         
-        XCTAssertEqual(normal.selection!.positions(), normal.indices(at: C(0) ..< 10))
-        XCTAssertEqual(suffix.selection!.positions(), suffix.indices(at: C(0) ..< 10))
+        XCTAssertEqual(normal.selection!.positions(), normal.snapshot.indices(at: C(0) ..< 10))
+        XCTAssertEqual(suffix.selection!.positions(), suffix.snapshot.indices(at: C(0) ..< 10))
     }
 }
 

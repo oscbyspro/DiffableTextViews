@@ -11,24 +11,15 @@
 // MARK: * Snapshot
 //*============================================================================*
 
-/// A collection of characters, attributes and an optional selection.
+/// A collection of characters and attributes.
+///
+/// Attributes describe how characters should be treated. As an example:
+/// virtual characters should not be parsed, and passthrough characters should
+/// not be selected. A single character can have multiple attributes.
 ///
 /// ```
 /// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|#|-|#|#|~
 /// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~
-/// ```
-///
-/// **Selection**
-///
-/// Selection is done by differentiation, but it can also be done manually.
-/// Snapshots containing only passthrough characters should always provide
-/// a manual selection, however. A pattern text style may select its first
-/// placeholder, as illustrated:
-///
-/// ```
-///   ↓ == selection
-/// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
-/// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
 /// ```
 ///
 /// **Attributes & Characters**
@@ -51,16 +42,12 @@
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
 ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollection {
     
-    public typealias Index   = DiffableTextKit.Index
-    public typealias Element = DiffableTextKit.Symbol
-
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
         
     @usableFromInline private(set) var _characters: String
     @usableFromInline private(set) var _attributes: [Attribute]
-    public var selection: Selection<Index>?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -93,18 +80,6 @@ ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollectio
     
     public var description: String {
         "\(Self.self)(\"\(_characters)\", \(_attributes))"
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) public mutating func select(_ position: Index) {
-        self.selection = Selection(position)
-    }
-    
-    @inlinable @inline(__always) public mutating func select(_ positions: Range<Index>) {
-        self.selection = Selection(positions)
     }
 }
 
@@ -355,10 +330,6 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     // MARK: Resolve
     //=------------------------------------------------------------------------=
-    
-    @inlinable func resolve(_ selection: Selection<Caret<Index>>) -> Selection<Index> {
-        self.selection ?? selection.map(resolve)
-    }
     
     @inlinable func resolve(_ caret: Caret<Index>) -> Index {
         //=--------------------------------------=
