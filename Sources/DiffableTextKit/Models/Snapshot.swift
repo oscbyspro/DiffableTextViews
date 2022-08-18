@@ -328,6 +328,45 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
+    // MARK: Searches
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func range(of text: some StringProtocol, first direction: Direction) -> Range<Index>? {
+        characters.range(of: text, options: (direction == .forwards) ? [] : [.backwards]).map(range)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Conversions
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func range(at positions: Range<String.Index>) -> Range<Index> {
+        let lower = index(at: positions.lowerBound, from: startIndex)
+        let upper = index(at: positions.upperBound, from: lower/*-*/)
+        return Range(uncheckedBounds:(lower,upper))
+    }
+    
+    @inlinable public func index(at position: String.Index) -> Index {
+        index(at: position, from: startIndex)
+    }
+    
+    @inlinable public func index(at position: String.Index, from start: Index) -> Index {
+        var character = position; if character != characters.endIndex {
+            character = characters.rangeOfComposedCharacterSequence(at: character).lowerBound
+        }
+        
+        let stride = characters.distance(from: start.character, to: character)
+        let attribute = attributes.index(start.attribute, offsetBy:    stride)
+        return Index(character, as: attribute)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities x Internal
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
     // MARK: Resolve
     //=------------------------------------------------------------------------=
     

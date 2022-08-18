@@ -264,14 +264,9 @@ public extension Encoding {
     @inlinable static func index(
     from start: Snapshot.Index, move distance: Offset<Self>,
     in  collection: Snapshot) -> Snapshot.Index {
-        var character  = index(from: start.character, move: distance, in: collection.characters)
-        if  character != collection.characters.endIndex {
-            character  = collection.characters.rangeOfComposedCharacterSequence(at: character).lowerBound
-        }
-        
-        let stride = collection.characters.distance(from: start.character, to: character)
-        let attribute = collection.attributes.index(start.attribute, offsetBy:    stride)
-        return Snapshot.Index(character, as: attribute)
+        let position = index(from: start.character,
+        move:  distance, in: collection.characters)
+        return collection.index(at: position, from: start)
     }
 }
 
