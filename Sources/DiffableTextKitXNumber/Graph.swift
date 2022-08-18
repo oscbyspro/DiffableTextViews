@@ -17,7 +17,7 @@ public protocol _Graph {
     
     associatedtype Value: _Value // where Value.NumberTextGraph == Self
     
-    associatedtype Input: _Input // where Input.NumberTextGraph == Self
+    associatedtype Input: _Input
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Style x Standard
 //*============================================================================*
 
-public struct _StandardStyle<Format>: _DefaultStyle, _Standard where Format: _Format & _Standard {
+public struct _StandardStyle<Format>: _Default, _Standard where Format: _Format & _Standard {
     
     public typealias Value = Format.FormatInput
     
@@ -38,7 +38,7 @@ public struct _StandardStyle<Format>: _DefaultStyle, _Standard where Format: _Fo
     // MARK: * Cache
     //*========================================================================*
 
-    public final class Cache: _DefaultCache {
+    public final class Cache: _Cache {
         
         public typealias Value = Format.FormatInput
         
@@ -82,8 +82,9 @@ public struct _StandardStyle<Format>: _DefaultStyle, _Standard where Format: _Fo
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable func compatible(_ style: Style) -> Bool {
-            self.style.locale == style.locale
+        @inlinable func merge(_ style: Style) -> Bool {
+            let merge = self.style.locale  == style.locale
+            if  merge { self.style = style }; return merge
         }
         
         @inlinable func snapshot(_ characters: String) -> Snapshot {

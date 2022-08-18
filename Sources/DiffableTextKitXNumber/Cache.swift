@@ -11,12 +11,14 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Default x Cache
+// MARK: * Cache
 //*============================================================================*
 
-@usableFromInline protocol _DefaultCache: NullableTextStyle where Value == Style.Input {
+@usableFromInline protocol _Cache: NullableTextStyle {
     
-    associatedtype Style: _DefaultStyle
+    associatedtype Style: _Default where Style.Input == Value
+    
+    associatedtype Format: _Format where Format.FormatInput == Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -26,9 +28,9 @@ import Foundation
     
     @inlinable var preferences: Preferences<Value> { get }
 
-    @inlinable var parser: Parser<Style.Format> { get }
+    @inlinable var parser: Parser<Format> { get }
     
-    @inlinable var formatter: Formatter<Style.Format> { get }
+    @inlinable var formatter: Formatter<Format> { get }
         
     @inlinable var interpreter: Interpreter { get }
     
@@ -42,7 +44,7 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func compatible(_ style: Style) -> Bool
+    @inlinable func merge(_ style: Style) -> Bool
     
     @inlinable func snapshot(_ characters: String) -> Snapshot
 }
@@ -51,7 +53,7 @@ import Foundation
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _DefaultCache {
+extension _Cache {
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -78,7 +80,7 @@ extension _DefaultCache {
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-extension _DefaultCache {
+extension _Cache {
     
     //=------------------------------------------------------------------------=
     // MARK: Inactive

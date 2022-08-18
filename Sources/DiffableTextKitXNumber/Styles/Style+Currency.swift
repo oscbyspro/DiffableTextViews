@@ -11,10 +11,10 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Default x Currency
+// MARK: * Style x Currency
 //*============================================================================*
 
-public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency where Format: _Format & _Currency {
+public struct _CurrencyStyle<Format>: _Default, _Currency where Format: _Format & _Currency {
     
     public typealias Value = Format.FormatInput
     
@@ -39,7 +39,7 @@ public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency where Format: _Fo
     // MARK: * Cache
     //*========================================================================*
     
-    public final class Cache: _DefaultCache {
+    public final class Cache: _Cache {
         
         public typealias Value = Format.FormatInput
         
@@ -95,16 +95,16 @@ public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency where Format: _Fo
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable func compatible(_ style: Style) -> Bool {
-            self.style.locale == style.locale &&
-            self.style.currencyCode == style.currencyCode
+        @inlinable func merge(_ style: Style) -> Bool {
+            let merge = self.style.locale  == style.locale &&
+            self.style.currencyCode  == style.currencyCode
+            if  merge { self.style = style }; return merge
         }
         
-        @inlinable func snapshot(_ characters: String) -> Snapshot {
-            var snapshot = Snapshot(characters,
-            as: { interpreter.attributes[$0] })
-            label.autocorrect(&snapshot) /*--*/
-            return snapshot /*---------------*/
+        @inlinable func snapshot(_  characters: String) -> Snapshot {
+            var snapshot = Snapshot(characters, /*-----*/
+            as: { interpreter.attributes[$0] }) /*-----*/
+            label.autocorrect(&snapshot); return snapshot
         }
     }
 }

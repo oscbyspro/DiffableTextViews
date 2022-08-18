@@ -11,14 +11,11 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Default x Style
+// MARK: * Default
 //*============================================================================*
 
-@usableFromInline protocol _DefaultStyle: _Style, NullableTextStyle where
-Cache: _DefaultCache, Cache.Style == Self, Value == Format.FormatInput {
-    
-    associatedtype Format: _Format
-    
+@usableFromInline protocol _Default: _Style, NullableTextStyle where Cache: _Cache, Cache.Style == Self {
+        
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -30,7 +27,7 @@ Cache: _DefaultCache, Cache.Style == Self, Value == Format.FormatInput {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _DefaultStyle {
+extension _Default {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -49,8 +46,6 @@ extension _DefaultStyle {
     }
     
     @inlinable public func update(_ cache: inout Cache) {
-        switch cache.compatible(self) {
-        case  true: cache.style = self
-        case false: cache = self.cache() }
+        if/**/!cache.merge(self) { cache = self.cache() }
     }
 }
