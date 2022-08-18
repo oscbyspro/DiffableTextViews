@@ -15,9 +15,9 @@ import Foundation
 
 public protocol _Graph {
     
-    associatedtype Value
+    associatedtype Value: _Value // where Value.NumberTextGraph == Self
     
-    associatedtype Input: Comparable
+    associatedtype Input: _Input // where Input.NumberTextGraph == Self
     
     //=------------------------------------------------------------------------=
     // MARK: State

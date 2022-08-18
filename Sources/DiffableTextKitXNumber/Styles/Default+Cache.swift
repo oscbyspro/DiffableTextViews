@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Default x Cache
 //*============================================================================*
 
-@usableFromInline protocol _DefaultCache<Style>: NullableTextStyle where Value == Style.Input {
+@usableFromInline protocol _DefaultCache: NullableTextStyle where Value == Style.Input {
     
     associatedtype Style: _DefaultStyle
     

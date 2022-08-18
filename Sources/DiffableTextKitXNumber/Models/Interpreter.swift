@@ -61,8 +61,8 @@ import Foundation
     @inlinable func number(_ /**/ proposal: Proposal,
     as value: (some _Value).Type) throws -> Number? {
         var proposal = proposal; translator.translate(&proposal)
-        let sign   = components.process(&proposal) /*---------*/
+        let sign = components.process(&proposal) /*-----------*/
         var number = try number(proposal.lazy.merged(),as:value)
-        if  sign  != nil { number?.sign = sign! }; return number
+        if let sign { number?.sign = sign }; return number /*-*/
     }
 }

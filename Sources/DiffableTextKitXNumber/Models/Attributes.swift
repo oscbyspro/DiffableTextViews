@@ -22,9 +22,9 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ components: Components) {
-        self.map[components.separators[.fraction]] = .removable
-        components.digits.tokens.keys.forEach { self .map[$0] = .content }
-        components.signs .tokens.keys.forEach { self .map[$0] = .phantom.subtracting(.virtual) }
+        self.map[components.separators[Separator .fraction]] = .removable
+        components.digits.tokens.keys.forEach { self.map[$0] = .content }
+        components.signs .tokens.keys.forEach { self.map[$0] = .phantom.subtracting(.virtual) }
     }
     
     @inlinable subscript(character: Character) -> Attribute {

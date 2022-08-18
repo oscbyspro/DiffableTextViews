@@ -332,7 +332,7 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable public func range(of text: some StringProtocol, first direction: Direction) -> Range<Index>? {
-        characters.range(of: text, options: direction == .forwards ? [] : .backwards).map(range)
+        characters.range(of: text, options: (direction == .forwards) ? [] : [.backwards]).map(range)
     }
     
     //=------------------------------------------------------------------------=

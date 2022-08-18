@@ -106,7 +106,7 @@ extension StyleTestsOnCurrency {
     }
     
     func testInt8() {
-        XCTAssertCurrencies(-123 as Int8)
+        XCTAssertCurrencies(-012 as Int8) // 9s
     }
     
     func testInt16() {

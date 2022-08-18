@@ -14,13 +14,9 @@ import Foundation
 // MARK: * Default x Currency
 //*============================================================================*
 
-public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency
-where Format: _Format & _Currency, Format.FormatInput: _Input {
+public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency where Format: _Format & _Currency {
     
     public typealias Value = Format.FormatInput
-    public typealias Input = Format.FormatInput
-    
-    public typealias Graph = Format.FormatInput.NumberTextGraph
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,7 +24,6 @@ where Format: _Format & _Currency, Format.FormatInput: _Input {
     
     public var locale: Locale
     public var currencyCode: String
-    
     public var bounds: Bounds?
     public var precision: Precision?
     

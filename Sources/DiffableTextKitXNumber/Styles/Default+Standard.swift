@@ -14,20 +14,15 @@ import Foundation
 // MARK: * Style x Standard
 //*============================================================================*
 
-public struct _StandardStyle<Format>: _DefaultStyle, _Standard
-where Format: _Format & _Standard, Format.FormatInput: _Input {
+public struct _StandardStyle<Format>: _DefaultStyle, _Standard where Format: _Format & _Standard {
     
     public typealias Value = Format.FormatInput
-    public typealias Input = Format.FormatInput
-    
-    public typealias Graph = Format.FormatInput.NumberTextGraph
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     public var locale: Locale
-    
     public var bounds: Bounds?
     public var precision: Precision?
     

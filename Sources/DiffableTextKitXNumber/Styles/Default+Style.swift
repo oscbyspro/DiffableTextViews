@@ -14,12 +14,10 @@ import Foundation
 // MARK: * Default x Style
 //*============================================================================*
 
-@usableFromInline protocol _DefaultStyle<Value>: _Style, NullableTextStyle
-where Cache: _DefaultCache<Self>, Value == Input, Input: _Input {
+@usableFromInline protocol _DefaultStyle: _Style, NullableTextStyle where
+Cache: _DefaultCache, Cache.Style == Self, Value == Format.FormatInput {
     
     associatedtype Format: _Format
-    
-    typealias Input = Format.FormatInput
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,7 +37,7 @@ extension _DefaultStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var S0 = self;  S0.locale = locale; return S0
+        var S0 = self;  S0.locale = locale; return  S0
     }
     
     //=------------------------------------------------------------------------=
