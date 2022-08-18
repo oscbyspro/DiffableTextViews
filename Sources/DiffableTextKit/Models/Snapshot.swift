@@ -306,7 +306,7 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Replace x Internal
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func replaceSubrange(_ positions: Range<Index>,
@@ -332,7 +332,7 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable public func range(of text: some StringProtocol, first direction: Direction) -> Range<Index>? {
-        characters.range(of: text, options: (direction == .forwards) ? [] : [.backwards]).map(range)
+        characters.range(of: text, options: direction == .forwards ? [] : .backwards).map(range)
     }
     
     //=------------------------------------------------------------------------=
@@ -349,14 +349,17 @@ extension Snapshot {
         index(at: position, from: startIndex)
     }
     
-    @inlinable public func index(at position: String.Index, from start: Index) -> Index {
+    //=------------------------------------------------------------------------=
+    // MARK: Conversions x Internal
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(at position: String.Index, from start: Index) -> Index {
         var character = position; if character != characters.endIndex {
             character = characters.rangeOfComposedCharacterSequence(at: character).lowerBound
         }
         
         let stride = characters.distance(from: start.character, to: character)
-        let attribute = attributes.index(start.attribute, offsetBy:    stride)
-        return Index(character, as: attribute)
+        return Index(character, as: attributes.index(start.attribute, offsetBy: stride))
     }
 }
 
