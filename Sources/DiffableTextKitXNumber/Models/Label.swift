@@ -61,9 +61,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        if  virtual { return }
-        
-        if  let label = Search.range(of: text, in: snapshot, towards:  direction ){
+        if !virtual, let label = snapshot.range(of: text, first: direction) {
             snapshot.transform(attributes: label, with: { $0 = Attribute.phantom })
         }
     }
