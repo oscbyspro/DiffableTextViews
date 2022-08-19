@@ -16,18 +16,16 @@ import Foundation
 
 @usableFromInline protocol _Cache: NullableTextStyle {
     
-    associatedtype Style: _Default where Style.Input == Value
-    
     associatedtype Format: _Format where Format.FormatInput == Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-    
-    @inlinable var style: Style { get set }
-    
-    @inlinable var preferences: Preferences<Value> { get }
 
+    @inlinable var bounds: _Bounds<Value> { get }
+
+    @inlinable var precision: _Precision<Value> { get }
+    
     @inlinable var parser: Parser<Format> { get }
     
     @inlinable var formatter: Formatter<Format> { get }
@@ -35,49 +33,14 @@ import Foundation
     @inlinable var interpreter: Interpreter { get }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ style: Style)
-    
-    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable func merge(_ style: Style) -> Bool
     
     @inlinable func snapshot(_ characters: String) -> Snapshot
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension _Cache {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var bounds: _Bounds<Value> {
-        style.bounds ?? preferences.bounds
-    }
-
-    @inlinable var precision: _Precision<Value> {
-        style.precision ?? preferences.precision
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.style == rhs.style
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
+// MARK: + Details x Utilities
 //=----------------------------------------------------------------------------=
 
 extension _Cache {

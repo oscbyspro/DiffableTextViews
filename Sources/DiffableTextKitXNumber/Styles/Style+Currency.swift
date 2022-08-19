@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Style x Currency
 //*============================================================================*
 
-public struct _CurrencyStyle<Format>: _Default, _Currency where Format: _Format & _Currency {
+public struct _CurrencyStyle<Format>: _DefaultStyle, _Currency where Format: _Format & _Currency {
     
     public typealias Value = Format.FormatInput
     
@@ -39,7 +39,7 @@ public struct _CurrencyStyle<Format>: _Default, _Currency where Format: _Format 
     // MARK: * Cache
     //*========================================================================*
     
-    public final class Cache: _Cache {
+    public final class Cache: _DefaultCache {
         
         public typealias Value = Format.FormatInput
         
@@ -95,10 +95,9 @@ public struct _CurrencyStyle<Format>: _Default, _Currency where Format: _Format 
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable func merge(_ style: Style) -> Bool {
-            let merge = self.style.locale  == style.locale &&
+        @inlinable func swappable(_ style: Style) -> Bool {
+            self.style.locale == style.locale &&
             self.style.currencyCode  == style.currencyCode
-            if  merge { self.style = style }; return merge
         }
         
         @inlinable func snapshot(_  characters: String) -> Snapshot {

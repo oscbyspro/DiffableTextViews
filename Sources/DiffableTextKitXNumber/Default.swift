@@ -11,15 +11,15 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Default
+// MARK: * Default x Style
 //*============================================================================*
 
-@usableFromInline protocol _Default: _Style, NullableTextStyle where Cache: _Cache, Cache.Style == Self {
+@usableFromInline protocol _DefaultStyle: _Style, NullableTextStyle where Cache: _DefaultCache<Self> {
         
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-        
+    
     @inlinable var locale: Locale { get set }
 }
 
@@ -27,7 +27,7 @@ import Foundation
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _Default {
+extension _DefaultStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -46,6 +46,64 @@ extension _Default {
     }
     
     @inlinable public func update(_ cache: inout Cache) {
-        if/**/!cache.merge(self) { cache = self.cache() }
+        switch cache.swappable(self) {
+        case  true: cache.style = self
+        case false: cache = self.cache() }
+    }
+}
+
+//*============================================================================*
+// MARK: * Default x Cache
+//*============================================================================*
+
+@usableFromInline protocol _DefaultCache<Style>: _Cache {
+    
+    associatedtype Style: _DefaultStyle where Style.Input == Value
+        
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var style: Style { get set }
+    
+    @inlinable var preferences: Preferences<Value> { get }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ style: Style)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func swappable(_ style: Style) -> Bool
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _DefaultCache {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var bounds: _Bounds<Value> {
+        style.bounds ?? preferences.bounds
+    }
+    
+    @inlinable public var precision: _Precision<Value> {
+        style.precision ?? preferences.precision
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.style == rhs.style
     }
 }
