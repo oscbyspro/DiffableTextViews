@@ -53,7 +53,7 @@ import DiffableTextKit
             }
         }
         //=--------------------------------------=
-        // Sign As Prefix
+        // Sign x Prefix
         //=--------------------------------------=
         sign()
         //=--------------------------------------=
@@ -84,7 +84,7 @@ import DiffableTextKit
             }
         }
         //=--------------------------------------=
-        // Sign As Suffix
+        // Sign x Suffix
         //=--------------------------------------=
         sign()
         //=--------------------------------------=
@@ -128,35 +128,31 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func trim(to precision: Count) -> Bool {
-        let trimmed: (integer: Bool,  fraction:  Bool)
-        //=--------------------------------------=
-        // Trim
-        //=--------------------------------------=
-        trimmed.integer = self.integer.resize(
+        let integerWasTrimmed = self.integer.resize(
         suffix: min(precision.integer,  precision.digits))
         
-        trimmed.fraction = self.fraction.resize(
+        let fractionWasTrimmed = self.fraction.resize(
         prefix: min(precision.fraction, precision.digits - integer.count))
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if  trimmed.integer {
+        if  integerWasTrimmed {
             self.integer.trim(prefix:{ $0 == .zero })
             self.integer.atLeastZero()
         }
         
-        if  trimmed.fraction {
+        if  fractionWasTrimmed {
             self.fraction.trim(suffix:{ $0 == .zero })
             self.removeSeparatorAsSuffix()
         }
         //=--------------------------------------=
-        // Done
+        // Return
         //=--------------------------------------=
-        return trimmed.integer || trimmed.fraction
+        return integerWasTrimmed || fractionWasTrimmed
     }
     
     @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
         let remove = fraction.count == 0 && separator != nil
-        if  remove { separator = nil }; return remove
+        if  remove { separator = nil }; /*--*/ return remove
     }
 }
