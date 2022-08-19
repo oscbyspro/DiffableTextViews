@@ -30,10 +30,10 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Use this on view setup.
+    /// Use this method on view setup.
     @inlinable public init(_ status: Status, with cache: inout Cache) {
-        var  changes = Changes() // it's too infrequent to worry about the comparison
-        self.storage = Storage(Transaction(status, with: &cache, observing: &changes))
+        var changes = Changes(); self.storage = Storage.init(
+        Transaction(status, with: &cache, observing: &changes))
     }
     
     //=------------------------------------------------------------------------=
@@ -147,7 +147,7 @@ extension Context {
     // MARK: Status
     //=------------------------------------------------------------------------=
     
-    /// Call this on view update.
+    /// Use this method on view update.
     @inlinable public mutating func merge(_ remote: Status, with cache: inout Cache) -> Update {
         var update = Update()
         //=--------------------------------------=
@@ -182,7 +182,7 @@ extension Context {
     // MARK: Text
     //=------------------------------------------------------------------------=
     
-    /// Call this on changes to text.
+    /// Use this method on changes to text.
     @inlinable public mutating func merge<T>(_ characters: String,
     in range: Range<Offset<T>>, with cache: inout Cache) throws -> Update {
         //=--------------------------------------=
@@ -220,7 +220,7 @@ extension Context {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    /// Call this on changes to selection.
+    /// Use this method on changes to selection.
     @inlinable public mutating func merge<T>(
     selection: Range<Offset<T>>, momentums: Bool) -> Update {
         //=--------------------------------------=

@@ -41,7 +41,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
         
-    /// Use this on changes to text.
+    /// Use this method on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot, preference: Selection<Index>?) {
         //=--------------------------------------=
         // Values
@@ -57,7 +57,7 @@
         self.merge(selection: selection)
     }
     
-    /// Use this on changes to selection.
+    /// Use this method on changes to selection.
     @inlinable mutating func merge(selection: Selection<Index>, momentums: Bool = false) {
         //=--------------------------------------=
         // Accept Max Selection
