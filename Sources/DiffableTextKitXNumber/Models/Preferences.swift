@@ -13,14 +13,14 @@ import Foundation
 // MARK: * Preferences [...]
 //*============================================================================*
 
-@usableFromInline struct Preferences<Value> where Value: _Input {
+@usableFromInline struct Preferences<Value: _Input> {
     
-    @usableFromInline typealias Bounds = _Bounds<Value>
+    @usableFromInline typealias Bounds    = _Bounds   <Value>
     @usableFromInline typealias Precision = _Precision<Value>
     
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let bounds: Bounds
+    @usableFromInline let bounds:    Bounds
     @usableFromInline let precision: Precision
     
     //=------------------------------------------------------------------------=
@@ -41,6 +41,6 @@ import Foundation
         formatter.minimumFractionDigits ...
         formatter.maximumFractionDigits)
         
-        return Self(bounds: Bounds(), precision: precision)
+        return Self(bounds: _Bounds(), precision: precision)
     }
 }

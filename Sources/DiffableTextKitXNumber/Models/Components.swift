@@ -11,10 +11,14 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Components [...]
+// MARK: * Components
 //*============================================================================*
 
 @usableFromInline struct Components {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     @usableFromInline static let ascii = Self(
     signs:/*-*/ .ascii(),
@@ -22,11 +26,15 @@ import Foundation
     separators: .ascii())
     
     //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let signs:/*-*/ Links<Sign>
     @usableFromInline let digits:/**/ Links<Digit>
     @usableFromInline let separators: Links<Separator>
 
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
@@ -48,6 +56,10 @@ import Foundation
         digits:/**/ .currency(formatter),
         separators: .currency(formatter))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
     
     @inlinable func process(_ proposal: inout Proposal) -> Sign? {
         //=--------------------------------------=

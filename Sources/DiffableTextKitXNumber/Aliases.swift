@@ -13,15 +13,12 @@ import Foundation
 // MARK: * Aliases
 //*============================================================================*
 
-public typealias NumberTextStyle<Value> =
+public typealias NumberTextStyle<Value: _Value> =
 Value.NumberTextGraph.Number where
-Value.NumberTextGraph: _Numberable, Value: _Value
+Value.NumberTextGraph: _Numberable
 
-public typealias NumberTextBounds<Value> =
-_Bounds<Value> where Value: _Input
-
-public typealias NumberTextPrecision<Value> =
-_Precision<Value> where Value: _Input
+public typealias NumberTextBounds   <Value: _Input> = _Bounds   <Value>
+public typealias NumberTextPrecision<Value: _Input> = _Precision<Value>
 
 //*============================================================================*
 // MARK: * Aliases x Internal

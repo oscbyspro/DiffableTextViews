@@ -10,16 +10,20 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * Translator [...]
+// MARK: * Translator
 //*============================================================================*
 
 @usableFromInline struct Translator {
     
     //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var singular = [Character: Character]()
     @usableFromInline private(set) var fraction = [Character: Character]()
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(from source: Components, to target: Components) {
@@ -31,6 +35,10 @@ import DiffableTextKit
         source.separators.tokens.keys.forEach { self.fraction[$0] = fraction }
         target.separators.tokens.keys.forEach { self.fraction[$0] = fraction }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
     
     /// Translates a keystroke.
     ///

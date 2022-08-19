@@ -51,7 +51,7 @@ public struct _OptionalGraph<Base: _Graph>: _Graph where Base.Input == Base.Valu
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Nodes
+// MARK: + Nodes [...]
 //=----------------------------------------------------------------------------=
 
 extension _OptionalGraph: _Numberable

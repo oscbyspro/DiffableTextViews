@@ -10,22 +10,30 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * Attributes [...]
+// MARK: * Attributes
 //*============================================================================*
 
 @usableFromInline struct Attributes {
     
     //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var map = [Character: Attribute]()
     
     //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init(_ components: Components) {
-        self.map[components.separators[Separator .fraction]] = .removable
+        self.map[components.separators[.fraction/*------*/]] = .removable
         components.digits.tokens.keys.forEach { self.map[$0] = .content }
-        components.signs .tokens.keys.forEach { self.map[$0] = .phantom.subtracting(.virtual) }
+        components.signs .tokens.keys.forEach { self.map[$0] = .phantom - .virtual }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Attribute {
         map[character] ?? .phantom
