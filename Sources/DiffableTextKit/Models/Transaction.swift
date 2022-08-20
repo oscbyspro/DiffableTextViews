@@ -7,12 +7,16 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("Remove")
+
 //*============================================================================*
-// MARK: * Transaction [...]
+// MARK: * Transaction
 //*============================================================================*
 
 @usableFromInline struct Transaction<Style: DiffableTextStyle> {
-    
+        
+    //=------------------------------------------------------------------------=
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var status: Status<Style>
@@ -20,23 +24,30 @@
     @usableFromInline private(set) var commit: Commit<Style.Value>?
     
     //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
-    /// - Observing changes on view setup is free and/or infrequent.
-    @inlinable init(_ status: Status<Style>, with cache: inout Style.Cache,
-    observing changes: inout Changes) {
-        self.status = status
+    @inlinable init(_ status: Status<Style>, with cache: inout Style.Cache, then update: inout Update) {
+        self.status = status; update += .text
         //=----------------------------------=
         // Active
         //=----------------------------------=
         if  status.focus == true {
             self.commit = status.interpret(with: &cache)
-            changes += .value(status.value != commit!.value)
+            
+            update += .selection
+            update += .value(status.value != commit!.value)
+            
             self.status.value = commit!.value
         //=----------------------------------=
         // Inactive
         //=----------------------------------=
         } else { self.backup = status.format(with: &cache) }
     }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
     
     @inlinable internal func layout() -> Layout? {
         commit.map({ Layout($0.snapshot, preference: $0.selection) })

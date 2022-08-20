@@ -31,30 +31,13 @@ public struct Context<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     
     /// Use this method on view setup.
-    @inlinable public init(_ status: Status, with cache: inout Cache) {
-        var changes = Changes(); self.storage = Storage.init(
-        Transaction(status, with: &cache, observing: &changes))
+    @inlinable public init(_ status: Status, with cache: inout Cache, then update: inout Update) {
+        self.storage = Storage(Transaction(status, with: &cache, then: &update))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformation
     //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func merge(_ remote: Transaction<Style>) {
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if  layout != nil, remote.commit != nil {
-            self.unique()
-            self.storage.status = remote.status
-            self.storage.layout!.merge(
-            snapshot:/**/remote.commit!.snapshot,
-            preference:  remote.commit!.selection)
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else { self.storage = Storage(remote) }
-    }
     
     @inlinable mutating func unique() {
         if !isKnownUniquelyReferenced(&storage) { self.storage = storage.copy() }
@@ -138,7 +121,7 @@ extension Context {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream
+// MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
 extension Context {
@@ -158,26 +141,26 @@ extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        var changes = Changes()
-        self.merge(Transaction(status, with: &cache, observing: &changes))
+        let remote = Transaction(status, with: &cache, then: &update)
+        //=--------------------------------------=
+        // Active
+        //=--------------------------------------=
+        if  layout != nil, remote.commit != nil {
+            self.unique()
+            self.storage.status = remote.status
+            self.storage.layout!.merge(
+            snapshot:    remote.commit!.snapshot,
+            preference:  remote.commit!.selection)
+        //=--------------------------------------=
+        // Inactive
+        //=--------------------------------------=
+        } else { self.storage = Storage(remote) }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        update += .text
-        if status.focus == false { return update }
-        
-        update += .selection
-        update += .value(changes.contains(.value))
         return update
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Downstream
-//=----------------------------------------------------------------------------=
-
-extension Context {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Text
     //=------------------------------------------------------------------------=
@@ -206,7 +189,7 @@ extension Context {
         self.storage.status.value = commit.value
         self.storage.layout!.selection.collapse()
         self.storage.layout!.merge(
-        snapshot:/**/commit.snapshot,
+        snapshot:    commit.snapshot,
         preference:  commit.selection)
         //=--------------------------------------=
         // Return

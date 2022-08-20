@@ -119,9 +119,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
+            var update = Update()
             self.cache = upstream.style.cache()
-            self.context = Context(pull(), with: &self.cache)
-            self.push(.text)
+            self.context = Context(pull(),with: &self.cache, then: &update)
+            self.push(update)
         }
         
         @inlinable @inline(never)
