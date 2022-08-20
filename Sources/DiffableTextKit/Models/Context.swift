@@ -240,7 +240,8 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = Selection(layout!.snapshot.range(at: selection))
+        let selection = Selection(
+        layout!.snapshot.range(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -249,8 +250,6 @@ extension Context {
         selection: selection,
         momentums: momentums)
 
-        update += .selection(layout!.selection != selection)
-        
-        return update
+        return update + .selection(layout!.selection != selection)
     }
 }

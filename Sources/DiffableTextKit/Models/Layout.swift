@@ -22,28 +22,20 @@
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var snapshot:   Snapshot
-    @usableFromInline var preference: Selection<Index>?
-    @usableFromInline var selection:  Selection<Index>
+    @usableFromInline private(set) var snapshot: Snapshot
+    @usableFromInline private(set) var preference: Selection<Index>?
+    @usableFromInline var selection: Selection<Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    /// Setting autocorrect to false requires you to call autocorrect() manually.
     @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?, autocorrect: Bool = true) {
         self.snapshot   = snapshot
         self.preference = preference
         self.selection  = Selection(snapshot.endIndex)
         if autocorrect  { self.autocorrect() } // O(n)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    /// Use this to finalize initialization.
-    @inlinable mutating func autocorrect() {
-        self.merge(selection: self.selection)
     }
     
     //=------------------------------------------------------------------------=
@@ -64,6 +56,15 @@
         self.snapshot = snapshot
         self.preference = preference
         self.merge(selection: selection)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    /// Use this on delayed initialization.
+    @inlinable mutating func autocorrect() {
+        self.merge(selection: self.selection)
     }
     
     /// Use this method on changes to selection.
