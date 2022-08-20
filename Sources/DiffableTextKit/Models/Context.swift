@@ -242,6 +242,6 @@ extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Update.selection(layout!.selection != selection)
+        return .selection(layout!.selection != selection)
     }
 }

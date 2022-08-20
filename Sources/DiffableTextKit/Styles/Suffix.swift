@@ -49,7 +49,7 @@ public struct SuffixTextStyle<Base: DiffableTextStyle>: WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Utilities x Private
     //=------------------------------------------------------------------------=
     
     @inlinable func label(_ text: inout String) {

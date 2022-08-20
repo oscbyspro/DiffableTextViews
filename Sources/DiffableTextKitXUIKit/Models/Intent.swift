@@ -16,6 +16,7 @@ import UIKit
 //*============================================================================*
 
 @usableFromInline struct Intent {
+    
     @usableFromInline typealias Key = UIKeyboardHIDUsage
     
     //=------------------------------------------------------------------------=

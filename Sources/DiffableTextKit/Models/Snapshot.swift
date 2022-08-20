@@ -306,7 +306,7 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Replace x Internal
+    // MARK: Replace x Private
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func replaceSubrange(_ positions: Range<Index>,
@@ -412,7 +412,7 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Resolve x Private
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) func nonpassthrough(_ position: Index) -> Bool {

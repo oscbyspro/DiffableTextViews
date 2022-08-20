@@ -28,12 +28,6 @@ final class PlaceholdersTests: XCTestCase {
     lazy var many = Placeholders(["#": \.isNumber, "@": \.isLetter])
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    func TRUE(_ character: Character) -> Bool {  true }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
@@ -88,12 +82,12 @@ final class PlaceholdersTests: XCTestCase {
         XCTAssertNotEqual(some, many)
         
         XCTAssertNotEqual(
-        Placeholders(("A", TRUE)),
-        Placeholders(("_", TRUE)))
+        Placeholders(("A", { _ in true })),
+        Placeholders(("_", { _ in true })))
         
         XCTAssertNotEqual(
-        Placeholders(["A": TRUE, "B": TRUE]),
-        Placeholders(["A": TRUE, "_": TRUE]))
+        Placeholders(["A": { _ in true }, "B": { _ in true }]),
+        Placeholders(["A": { _ in true }, "_": { _ in true }]))
     }
 }
 

@@ -18,7 +18,7 @@ import XCTest
 final class InfoTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     func DEBUG() throws {

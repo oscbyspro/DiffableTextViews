@@ -121,7 +121,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             self.cache = upstream.style.cache()
             self.context = Context(pull(), with: &self.cache)
-            self.push(Update.text)
+            self.push(.text)
         }
         
         @inlinable @inline(never)
@@ -179,8 +179,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 self.push(update)
                 self.lock.task {
-                    // see [option + backspace]
-                    self.push(Update.selection)
+                    // option + backspace
+                    self.push(.selection)
                 }
             //=----------------------------------=
             // Cancellation
@@ -203,7 +203,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 // Push
                 //=------------------------------=
-                self.push([Update.text, .selection])
+                self.push([.text, .selection])
             //=----------------------------------=
             // Normal
             //=----------------------------------=

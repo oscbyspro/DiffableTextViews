@@ -54,7 +54,7 @@ final class TokenTestsOnString: XCTestCase {
     let digits = [Digit](repeating: .seven, count: 1)
 
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     func collection<T>(_ type: T.Type = T.self) -> T where T: RangeReplaceableCollection {

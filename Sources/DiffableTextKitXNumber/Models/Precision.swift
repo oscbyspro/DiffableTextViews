@@ -80,7 +80,7 @@ public struct _Precision<Value: _Input>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Accessors x Private
     //=------------------------------------------------------------------------=
     
     @inlinable static var digits: ClosedRange<Int> {

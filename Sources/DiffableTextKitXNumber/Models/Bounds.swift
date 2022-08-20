@@ -120,7 +120,7 @@ extension _Bounds {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream, Downstream x Helpers
+    // MARK: Upstream, Downstream x Private
     //=------------------------------------------------------------------------=
     
     @inlinable func full(_ value: Value) -> Bool? {
