@@ -30,17 +30,26 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?) {
+    @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?, autocorrect: Bool = true) {
         self.snapshot   = snapshot
         self.preference = preference
         self.selection  = Selection(snapshot.endIndex)
+        if autocorrect  { self.autocorrect() } // O(n)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    /// Use this to finalize initialization.
+    @inlinable mutating func autocorrect() {
         self.merge(selection: self.selection)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-        
+    
     /// Use this method on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot, preference: Selection<Index>?) {
         //=--------------------------------------=

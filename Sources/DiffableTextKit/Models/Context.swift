@@ -14,8 +14,8 @@
 /// A diffable text view state model.
 public struct Context<Style: DiffableTextStyle> {
     
-    public typealias Cache = Style.Cache
-    public typealias Value = Style.Value
+    public typealias Cache  = Style.Cache
+    public typealias Value  = Style.Value
     
     public typealias Status = DiffableTextKit.Status<Style>
     public typealias Commit = DiffableTextKit.Commit<Value>
@@ -32,7 +32,33 @@ public struct Context<Style: DiffableTextStyle> {
     
     /// Use this method on view setup.
     @inlinable public init(_ status: Status, with cache: inout Cache, then update: inout Update) {
-        self.storage = Storage(Transaction(status, with: &cache, then: &update))
+        self.init(unchecked: status, with: &cache, then: &update)
+        self.storage.layout?.autocorrect() // finalize the layout
+    }
+    
+    /// Use this method to delay layout autocorrection.
+    @inlinable init(unchecked status: Status, with cache: inout Cache, then update: inout Update) {
+        update += .text
+        //=----------------------------------=
+        // Active
+        //=----------------------------------=
+        if  status.focus == true {
+            let commit = status.interpret(with: &cache)
+            let layout = Layout.init(commit.snapshot,
+            preference: commit.selection,autocorrect: false)
+            
+            update += .selection
+            update += .value(status.value != commit.value)
+            
+            self.storage = Storage(status,nil,layout)
+            self.storage.status.value = commit.value
+        //=----------------------------------=
+        // Inactive
+        //=----------------------------------=
+        } else {
+            let  backup  = status.format(with:&cache)
+            self.storage = Storage(status,backup,nil)
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -44,17 +70,21 @@ public struct Context<Style: DiffableTextStyle> {
     }
     
     //*========================================================================*
-    // MARK: * Storage [...]
+    // MARK: * Storage
     //*========================================================================*
     
     @usableFromInline final class Storage {
         
+        //=--------------------------------------------------------------------=
+        // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline var status: Status
         @usableFromInline var backup: String?
         @usableFromInline var layout: Layout?
         
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
         //=--------------------------------------------------------------------=
         
         @inlinable init(_ status: Status, _ backup: String?, _ layout: Layout?) {
@@ -66,12 +96,12 @@ public struct Context<Style: DiffableTextStyle> {
             assert((status.focus == false) == (backup != nil))
         }
         
-        @inlinable convenience init(_ remote: Transaction<Style>) {
-            self.init(remote.status,  remote.backup, remote.layout())
-        }
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
         
-        @inlinable func copy() -> Storage {
-            Storage(status, backup, layout)
+        @inlinable func copy() -> Self {
+            Self(status, backup, layout)
         }
     }
 }
@@ -131,30 +161,30 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on view update.
-    @inlinable public mutating func merge(_ remote: Status, with cache: inout Cache) -> Update {
+    @inlinable public mutating func merge(_ status: Status, with cache: inout Cache) -> Update {
         var update = Update()
         //=--------------------------------------=
-        // At Least One Value Must Have Changed
+        // Values
         //=--------------------------------------=
-        var status = self.status
-        if !status.merge(remote) { return update }
+        var merged = self.status
+        if !merged.merge(status) { return update }
+        let next = Self(unchecked: merged, with: &cache, then: &update)
         //=--------------------------------------=
-        // Update
+        // Update x Active == 2
         //=--------------------------------------=
-        let remote = Transaction(status, with: &cache, then: &update)
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if  layout != nil, remote.commit != nil {
+        if  layout != nil, next.layout != nil {
             self.unique()
-            self.storage.status = remote.status
+            self.storage.status = next.status
             self.storage.layout!.merge(
-            snapshot:    remote.commit!.snapshot,
-            preference:  remote.commit!.selection)
+            snapshot:/**/next.layout!.snapshot,
+            preference:  next.layout!.preference)
         //=--------------------------------------=
-        // Inactive
+        // Update x Active <= 1
         //=--------------------------------------=
-        } else { self.storage = Storage(remote) }
+        } else {
+            self = next // layout is delayed
+            self.storage.layout?.autocorrect()
+        }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -168,34 +198,31 @@ extension Context {
     /// Use this method on changes to text.
     @inlinable public mutating func merge<T>(_ characters: String,
     in range: Range<Offset<T>>, with cache: inout Cache) throws -> Update {
+        var update = Update()
         //=--------------------------------------=
         // Layout
         //=--------------------------------------=
-        if layout == nil { return [] }
+        guard layout != nil else { return update }
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
         let proposal = Proposal(layout!.snapshot,
-        with: Snapshot(characters), in: range)
-        //=--------------------------------------=
-        // Commit
-        //=--------------------------------------=
+        with: Snapshot(characters), in:/**/range)
         let commit = try status.resolve(proposal, with: &cache)
-        var update = Update.value(value != commit.value)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
+        update += .text
+        update += .selection(focus == true)
+        update += .value(value != commit.value)
+        
         self.unique()
         self.storage.status.value = commit.value
         self.storage.layout!.selection.collapse()
         self.storage.layout!.merge(
-        snapshot:    commit.snapshot,
+        snapshot:/**/commit.snapshot,
         preference:  commit.selection)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        update += .text
-        update += .selection(focus == true)
+        
         return update
     }
     
@@ -204,17 +231,16 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
-    @inlinable public mutating func merge<T>(
-    selection: Range<Offset<T>>, momentums: Bool) -> Update {
+    @inlinable public mutating func merge<T>(selection: Range<Offset<T>>, momentums: Bool) -> Update {
+        var update = Update()
         //=--------------------------------------=
         // Layout
         //=--------------------------------------=
-        if layout == nil { return [] }
+        guard layout != nil else { return update }
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = Selection(
-        layout!.snapshot.range(at: selection))
+        let selection = Selection(layout!.snapshot.range(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -222,9 +248,9 @@ extension Context {
         self.storage.layout!.merge(
         selection: selection,
         momentums: momentums)
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return .selection(layout!.selection != selection)
+
+        update += .selection(layout!.selection != selection)
+        
+        return update
     }
 }
