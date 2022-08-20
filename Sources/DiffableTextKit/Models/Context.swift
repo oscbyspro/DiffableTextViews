@@ -250,6 +250,8 @@ extension Context {
         selection: selection,
         momentums: momentums)
 
-        return update + .selection(layout!.selection != selection)
+        update += .selection(layout!.selection != selection)
+        
+        return update
     }
 }
