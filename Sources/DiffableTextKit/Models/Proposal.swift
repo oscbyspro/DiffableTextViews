@@ -24,7 +24,7 @@
 ///
 /// **Composition**
 ///
-/// Wrapper styles only adding or removing formatting characters do not need to
+/// Wrapper styles that only add or remove formatting characters do not need to
 /// alter proposals as they propagate down the style hierarchy. Instead, all base
 /// styles should ignore virtual characters, which can be done as shown:
 ///
