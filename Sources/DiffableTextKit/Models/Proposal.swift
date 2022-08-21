@@ -12,6 +12,25 @@
 //*============================================================================*
 
 /// A snapshot and a proposed change that has not yet been applied to it.
+///
+/// Proposals capture user intent and styles are responsible for resolving them.
+///
+/// ```
+///   ↓ - ↓                             ↓
+/// |$|1|2|3|   |.|    |$|.|3|    |$|0|.|3|
+/// |x|o|o|o| + |o| == |x|o|o| -> |x|o|o|o| (RESOLVED)
+/// ```
+///
+/// **Composition**
+///
+/// Wrapper styles that only add or remove formatting characters do not need to
+/// alter proposals as they propagate down the style hierarchy. Instead, all base
+/// styles should ignore virtual characters, which can be done as shown:
+///
+/// ```
+/// proposal.lazy.merged().nonvirtuals() // some Sequence<Character>
+/// ```
+///
 public struct Proposal {
     
     //=------------------------------------------------------------------------=

@@ -11,7 +11,7 @@
 // MARK: * Attribute
 //*============================================================================*
 
-/// A set of behavioral options, such that plain text has no attributes.
+/// A set of behavioral options, such that plain text has none.
 ///
 /// The easiest way to unformat text is to filter characters marked as virtual.
 ///
@@ -21,16 +21,16 @@ public struct Attribute: CustomStringConvertible, OptionSet {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    /// Marks that a symbol is not real and should not be parsed.
+    /// Marks a character that is not real and should not be parsed.
     public static let virtual = Self(rawValue: 1 << 0)
     
-    /// Marks that a symbol should be ignored when inserted.
+    /// Marks a character that should be ignored when inserted.
     public static let insertable = Self(rawValue: 1 << 1)
     
-    /// Marks that a symbol should be ignored when removed.
+    /// Marks a character that should be ignored when removed.
     public static let removable = Self(rawValue: 1 << 2)
 
-    /// Marks that a symbol has no real size and should be passed through.
+    /// Marks a character that has no real size and should be passed through.
     public static let passthrough = Self(rawValue: 1 << 3)
     
     //=------------------------------------------------------------------------=

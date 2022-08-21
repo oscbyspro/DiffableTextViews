@@ -18,8 +18,8 @@
 /// not be selected. A single character can have multiple attributes.
 ///
 /// ```
-/// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|#|-|#|#|~
-/// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~
+/// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|#|-|#|#|
+/// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|
 /// ```
 ///
 /// **Attributes & Characters**
@@ -30,13 +30,13 @@
 /// a snapshot is to loop over each character in a composed character sequence.
 ///
 /// ```
-/// |🇸🇪|   |🇺🇸|    |🇸🇪|🇺🇸|~
-/// |➖| + |➖| -> |➖|➖|~ (GOOD)
+/// |🇸🇪|   |🇺🇸|    |🇸🇪|🇺🇸|
+/// |➖| + |➖| -> |➖|➖| (GOOD)
 /// ```
 ///
 /// ```
-/// |🇸|   |🇪|   |🇺|   |🇸|    |🇸🇪|🇺🇸|~
-/// |➖| + |➖| + |➖| + |➖| -> |➖|➖|➖|➖|~ (BAD)
+/// |🇸|   |🇪|   |🇺|   |🇸|    |🇸🇪|🇺🇸|
+/// |➖| + |➖| + |➖| + |➖| -> |➖|➖|➖|➖| (BAD)
 /// ```
 ///
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,

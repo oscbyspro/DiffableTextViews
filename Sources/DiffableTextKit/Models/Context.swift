@@ -44,7 +44,7 @@ public struct Context<Style: DiffableTextStyle> {
         //=----------------------------------=
         if  status.focus == true {
             let commit = status.interpret(with: &cache)
-            let layout = Layout.init(deferring:(
+            let layout = Layout(deferring:(
             snapshot:/**/commit.snapshot,
             preference:  commit.selection))
             

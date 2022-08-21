@@ -34,7 +34,7 @@
         self.init(deferring: (snapshot, preference)); self.autocorrect()
     }
     
-    /// Use this method to defer selection autocorrection.
+    /// Use this method to defer autocorrection.
     @inlinable init(deferring:(snapshot: Snapshot, preference: Selection<Index>?)) {
         self.snapshot   = deferring.snapshot
         self.preference = deferring.preference
