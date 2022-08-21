@@ -30,12 +30,15 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Setting autocorrect to false requires you to call autocorrect() manually.
-    @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?, autocorrect: Bool = true) {
-        self.snapshot   = snapshot
-        self.preference = preference
+    @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?) {
+        self.init(deferring: (snapshot, preference)); self.autocorrect()
+    }
+    
+    /// Use this method to defer selection autocorrection.
+    @inlinable init(deferring:(snapshot: Snapshot, preference: Selection<Index>?)) {
+        self.snapshot   = deferring.snapshot
+        self.preference = deferring.preference
         self.selection  = Selection(snapshot.endIndex)
-        if autocorrect  { self.autocorrect() } // O(n)
     }
     
     //=------------------------------------------------------------------------=
@@ -62,10 +65,14 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Use this on delayed initialization.
+    /// Use this method to resolve a custom or deferred selection.
     @inlinable mutating func autocorrect() {
         self.merge(selection: self.selection)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
     @inlinable mutating func merge(selection: Selection<Index>, momentums: Bool = false) {

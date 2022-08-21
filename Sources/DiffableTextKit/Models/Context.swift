@@ -32,20 +32,21 @@ public struct Context<Style: DiffableTextStyle> {
     
     /// Use this method on view setup.
     @inlinable public init(_ status: Status, with cache: inout Cache, then update: inout Update) {
-        self.init(unchecked: status, with: &cache, then: &update)
-        self.storage.layout?.autocorrect() // finalize the layout
+        self.init(deferring: status, with: &cache, then: &update)
+        self.storage.layout?.autocorrect() // layout was deferred
     }
     
-    /// Use this method to delay layout autocorrection.
-    @inlinable init(unchecked status: Status, with cache: inout Cache, then update: inout Update) {
+    /// Use this method to defer layout selection.
+    @inlinable init(deferring status: Status, with cache: inout Cache, then update: inout Update) {
         update += .text
         //=----------------------------------=
         // Active
         //=----------------------------------=
         if  status.focus == true {
             let commit = status.interpret(with: &cache)
-            let layout = Layout.init(commit.snapshot,
-            preference: commit.selection,autocorrect: false)
+            let layout = Layout.init(deferring:(
+            snapshot:/**/commit.snapshot,
+            preference:  commit.selection))
             
             update += .selection
             update += .value(status.value != commit.value)
@@ -166,9 +167,9 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        var merged = self.status
-        if !merged.merge(status) { return update }
-        let next = Self(unchecked: merged, with: &cache, then: &update)
+        var values = self.status
+        if !values.merge(status) { return update }
+        let next = Self(deferring: values, with: &cache, then: &update)
         //=--------------------------------------=
         // Update x Active == 2
         //=--------------------------------------=
@@ -182,7 +183,7 @@ extension Context {
         // Update x Active <= 1
         //=--------------------------------------=
         } else {
-            self = next // layout is delayed
+            self = next // layout was deferred
             self.storage.layout?.autocorrect()
         }
         //=--------------------------------------=
@@ -249,7 +250,7 @@ extension Context {
         self.storage.layout!.merge(
         selection: selection,
         momentums: momentums)
-
+        
         update += .selection(layout!.selection != selection)
         
         return update
