@@ -16,9 +16,9 @@
 /// Proposals capture user intent and styles are responsible for resolving them.
 ///
 /// ```
-///   ↓ ─ ↓                               ↓
-/// |$|1|2|3|   |.|    |$|0|.|3|    |$|0|.|3|
-/// |x|o|o|o| + |o| -> |x|o|o|o| -> |x|o|o|o|
+///   ↓ ┄ ↓                               ↓
+/// │$│1│2│3│   │,│    │$│0│.│3│    │$│0│.│3│
+/// │x│o│o│o│ + │o│ -> │x│o│o│o│ -> │x│o│o│o│
 /// └─ proposal ──┴─ style ────┴─ diff ─────┘
 /// ```
 ///
