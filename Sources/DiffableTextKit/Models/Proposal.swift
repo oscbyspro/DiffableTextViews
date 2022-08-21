@@ -16,14 +16,15 @@
 /// Proposals capture user intent and styles are responsible for resolving them.
 ///
 /// ```
-///   ↓ - ↓                             ↓
-/// |$|1|2|3|   |.|    |$|.|3|    |$|0|.|3|
-/// |x|o|o|o| + |o| == |x|o|o| -> |x|o|o|o| (RESOLVED)
+///   ↓ ─ ↓                               ↓
+/// |$|1|2|3|   |.|    |$|0|.|3|    |$|0|.|3|
+/// |x|o|o|o| + |o| -> |x|o|o|o| -> |x|o|o|o|
+/// └─ proposal ──┴─ style ────┴─ diff ─────┘
 /// ```
 ///
 /// **Composition**
 ///
-/// Wrapper styles that only add or remove formatting characters do not need to
+/// Wrapper styles only adding or removing formatting characters do not need to
 /// alter proposals as they propagate down the style hierarchy. Instead, all base
 /// styles should ignore virtual characters, which can be done as shown:
 ///

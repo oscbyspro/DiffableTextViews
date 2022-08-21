@@ -92,7 +92,9 @@ public struct Context<Style: DiffableTextStyle> {
             self.status = status
             self.backup = backup
             self.layout = layout
-            
+            //=----------------------------------=
+            // Invariants
+            //=----------------------------------=
             assert((status.focus ==  true) == (layout != nil))
             assert((status.focus == false) == (backup != nil))
         }
@@ -214,7 +216,7 @@ extension Context {
         // Update
         //=--------------------------------------=
         update += .text
-        update += .selection(focus == true)
+        update += .selection
         update += .value(value != commit.value)
         
         self.unique()
@@ -223,7 +225,9 @@ extension Context {
         self.storage.layout!.merge(
         snapshot:/**/commit.snapshot,
         preference:  commit.selection)
-        
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
         return update
     }
     
@@ -252,7 +256,9 @@ extension Context {
         momentums: momentums)
         
         update += .selection(layout!.selection != selection)
-        
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
         return update
     }
 }
