@@ -36,9 +36,9 @@
     
     /// Use this method to defer autocorrection.
     @inlinable init(deferring:(snapshot: Snapshot, preference: Selection<Index>?)) {
-        self.snapshot   = deferring.snapshot
+        self.snapshot = deferring.snapshot
         self.preference = deferring.preference
-        self.selection  = Selection(snapshot.endIndex)
+        self.selection = Selection(snapshot.endIndex)
     }
     
     //=------------------------------------------------------------------------=
@@ -50,7 +50,7 @@
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = selection.map(
+        let selection = preference ?? selection.map(
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
         upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         //=--------------------------------------=
@@ -65,7 +65,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Use this method to resolve a custom or deferred selection.
+    /// Use this method to resolve selection.
     @inlinable mutating func autocorrect() {
         self.merge(selection: self.selection)
     }
@@ -75,11 +75,11 @@
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
-    @inlinable mutating func merge(selection: Selection<Index>, momentums: Bool = false) {
+    @inlinable mutating func merge(selection: Selection<Index>, resolve: Resolve = []) {
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=
-        if  selection == .max(snapshot) {
+        if  resolve.contains(.max), selection == .max(snapshot) {
             self.selection = selection; return
         }
         //=--------------------------------------=
@@ -93,7 +93,7 @@
         //=--------------------------------------=
         var carets = selection.carets().detached()
         
-        if  momentums {
+        if  resolve.contains(.momentums) {
             carets.lower.momentum = Direction(from: self.selection.lower, to: selection.lower)
             carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
         }

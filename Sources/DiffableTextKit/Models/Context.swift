@@ -253,7 +253,7 @@ extension Context {
         self.unique()
         self.storage.layout!.merge(
         selection: selection,
-        momentums: momentums)
+        resolve: [.max, .momentums(momentums)])
         
         update += .selection(layout!.selection != selection)
         //=--------------------------------------=
