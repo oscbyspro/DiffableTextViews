@@ -25,8 +25,8 @@ import SwiftUI
     
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ upstream: DiffableTextField<Style>, _ environment: EnvironmentValues) {
-        self.style  = upstream.style.locale(environment.locale); self.value  = upstream.value
+    @inlinable init(_ view: DiffableTextField<Style>, _ environment: EnvironmentValues) {
+        self.style  = view.style.locale(environment.locale); self.value = view.value
     }
 }
 

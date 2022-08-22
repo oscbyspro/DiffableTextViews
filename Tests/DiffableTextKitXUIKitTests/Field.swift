@@ -7,43 +7,41 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-#if canImport(UIKit)
+#if DEBUG && canImport(UIKit)
 
 @testable import DiffableTextKitXUIKit
 
 import XCTest
 
 //*============================================================================*
-// MARK: * Base x Tests
+// MARK: * Field x Tests
 //*============================================================================*
 
-final class BaseTests: XCTestCase {
+final class FieldTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = Base()
+    lazy var field = Field()
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testForceUnwrappingTextIsOK() {
-        view.text = nil
-        XCTAssertNotNil(view.text)
+        field.text = nil
+        XCTAssertNotNil(field.text)
     }
     
     func testForceUnwrappingSelectedTextRangeIsOK() {
-        view.selectedTextRange = nil
-        XCTAssertNotNil(view.selectedTextRange)
+        field.selectedTextRange = nil
+        XCTAssertNotNil(field.selectedTextRange)
     }
     
     func testForceUnwrappingMarkedTextRangeIsBad() {
-        XCTAssertNil(view.markedTextRange)
+        XCTAssertNil(field.markedTextRange)
     }
 }
 
-#endif
 #endif

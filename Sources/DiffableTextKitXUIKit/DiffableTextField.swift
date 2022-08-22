@@ -65,7 +65,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Cycle
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeCoordinator() -> Coordinator {
@@ -93,7 +93,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock =   Lock()
+        @usableFromInline let lock = Lock()
+
         @usableFromInline var cache:   Cache!
         @usableFromInline var context: Context!
         
@@ -102,15 +103,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var sidestream = Sidestream()
         
         //=--------------------------------------------------------------------=
-        // MARK: Cycle
+        // MARK: Transformations
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(never)
-        func setup(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
+        @inlinable @inline(never) func setup(
+        _ view:/*---*/ DiffableTextField,
+        _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            self.upstream = Upstream(upstream, environment)
+            self.upstream = Upstream(view, environment)
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
@@ -120,21 +122,22 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Synchronize
             //=----------------------------------=
             var update = Update()
-            self.cache = upstream.style.cache()
-            self.context = Context(pull(),with: &self.cache, then: &update)
+            self.cache = self.upstream.style.cache()
+            self.context = Context(self.pull(),with: &self.cache, then: &update)
             self.push(update)
         }
         
-        @inlinable @inline(never)
-        func update(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
+        @inlinable @inline(never) func update(
+        _ view:/*---*/ DiffableTextField,
+        _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            self.upstream = Upstream(upstream, environment)
+            self.upstream = Upstream(view, environment)
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream.placeholder(upstream.title)
+            self.downstream.placeholder(view.title)
             self.downstream.autocorrectionDisabled(environment)
             self.downstream.font(environment)
             self.downstream.foregroundColor(environment)
@@ -195,8 +198,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             return false
         }
         
-        @inlinable @inline(never)
-        public func textFieldDidChangeSelection(_ textField: UITextField) {
+        @inlinable @inline(never) public func textFieldDidChangeSelection(_ textField: UITextField) {
             //=----------------------------------=
             // Marked
             //=----------------------------------=

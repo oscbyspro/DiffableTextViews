@@ -7,8 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-#if canImport(UIKit)
+#if DEBUG && canImport(UIKit)
 
 @testable import DiffableTextKitXUIKit
 
@@ -50,9 +49,6 @@ final class FontTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testDesignsCanBeForceUnwrapped() {
-        //=--------------------------------------=
-        // Fonts, Designs
-        //=--------------------------------------=
         for font in fonts {
             for design in designs {
                 XCTAssertNotNil(font.descriptor.withDesign(design))
@@ -61,5 +57,4 @@ final class FontTests: XCTestCase {
     }
 }
 
-#endif
 #endif

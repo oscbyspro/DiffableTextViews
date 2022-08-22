@@ -25,7 +25,7 @@ import UIKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var view = Base()
+    @usableFromInline var view = Field()
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -68,13 +68,11 @@ import UIKit
     }
     
     @inlinable func font(_ environment: EnvironmentValues) {
-        let font = environment.diffableTextViews_font
-        self.view.font = UIFont(font ?? .body)
+        self.view.font = UIFont(environment.diffableTextViews_font ?? .body)
     }
     
     @inlinable func foregroundColor(_ environment: EnvironmentValues) {
-        let color = environment.diffableTextViews_foregroundColor
-        self.view.textColor = UIColor(color ?? .primary)
+        self.view.textColor = UIColor(environment.diffableTextViews_foregroundColor ?? .primary)
     }
     
     @inlinable func keyboardType(_ environment: EnvironmentValues) {
@@ -105,8 +103,7 @@ import UIKit
     }
     
     @inlinable func tint(_ environment: EnvironmentValues) {
-        let color = environment.diffableTextViews_tint
-        self.view.tintColor = UIColor(color ?? .accentColor)
+        self.view.tintColor = UIColor(environment.diffableTextViews_tint ?? .accentColor)
     }
 }
 
