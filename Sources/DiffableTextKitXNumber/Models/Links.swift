@@ -20,7 +20,7 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var tokens:     [Character: Token]
+    @usableFromInline private(set) var tokens:/**/ [Character: Token]
     @usableFromInline private(set) var characters: [Token: Character]
     
     //=------------------------------------------------------------------------=
@@ -33,13 +33,13 @@ import Foundation
         //=--------------------------------------=
         // Count
         //=--------------------------------------=
-        self.tokens     = .init(minimumCapacity: tokens.count)
+        self.tokens/**/ = .init(minimumCapacity: tokens.count)
         self.characters = .init(minimumCapacity: tokens.count)
         //=--------------------------------------=
         // Links
         //=--------------------------------------=
         for token in tokens {
-            self.tokens    [character(token)] = token
+            self.tokens/**/[character(token)] = token
             self.characters[token] = character(token)
         }
     }

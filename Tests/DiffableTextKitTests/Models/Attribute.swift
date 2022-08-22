@@ -29,16 +29,16 @@ final class AttributeTests: XCTestCase {
     // MARK: Tests x Instances
     //=------------------------------------------------------------------------=
     
-    func testContentInstanceIsEmpty() {
+    func testContentIsEmpty() {
         XCTAssert(Attribute.content.isEmpty)
         XCTAssertEqual(Attribute.content,[])
     }
     
-    func testPhantomInstanceIsFull() {
+    func testPhantomIsFull() {
         XCTAssertEqual(Attribute.phantom, Attribute(all))
     }
     
-    func testRawValuesAreUnique() {
+    func testInstancesAreUnique() {
         XCTAssertEqual(Set(all.map(\.rawValue)).count, all.count)
     }
 }

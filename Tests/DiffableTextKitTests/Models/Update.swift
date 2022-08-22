@@ -29,7 +29,7 @@ final class UpdateTests: XCTestCase {
     // MARK: Tests x Instances
     //=------------------------------------------------------------------------=
     
-    func testRawValuesAreUnique() {
+    func testInstancesAreUnique() {
         XCTAssertEqual(Set(all.map(\.rawValue)).count, all.count)
     }
 }

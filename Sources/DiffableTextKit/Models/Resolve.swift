@@ -14,8 +14,6 @@
 /// A message describing selection behavior.
 @usableFromInline struct Resolve: OptionSet {
     
-    //=--------------------------------------------------------------------=
-    
     /// Resolve max selection.
     public static let max = Self(rawValue: 1 << 0)
     

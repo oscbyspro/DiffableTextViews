@@ -19,14 +19,10 @@ import UIKit
 
 /// An as-you-type formatting compatible UITextField.
 ///
-/// UITextField has two selection methods: drag and drop, and keyboard inputs.
-///
-///  - Use static   selection for drag and drop.
-///  - Use momentum selection for keyboard inputs.
+///  - Use static   selection on drag and drop.
+///  - Use momentum selection on keyboard inputs.
 ///
 @usableFromInline final class Field: UITextField {
-    
-    @usableFromInline typealias Offset = DiffableTextKit.Offset<UTF16>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -68,6 +64,15 @@ import UIKit
     override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         intent.remove(presses); super.pressesCancelled(presses, with: event)
     }
+}
+
+//*============================================================================*
+// MARK: * Field x UIKit
+//*============================================================================*
+
+extension UITextField {
+    
+    @usableFromInline typealias Offset = DiffableTextKit.Offset<UTF16>
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

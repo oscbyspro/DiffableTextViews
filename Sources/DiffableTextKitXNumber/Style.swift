@@ -122,8 +122,7 @@ public extension _Style {
         precision(Precision(integer: integer...integer, fraction: fraction))
     }
     
-    @inlinable func precision(integer: some RangeExpression<Int>,
-    fraction: some RangeExpression<Int>) -> Self {
+    @inlinable func precision(integer: some RangeExpression<Int>, fraction: some RangeExpression<Int>) -> Self {
         precision(Precision(integer: integer, fraction: fraction))
     }
 }

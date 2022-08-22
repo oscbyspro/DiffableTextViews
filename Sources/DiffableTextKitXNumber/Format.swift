@@ -33,7 +33,7 @@ public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatO
 }
 
 //*============================================================================*
-// MARK: * Format x Standard
+// MARK: * Format x Standard [...]
 //*============================================================================*
 
 extension      Decimal.FormatStyle: _Format & _Standard { }
@@ -44,7 +44,7 @@ extension      Decimal.FormatStyle.Percent: _Format & _Standard { }
 extension FloatingPointFormatStyle.Percent: _Format & _Standard where FormatInput: _Input { }
 
 //*============================================================================*
-// MARK: * Format x Currency
+// MARK: * Format x Currency [...]
 //*============================================================================*
 
 extension      Decimal.FormatStyle.Currency: _Format & _Currency { }
@@ -52,14 +52,14 @@ extension FloatingPointFormatStyle.Currency: _Format & _Currency where FormatInp
 extension       IntegerFormatStyle.Currency: _Format & _Currency where FormatInput: _Input { }
 
 //*============================================================================*
-// MARK: * Format x Strategy x Sign
+// MARK: * Format x Strategy x Sign [...]
 //*============================================================================*
 
 public enum     _SignDS      { case always, automatic }
 public protocol _SignDS_Init { init(_ value: _SignDS) }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Types
+// MARK: + Types [...]
 //=----------------------------------------------------------------------------=
 
 extension _NFSC_SignDS: _SignDS_Init {

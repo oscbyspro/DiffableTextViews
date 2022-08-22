@@ -14,8 +14,6 @@
 /// A model used to capture comparison results.
 @frozen @usableFromInline struct Changes: OptionSet {
     
-    //=------------------------------------------------------------------------=
-    
     public static let style = Self(rawValue: 1 << 0)
     public static let value = Self(rawValue: 1 << 1)
     public static let focus = Self(rawValue: 1 << 2)
