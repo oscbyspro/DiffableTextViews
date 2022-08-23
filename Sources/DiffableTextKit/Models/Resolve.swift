@@ -26,5 +26,5 @@
     
     //=--------------------------------------------------------------------=
     
-    @usableFromInline init(rawValue: UInt8) { self.rawValue = rawValue }
+    @inlinable init(rawValue: UInt8) { self.rawValue = rawValue }
 }

@@ -45,6 +45,15 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    /// Use this method to resolve a deferred selection.
+    @inlinable mutating func autocorrect() {
+        self.merge(selection: self.selection)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
     /// Use this method on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot, preference: Selection<Index>?) {
         //=--------------------------------------=
@@ -60,19 +69,6 @@
         self.preference = preference
         self.merge(selection: selection)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    /// Use this method to resolve selection.
-    @inlinable mutating func autocorrect() {
-        self.merge(selection: self.selection)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
     @inlinable mutating func merge(selection: Selection<Index>, resolve: Resolve = []) {
