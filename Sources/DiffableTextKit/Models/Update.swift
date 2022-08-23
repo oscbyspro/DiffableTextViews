@@ -12,11 +12,16 @@
 //*============================================================================*
 
 /// A message describing which properties should be updated.
+///
+/// It is recommended to update the value first, then the text before selection.
+///
+/// - Implement reentrant updates by only updating the value until it stabilizes.
+///
 @frozen public struct Update: OptionSet {
-        
-    public static let text      = Self(rawValue: 1 << 0)
-    public static let selection = Self(rawValue: 1 << 1)
-    public static let value     = Self(rawValue: 1 << 2)
+    
+    public static let value     = Self(rawValue: 1 << 0)
+    public static let text      = Self(rawValue: 1 << 1)
+    public static let selection = Self(rawValue: 1 << 2)
     
     //=------------------------------------------------------------------------=
     

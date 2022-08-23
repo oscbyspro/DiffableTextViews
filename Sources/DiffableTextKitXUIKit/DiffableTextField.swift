@@ -272,7 +272,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Value
             //=----------------------------------=
             if  let _ = self.update.remove(.value) {
-                self.upstream.value = self.context.value
+                self.upstream.value = context.value
                 //=------------------------------=
                 // Reentrance
                 //=------------------------------=
