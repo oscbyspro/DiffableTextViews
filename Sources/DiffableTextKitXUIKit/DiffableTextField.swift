@@ -93,7 +93,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock = Lock()
+        @usableFromInline let lock   = Lock()
+        @usableFromInline var update = Update()
 
         @usableFromInline var cache:   Cache!
         @usableFromInline var context: Context!
@@ -265,10 +266,24 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=
-            Status(upstream.style, upstream.value.wrappedValue, downstream.focus)
+            Status(upstream.style, upstream.value, downstream.focus)
         }
         
         @inlinable func push(_ update: Update) {
+            //=----------------------------------=
+            // State
+            //=----------------------------------=
+            self.update += update
+            //=----------------------------------=
+            // Value
+            //=----------------------------------=
+            if  let _ = self.update.remove(.value) {
+                self.upstream.value = self.context.value
+                //=------------------------------=
+                // Reentrance
+                //=------------------------------=
+                return
+            }
             //=----------------------------------=
             // Lock
             //=----------------------------------=
@@ -276,20 +291,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 // Text
                 //=------------------------------=
-                if update.contains(.text) {
+                if  let _ = self.update.remove(.text) {
                     self.downstream.text = context.text
                 }
                 //=------------------------------=
                 // Selection
                 //=------------------------------=
-                if update.contains(.selection) {
+                if  let _ = self.update.remove(.selection) {
                     self.downstream.selection = context.selection()
-                }
-                //=------------------------------=
-                // Value
-                //=------------------------------=
-                if update.contains(.value) {
-                    self.upstream.value.wrappedValue = context.value
                 }
             }
         }
