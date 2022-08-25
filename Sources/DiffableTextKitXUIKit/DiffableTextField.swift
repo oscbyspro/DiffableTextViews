@@ -152,7 +152,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
-            self.synchronize()
+            self.synchronize(.invariant)
         }
         
         //=--------------------------------------------------------------------=
@@ -160,9 +160,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never)
-        public func textField(_ textField: UITextField,
+        public func textField(_ view: UITextField,
         shouldChangeCharactersIn nsrange: NSRange,
-        replacementString characters: String) -> Bool {
+        replacementString text: String) -> Bool {
             //=----------------------------------=
             // Lock
             //=----------------------------------=
@@ -176,7 +176,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 Offset<UTF16>(nsrange.upperBound)
                 
                 let update = try self.context.merge(
-                characters, in: range, with: &cache)
+                text, in: range, with:  &self.cache)
                 //=------------------------------=
                 // Push
                 //=------------------------------=
@@ -193,11 +193,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             return false
         }
         
-        @inlinable @inline(never) public func textFieldDidChangeSelection(_ textField: UITextField) {
+        @inlinable @inline(never) public func textFieldDidChangeSelection(_ view: UITextField) {
             //=----------------------------------=
             // Marked
             //=----------------------------------=
-            if let _ = textField.markedTextRange {
+            if let _ = view.markedTextRange {
                 //=------------------------------=
                 // Push
                 //=------------------------------=
@@ -214,8 +214,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // Pull
                 //=------------------------------=
                 let update = self.context.merge(
-                selection: downstream.selection,
-                momentums: downstream.momentums)
+                downstream.selection,with:[.max,
+               .momentums(downstream.momentums)])
                 //=------------------------------=
                 // Push
                 //=------------------------------=
@@ -227,33 +227,45 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Events
         //=--------------------------------------------------------------------=
         
-        @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            let _ = textField.resignFirstResponder()
-            self.sidestream.onSubmit?(); return true
+        @inlinable public func textFieldShouldReturn(_ view: UITextField) -> Bool {
+            self.downstream.dismiss(); self.sidestream.onSubmit?(); return true
         }
         
-        @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
-            self.synchronize()
+        @inlinable public func textFieldDidBeginEditing(_ view: UITextField) {
+            self.synchronize([])
         }
         
-        @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
-            self.synchronize()
+        @inlinable public func textFieldDidEndEditing(_ view: UITextField) {
+            self.synchronize([])
         }
         
         //=--------------------------------------------------------------------=
         // MARK: Synchronization
         //=--------------------------------------------------------------------=
         
-        @inlinable func synchronize() {
+        @inlinable func synchronize(_ options: Synchronize) {
             //=----------------------------------=
             // Pull
             //=----------------------------------=
-            let status = self.pull()
-            let update = self.context.merge(status, with: &self.cache)
+            attempt: do {
+                let status = self.pull()
+                let update = try self.context.merge(
+                status, with: &cache, and:  options)
+                //=------------------------------=
+                // Push
+                //=------------------------------=
+                self.push(update)
             //=----------------------------------=
-            // Push
+            // Dismiss
             //=----------------------------------=
-            self.push(update)
+            } catch let reason {
+                Brrr.unsynchronizable << Info(reason)
+                Brrr.dismiss << Info(["reentrant view updates are prohibited"])
+                //=------------------------------=
+                // Task
+                //=------------------------------=
+                Task { self.downstream.dismiss() }
+            }
         }
         
         @inlinable func pull() -> Status<Style> {

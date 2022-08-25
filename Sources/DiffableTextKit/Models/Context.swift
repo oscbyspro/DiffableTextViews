@@ -164,7 +164,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on view update.
-    @inlinable public mutating func merge(_ status: Status, with cache: inout Cache) -> Update {
+    @inlinable public mutating func merge(
+    _ status: Status, with cache: inout Cache,
+    and options: Synchronize) throws -> Update {
         var update = Update()
         //=--------------------------------------=
         // Values
@@ -173,14 +175,20 @@ extension Context {
         if !values.merge(status) { return update }
         let next = Self(deferring: values, with: &cache, then: &update)
         //=--------------------------------------=
+        // Validation
+        //=--------------------------------------=
+        if  options.contains(.invariant), update.contains(.value) {
+            let  input = Info.mark(status.value)
+            let output = Info.mark(next  .value)
+            throw Info(["input \(input) != \(output) output"])
+        }
+        //=--------------------------------------=
         // Update x Active == 2
         //=--------------------------------------=
         if  layout != nil, next.layout != nil {
             self.unique()
             self.storage.status = next.status
-            self.storage.layout!.merge(
-            snapshot:/**/next.layout!.snapshot,
-            preference:  next.layout!.preference)
+            self.storage.layout!.merge(next.layout!.snapshot, and: next.layout!.preference)
         //=--------------------------------------=
         // Update x Active <= 1
         //=--------------------------------------=
@@ -199,8 +207,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to text.
-    @inlinable public mutating func merge<T>(_ characters: String,
-    in range: Range<Offset<T>>, with cache: inout Cache) throws -> Update {
+    @inlinable public mutating func merge<T>(
+    _ text: String, in range: Range<Offset<T>>,
+    with cache: inout Cache) throws -> Update {
         var update = Update()
         //=--------------------------------------=
         // Layout
@@ -209,8 +218,7 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let proposal = Proposal(layout!.snapshot,
-        with: Snapshot(characters), in:/**/range)
+        let proposal = Proposal(layout!.snapshot, with: text, in: range)
         let commit = try status.resolve(proposal, with: &cache)
         //=--------------------------------------=
         // Update
@@ -222,9 +230,7 @@ extension Context {
         self.unique()
         self.storage.status.value = commit.value
         self.storage.layout!.selection.collapse()
-        self.storage.layout!.merge(
-        snapshot:/**/commit.snapshot,
-        preference:  commit.selection)
+        self.storage.layout!.merge(commit.snapshot, and: commit.selection)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -236,7 +242,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
-    @inlinable public mutating func merge<T>(selection: Range<Offset<T>>, momentums: Bool) -> Update {
+    @inlinable public mutating func merge<T>(
+    _ selection: Range<Offset<T>>,  with options: Resolve) -> Update {
         var update = Update()
         //=--------------------------------------=
         // Layout
@@ -245,16 +252,12 @@ extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = Selection(
-        layout!.snapshot.range(at: selection))
+        let selection = Selection(layout!.snapshot.range(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.unique()
-        self.storage.layout!.merge(
-        selection: selection,
-        resolve: [.max, .momentums(momentums)])
-        
+        self.storage.layout!.merge(selection, with: options)
         update += .selection(layout!.selection != selection)
         //=--------------------------------------=
         // Return

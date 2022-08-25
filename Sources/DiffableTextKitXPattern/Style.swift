@@ -166,7 +166,7 @@ extension PatternTextStyle {
                 // Content <= Capacity
                 //=------------------------------=
                 if !virtuals.isEmpty {
-                    throw Info([.mark(mismatches.first!), "is invalid."])
+                    throw Info([.mark(mismatches.first!), "is invalid"])
                 //=------------------------------=
                 // Content >  Capacity
                 //=------------------------------=

@@ -50,8 +50,8 @@ public struct Proposal {
         self.base = base; self.replacement = replacement; self.range = range
     }
     
-    @inlinable public init<T>(_ base: Snapshot, with replacement: Snapshot, in range: Range<Offset<T>>) {
-        self.base = base; self.replacement = replacement; self.range = base.range(at: range)
+    @inlinable public init<T>(_ base: Snapshot, with replacement: String, in range: Range<Offset<T>>) {
+        self.init(base, with: Snapshot(replacement), in: base.range(at: range))
     }
     
     //=------------------------------------------------------------------------=
