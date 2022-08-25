@@ -70,16 +70,10 @@ extension Sequence where Element == Symbol {
     @inlinable public func nonvirtuals() -> String {
         String(lazy.nonvirtuals())
     }
-}
-
-//*============================================================================*
-// MARK: * Symbol x Sequence x Lazy [...]
-//*============================================================================*
-
-extension LazySequenceProtocol where Element == Symbol {
     
     /// A lazy sequence of nonvirtual characters.
-    @inlinable public func nonvirtuals() -> LazyMapSequence<LazyFilterSequence<Elements>, Character> {
+    @inlinable public func nonvirtuals() -> LazyMapSequence<LazyFilterSequence
+    <Self.Elements>, Character> where Self: LazySequenceProtocol {
         filter({!$0.attribute.contains(.virtual)}).map({$0.character})
     }
 }

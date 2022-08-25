@@ -19,18 +19,20 @@ import Foundation
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let zero  = Self(ascii: 48) // "0"
-    @usableFromInline static let one   = Self(ascii: 49) // "1"
-    @usableFromInline static let two   = Self(ascii: 50) // "2"
-    @usableFromInline static let three = Self(ascii: 51) // "3"
-    @usableFromInline static let four  = Self(ascii: 52) // "4"
-    @usableFromInline static let five  = Self(ascii: 53) // "5"
-    @usableFromInline static let six   = Self(ascii: 54) // "6"
-    @usableFromInline static let seven = Self(ascii: 55) // "7"
-    @usableFromInline static let eight = Self(ascii: 56) // "8"
-    @usableFromInline static let nine  = Self(ascii: 57) // "9"
+    @usableFromInline static let zero  = Self(ascii: "0")
+    @usableFromInline static let one   = Self(ascii: "1")
+    @usableFromInline static let two   = Self(ascii: "2")
+    @usableFromInline static let three = Self(ascii: "3")
+    @usableFromInline static let four  = Self(ascii: "4")
+    @usableFromInline static let five  = Self(ascii: "5")
+    @usableFromInline static let six   = Self(ascii: "6")
+    @usableFromInline static let seven = Self(ascii: "7")
+    @usableFromInline static let eight = Self(ascii: "8")
+    @usableFromInline static let nine  = Self(ascii: "9")
     
-    @usableFromInline static let allCases =  (48 ..< 58).map(Self.init)
+    @usableFromInline static let allCases = [
+    zero, one, two,   three, four,
+    five, six, seven, eight, nine]
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -42,7 +44,9 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    private init(ascii: UInt8) { self.ascii = ascii }
+    private init(ascii: Unicode.Scalar) {
+        self.ascii = UInt8(ascii:ascii)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

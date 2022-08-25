@@ -114,13 +114,14 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable var ascii: [UInt8] {
-        let size = integer.count+fraction.count+2
-        return Array<UInt8>.init(capacity: size){
-        $0.append(sign.ascii)
-        $0.append(contentsOf: integer.ascii)
-        guard let separator else { return }
-        $0.append(separator.ascii)
-        $0.append(contentsOf: fraction.ascii)}
+        var ascii = [UInt8]()
+        ascii.reserveCapacity(integer.count+fraction.count+2)
+        ascii.append(sign.ascii)
+        ascii.append(contentsOf: integer .ascii )
+        guard let separator else { return ascii }
+        ascii.append(separator.ascii)
+        ascii.append(contentsOf: fraction.ascii )
+        return ascii
     }
     
     //=------------------------------------------------------------------------=

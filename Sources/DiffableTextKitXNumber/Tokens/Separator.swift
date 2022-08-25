@@ -19,8 +19,8 @@ import Foundation
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let grouping = Self(ascii: 44) // ","
-    @usableFromInline static let fraction = Self(ascii: 46) // "."
+    @usableFromInline static let grouping = Self(ascii: ",")
+    @usableFromInline static let fraction = Self(ascii: ".")
     
     @usableFromInline static let allCases = [grouping, fraction]
     
@@ -34,7 +34,9 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    private init(ascii: UInt8) { self.ascii = ascii }
+    private init(ascii: Unicode.Scalar) {
+        self.ascii = UInt8(ascii:ascii)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

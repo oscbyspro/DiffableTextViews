@@ -197,7 +197,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Marked
             //=----------------------------------=
-            if let _ = view.markedTextRange {
+            if  let _ = view.markedTextRange {
                 //=------------------------------=
                 // Push
                 //=------------------------------=
@@ -228,7 +228,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ view: UITextField) -> Bool {
-            self.downstream.dismiss(); self.sidestream.onSubmit?(); return true
+            self.downstream.dismiss()
+            self.sidestream.onSubmit?()
+            return true
         }
         
         @inlinable public func textFieldDidBeginEditing(_ view: UITextField) {
@@ -260,7 +262,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             } catch let reason {
                 Brrr.unsynchronizable << Info(reason)
-                Brrr.dismiss << Info(["reentrant view updates are prohibited"])
+                Brrr.dismiss << Info(["cyclical view updates are prohibited"])
                 //=------------------------------=
                 // Task
                 //=------------------------------=

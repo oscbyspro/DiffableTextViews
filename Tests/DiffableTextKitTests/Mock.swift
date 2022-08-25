@@ -15,7 +15,6 @@ import Foundation
 //*============================================================================*
 
 struct Mock: DiffableTextStyle {
-    typealias Value = String
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -44,11 +43,11 @@ struct Mock: DiffableTextStyle {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    func format(_ value: Value, with cache: inout Void) -> String {
+    func format(_ value: String, with cache: inout Void) -> String {
         value
     }
     
-    func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
+    func interpret(_ value: String, with cache: inout Void) -> Commit<String> {
         var commit = Commit(value, Snapshot(value))
         
         if  selection {
@@ -58,7 +57,7 @@ struct Mock: DiffableTextStyle {
         return commit
     }
     
-    func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
+    func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<String> {
         interpret(proposal.lazy.merged().nonvirtuals())
     }
 }

@@ -19,8 +19,8 @@ import Foundation
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let positive = Self(ascii: 43) // "+"
-    @usableFromInline static let negative = Self(ascii: 45) // "-"
+    @usableFromInline static let positive = Self(ascii: "+")
+    @usableFromInline static let negative = Self(ascii: "-")
     
     @usableFromInline static let allCases = [positive, negative]
 
@@ -34,7 +34,9 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    private init(ascii: UInt8) { self.ascii = ascii }
+    private init(ascii: Unicode.Scalar) {
+        self.ascii = UInt8(ascii:ascii)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
