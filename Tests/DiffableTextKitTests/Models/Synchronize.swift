@@ -23,7 +23,7 @@ final class SynchronizeTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let all: [Synchronize] = [.invariant]
+    let all: [Synchronize] = [.acyclical]
 
     //=------------------------------------------------------------------------=
     // MARK: Tests x Instances

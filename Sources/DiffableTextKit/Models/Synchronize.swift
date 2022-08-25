@@ -14,8 +14,8 @@
 /// A message describing synchronization behavior.
 @frozen public struct Synchronize: OptionSet {
     
-    /// Requires input and output values to be equal.
-    public static let invariant = Self(rawValue: 1 << 0)
+    /// Requires that input and output values are equal.
+    public static let acyclical = Self(rawValue: 1 << 0)
     
     //=------------------------------------------------------------------------=
     

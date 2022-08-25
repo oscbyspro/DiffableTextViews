@@ -152,7 +152,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
-            self.synchronize(.invariant)
+            self.synchronize(.acyclical)
         }
         
         //=--------------------------------------------------------------------=
@@ -258,13 +258,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 self.push(update)
             //=----------------------------------=
-            // Dismiss
+            // Cyclical
             //=----------------------------------=
-            } catch let reason {
-                Brrr.unsynchronizable << Info(reason)
-                Brrr.dismiss << Info(["cyclical view updates are prohibited"])
+            } catch let cyclical {
+                Brrr.unsynchronizable << Info(cyclical)
+                Brrr.dismiss << Info([.mark("cyclical"), "view updates are prohibited"])
                 //=------------------------------=
-                // Task
+                // Dismiss
                 //=------------------------------=
                 Task { self.downstream.dismiss() }
             }

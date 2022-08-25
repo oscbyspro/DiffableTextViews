@@ -164,8 +164,7 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on view update.
-    @inlinable public mutating func merge(
-    _ status: Status, with cache: inout Cache,
+    @inlinable public mutating func merge(_ status: Status, with cache: inout Cache,
     and options: Synchronize) throws -> Update {
         var update = Update()
         //=--------------------------------------=
@@ -177,10 +176,10 @@ extension Context {
         //=--------------------------------------=
         // Validation
         //=--------------------------------------=
-        if  options.contains(.invariant), update.contains(.value) {
-            let  input = Info.mark(status.value)
-            let output = Info.mark(next  .value)
-            throw Info(["input \(input) != \(output) output"])
+        if  options.contains(.acyclical), update.contains(.value) {
+            let  input = Info.init([.note(status.value), "[input]"])
+            let output = Info.init([.note(next  .value),"[output]"])
+            throw Info([.mark("cyclical"), "\(input) != \(output)"])
         }
         //=--------------------------------------=
         // Update x Active == 2
@@ -207,8 +206,7 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to text.
-    @inlinable public mutating func merge<T>(
-    _ text: String, in range: Range<Offset<T>>,
+    @inlinable public mutating func merge<T>(_ text: String, in range: Range<Offset<T>>,
     with cache: inout Cache) throws -> Update {
         var update = Update()
         //=--------------------------------------=
@@ -242,8 +240,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
-    @inlinable public mutating func merge<T>(
-    _ selection: Range<Offset<T>>,  with options: Resolve) -> Update {
+    @inlinable public mutating func merge<T>(_ selection: Range<Offset<T>>,
+    with options: Resolve) -> Update {
         var update = Update()
         //=--------------------------------------=
         // Layout

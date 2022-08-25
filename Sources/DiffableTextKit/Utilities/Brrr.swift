@@ -16,7 +16,7 @@
 /// It uses conditional compilation such that it has no size or cost in RELEASE mode.
 ///
 public struct Brrr: Equatable {
-        
+    
     public static let dismiss          = Self("dismiss")
     public static let cancellation     = Self("cancellation")
     public static let autocorrection   = Self("autocorrection")
