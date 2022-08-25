@@ -16,10 +16,12 @@
 /// It uses conditional compilation such that it has no size or cost in RELEASE mode.
 ///
 public struct Brrr: Equatable {
-    
-    public static let cancellation   = Self("User input cancelled:")
-    public static let autocorrection = Self("User input autocorrected:")
-    
+        
+    public static let dismiss          = Self("dismiss")
+    public static let cancellation     = Self("cancellation")
+    public static let autocorrection   = Self("autocorrection")
+    public static let unsynchronizable = Self("unsynchronizable")
+
     //=------------------------------------------------------------------------=
     
     #if DEBUG
@@ -36,7 +38,7 @@ public struct Brrr: Equatable {
     
     @inlinable @inline(__always) public static func << (brrr: Self, message: @autoclosure () -> Any) {
         #if DEBUG
-        Swift.print(brrr.context, message())
+        Swift.print("[DiffableTextViews] \(brrr.context): \(message())")
         #endif
     }
 }

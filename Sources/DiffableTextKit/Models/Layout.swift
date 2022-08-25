@@ -30,8 +30,8 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot, preference: Selection<Index>?) {
-        self.init(deferring: (snapshot, preference)); self.autocorrect()
+    @inlinable init(_ snapshot: Snapshot, and preference: Selection<Index>?) {
+        self.init(deferring:(snapshot, preference)); /**/ self.autocorrect()
     }
     
     /// Use this method to defer autocorrection.
@@ -47,7 +47,7 @@
     
     /// Use this method to resolve a deferred selection.
     @inlinable mutating func autocorrect() {
-        self.merge(selection: self.selection)
+        self.merge(selection)
     }
     
     //=------------------------------------------------------------------------=
@@ -55,7 +55,7 @@
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to text.
-    @inlinable mutating func merge(snapshot: Snapshot, preference: Selection<Index>?) {
+    @inlinable mutating func merge(_ snapshot: Snapshot, and preference: Selection<Index>?) {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
@@ -67,15 +67,15 @@
         //=--------------------------------------=
         self.snapshot = snapshot
         self.preference = preference
-        self.merge(selection: selection)
+        self.merge(selection)
     }
     
     /// Use this method on changes to selection.
-    @inlinable mutating func merge(selection: Selection<Index>, resolve: Resolve = []) {
+    @inlinable mutating func merge(_ selection: Selection<Index>, with options: Resolve = []) {
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=
-        if  resolve.contains(.max), selection == .max(snapshot) {
+        if  options.contains(.max), selection == .max(snapshot) {
             self.selection = selection; return
         }
         //=--------------------------------------=
@@ -89,7 +89,7 @@
         //=--------------------------------------=
         var carets = selection.carets().detached()
         
-        if  resolve.contains(.momentums) {
+        if  options.contains(.momentums) {
             carets.lower.momentum = Direction(from: self.selection.lower, to: selection.lower)
             carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
         }

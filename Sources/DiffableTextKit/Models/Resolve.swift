@@ -12,7 +12,7 @@
 //*========================================================================*
 
 /// A message describing selection behavior.
-@usableFromInline struct Resolve: OptionSet {
+@frozen public struct Resolve: OptionSet {
     
     /// Resolve max selection.
     public static let max = Self(rawValue: 1 << 0)
@@ -22,9 +22,9 @@
     
     //=--------------------------------------------------------------------=
     
-    @usableFromInline var rawValue: UInt8
+    public var rawValue: UInt8
     
     //=--------------------------------------------------------------------=
     
-    @inlinable init(rawValue: UInt8) { self.rawValue = rawValue }
+    @inlinable public init(rawValue: UInt8) { self.rawValue = rawValue }
 }

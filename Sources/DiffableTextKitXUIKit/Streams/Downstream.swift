@@ -54,6 +54,10 @@ import UIKit
         set { view.delegate = newValue }
     }
     
+    @inlinable func dismiss() {
+        self.view.resignFirstResponder()
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
