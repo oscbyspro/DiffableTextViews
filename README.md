@@ -79,6 +79,7 @@ diffableTextViews_textContentType(_:)
 diffableTextViews_textFieldStyle(_:)
 diffableTextViews_textInputAutocapitalization(_:)
 diffableTextViews_tint(_:)
+diffableTextViews_toolbarDoneButton(_:)
 ```
 
 # Styles

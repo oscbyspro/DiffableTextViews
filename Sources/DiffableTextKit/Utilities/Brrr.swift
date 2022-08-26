@@ -17,11 +17,10 @@
 ///
 public struct Brrr: Equatable {
     
-    public static let dismiss          = Self("dismiss")
     public static let cancellation     = Self("cancellation")
     public static let autocorrection   = Self("autocorrection")
     public static let unsynchronizable = Self("unsynchronizable")
-
+    
     //=------------------------------------------------------------------------=
     
     #if DEBUG

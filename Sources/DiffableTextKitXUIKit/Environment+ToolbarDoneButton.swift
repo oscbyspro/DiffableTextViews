@@ -10,26 +10,27 @@
 #if canImport(UIKit)
 
 import SwiftUI
+import UIKit
 
 //*============================================================================*
-// MARK: * Environment x Text Field Style [...]
+// MARK: * Environment x Toolbar Done Button [...]
 //*============================================================================*
 
-@usableFromInline enum DiffableTextViews_TextFieldStyle: EnvironmentKey {
-    @usableFromInline static let defaultValue: UITextField.BorderStyle = .none
+@usableFromInline enum DiffableTextViews_ToolbarDoneButton: EnvironmentKey {
+    @usableFromInline static let defaultValue: UIBarButtonItem.Style? = nil
 }
 
 extension EnvironmentValues {
-    @inlinable var diffableTextViews_textFieldStyle: UITextField.BorderStyle {
-        get { self[DiffableTextViews_TextFieldStyle.self] }
-        set { self[DiffableTextViews_TextFieldStyle.self] = newValue }
+    @inlinable var diffableTextViews_toolbarDoneButton: UIBarButtonItem.Style? {
+        get { self[DiffableTextViews_ToolbarDoneButton.self] }
+        set { self[DiffableTextViews_ToolbarDoneButton.self] = newValue }
     }
 }
 
 public extension View {
-    @inlinable func diffableTextViews_textFieldStyle(
-    _ style: UITextField.BorderStyle) -> some View  {
-        environment(\.diffableTextViews_textFieldStyle, style)
+    @inlinable func diffableTextViews_toolbarDoneButton(
+    _ style: UIBarButtonItem.Style = .plain) -> some View  {
+        environment(\.diffableTextViews_toolbarDoneButton, style)
     }
 }
 

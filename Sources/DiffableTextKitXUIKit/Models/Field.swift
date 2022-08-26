@@ -46,6 +46,27 @@ import UIKit
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline func setupToolbarDoneButton(_ style: UIBarButtonItem.Style) {
+        let toolbar = UIToolbar()
+        let button  = UIBarButtonItem(systemItem: .done)
+        let spacer  = UIBarButtonItem(systemItem: .flexibleSpace)
+        let insets  = UIBarButtonItem(systemItem: .fixedSpace)
+        let dismiss = UIAction{[weak self] _ in self?.resignFirstResponder()}
+        
+        insets.width = 8
+        button.style = style
+        button.primaryAction = dismiss
+        
+        toolbar.items = [insets, spacer, button, insets]
+        toolbar.sizeToFit()
+        
+        self.inputAccessoryView = toolbar
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Events
     //=------------------------------------------------------------------------=
     

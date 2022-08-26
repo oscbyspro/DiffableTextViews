@@ -32,6 +32,7 @@ import SwiftUI
 /// - diffableTextViews_textFieldStyle(\_:)
 /// - diffableTextViews_textInputAutocapitalization(\_:)
 /// - diffableTextViews_tint(\_:)
+/// - diffableTextViews_toolbarDoneButton(\_:)
 ///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
@@ -116,7 +117,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Downstream
             //=----------------------------------=
             self.downstream.delegate = self
-            self.downstream.textFieldStyle(environment)
+            self.downstream.setupTextFieldStyle(environment)
+            self.downstream.setupToolbarDoneButton(environment)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=

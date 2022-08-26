@@ -59,7 +59,20 @@ import UIKit
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Transformations x Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func setupTextFieldStyle(_ environment: EnvironmentValues) {
+        self.view.borderStyle = environment.diffableTextViews_textFieldStyle
+    }
+    
+    @inlinable func setupToolbarDoneButton(_ environment: EnvironmentValues) {
+        guard let style = environment.diffableTextViews_toolbarDoneButton else { return }
+        self.view.setupToolbarDoneButton(style)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations x Update
     //=------------------------------------------------------------------------=
     
     @inlinable func placeholder(_ placeholder: String) {
@@ -95,10 +108,6 @@ import UIKit
     
     @inlinable func textContentType(_ environment: EnvironmentValues) {
         self.view.textContentType = environment.diffableTextViews_textContentType
-    }
-    
-    @inlinable func textFieldStyle(_ environment: EnvironmentValues) {
-        self.view.borderStyle = environment.diffableTextViews_textFieldStyle
     }
     
     @inlinable func textInputAutocapitalization(_ environment: EnvironmentValues) {
