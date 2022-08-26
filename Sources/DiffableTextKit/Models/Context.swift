@@ -164,8 +164,13 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on view update.
-    @inlinable public mutating func merge(_ status: Status, with cache: inout Cache,
-    and options: Synchronize) throws -> Update {
+    ///
+    /// Merges inputs unless an optional constraint is broken.
+    ///
+    /// - Throws: A message describing the optional constraint that was broken.
+    ///
+    @inlinable @inline(never) public mutating func merge(_ status: Status,
+    with cache: inout Cache, and options: Synchronize) throws -> Update {
         var update = Update()
         //=--------------------------------------=
         // Values
@@ -206,8 +211,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to text.
-    @inlinable public mutating func merge<T>(_ text: String, in range: Range<Offset<T>>,
-    with cache: inout Cache) throws -> Update {
+    @inlinable @inline(never) public mutating func merge<T>(_ text: String,
+    in range: Range<Offset<T>>, with cache: inout Cache) throws -> Update {
         var update = Update()
         //=--------------------------------------=
         // Layout
@@ -240,8 +245,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Use this method on changes to selection.
-    @inlinable public mutating func merge<T>(_ selection: Range<Offset<T>>,
-    with options: Resolve) -> Update {
+    @inlinable @inline(never) public mutating func merge<T>(
+    _ selection: Range<Offset<T>>, with options: Resolve) -> Update {
         var update = Update()
         //=--------------------------------------=
         // Layout

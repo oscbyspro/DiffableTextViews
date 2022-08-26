@@ -102,7 +102,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var sidestream = Sidestream()
         
         //=--------------------------------------------------------------------=
-        // MARK: Transformations
+        // MARK: Events
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never) func setup(
@@ -155,8 +155,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.synchronize(.acyclical)
         }
         
+        @inlinable @inline(never) public func textFieldDidBeginEditing(_ view: UITextField) {
+            self.synchronize([])
+        }
+        
+        @inlinable @inline(never) public func textFieldDidEndEditing(_   view: UITextField) {
+            self.synchronize([])
+        }
+        
         //=--------------------------------------------------------------------=
-        // MARK: Events
+        // MARK: Interactions
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never)
@@ -185,7 +193,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Cancellation
             //=----------------------------------=
             } catch let reason {
-                Brrr.cancellation << Info(reason)
+                Brrr.cancellation << reason
             }
             //=----------------------------------=
             // Decline Automatic Insertion
@@ -223,22 +231,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             }
         }
         
-        //=--------------------------------------------------------------------=
-        // MARK: Events
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public func textFieldShouldReturn(_ view: UITextField) -> Bool {
+        @inlinable @inline(never) public func textFieldShouldReturn(_ view: UITextField) -> Bool {
             self.downstream.dismiss()
             self.sidestream.onSubmit?()
             return true
-        }
-        
-        @inlinable public func textFieldDidBeginEditing(_ view: UITextField) {
-            self.synchronize([])
-        }
-        
-        @inlinable public func textFieldDidEndEditing(_ view: UITextField) {
-            self.synchronize([])
         }
         
         //=--------------------------------------------------------------------=
@@ -258,11 +254,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 self.push(update)
             //=----------------------------------=
-            // Cyclical
+            // Unsynchronizable
             //=----------------------------------=
-            } catch let cyclical {
-                Brrr.unsynchronizable << Info(cyclical)
-                Brrr.dismiss << Info([.mark("cyclical"), "view updates are prohibited"])
+            } catch let reason {
+                Brrr.unsynchronizable << reason
                 //=------------------------------=
                 // Dismiss
                 //=------------------------------=
