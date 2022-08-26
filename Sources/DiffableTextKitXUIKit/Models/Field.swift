@@ -46,7 +46,7 @@ import UIKit
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Toolbar
     //=------------------------------------------------------------------------=
     
     @usableFromInline func setupToolbarDoneButton(_ style: UIBarButtonItem.Style) {
@@ -67,7 +67,7 @@ import UIKit
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Events
+    // MARK: Interactions
     //=------------------------------------------------------------------------=
     
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {

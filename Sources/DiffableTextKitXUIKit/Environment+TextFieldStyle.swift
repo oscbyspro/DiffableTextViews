@@ -27,8 +27,7 @@ extension EnvironmentValues {
 }
 
 public extension View {
-    @inlinable func diffableTextViews_textFieldStyle(
-    _ style: UITextField.BorderStyle) -> some View  {
+    @inlinable func diffableTextViews_textFieldStyle(_  style: UITextField.BorderStyle) -> some View  {
         environment(\.diffableTextViews_textFieldStyle, style)
     }
 }

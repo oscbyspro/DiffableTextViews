@@ -28,8 +28,7 @@ extension EnvironmentValues {
 }
 
 public extension View {
-    @inlinable func diffableTextViews_toolbarDoneButton(
-    _ style: UIBarButtonItem.Style = .plain) -> some View  {
+    @inlinable func diffableTextViews_toolbarDoneButton(_  style: UIBarButtonItem.Style = .plain) -> some View  {
         environment(\.diffableTextViews_toolbarDoneButton, style)
     }
 }
