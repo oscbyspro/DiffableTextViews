@@ -94,6 +94,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: State
         //=--------------------------------------------------------------------=
         
+        @usableFromInline let lock = Lock()
+        
         @usableFromInline var cache:   Cache!
         @usableFromInline var context: Context!
         @usableFromInline var update = Update()
@@ -174,7 +176,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         shouldChangeCharactersIn nsrange: NSRange,
         replacementString text: String) -> Bool {
             //=----------------------------------=
-            // Lock
+            // Wait
             //=----------------------------------=
             guard !update else { return false }
             //=----------------------------------=
@@ -205,9 +207,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable @inline(never) public func textFieldDidChangeSelection(_ view: UITextField) {
             //=----------------------------------=
+            // Locked
+            //=----------------------------------=
+            guard !lock.isLocked else { return }
+            //=----------------------------------=
+            // Reentrance, Known Due To Push Lock
+            //=----------------------------------=
+            if !update.isEmpty {
+                //=------------------------------=
+                // Push
+                //=------------------------------=
+                self.push([.text, .selection])
+            //=----------------------------------=
             // Marked
             //=----------------------------------=
-            if  let _ = view.markedTextRange {
+            } else if let _ = view.markedTextRange {
                 //=------------------------------=
                 // Push
                 //=------------------------------=
@@ -216,10 +230,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Normal
             //=----------------------------------=
             } else {
-                //=------------------------------=
-                // Lock
-                //=------------------------------=
-                guard !update else { return }
                 //=------------------------------=
                 // Pull
                 //=------------------------------=
@@ -290,16 +300,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 return
             }
             //=----------------------------------=
-            // Text
+            // Lock
             //=----------------------------------=
-            if  let _ = self.update.remove(.text) {
-                self.downstream.text = context.text
-            }
-            //=----------------------------------=
-            // Selection
-            //=----------------------------------=
-            if  let _ = self.update.remove(.selection) {
-                self.downstream.selection = context.selection()
+            self.lock.perform {
+                //=------------------------------=
+                // Text
+                //=------------------------------=
+                if  let _ = self.update.remove(.text) {
+                    self.downstream.text = context.text
+                }
+                //=------------------------------=
+                // Selection
+                //=------------------------------=
+                if  let _ = self.update.remove(.selection) {
+                    self.downstream.selection = context.selection()
+                }
             }
         }
     }
