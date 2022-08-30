@@ -35,9 +35,8 @@ public extension View {
     ///
     /// ```
     /// DiffableTextField("Username", text: $username, style: .normal)
-    ///     .onSubmit {
-    ///         guard model.validate() else { return }
-    ///         model.login()
+    ///     .diffableTextViews_onSubmit {
+    ///         print("Validate and try to login with \(username)...")
     ///     }
     /// ```
     ///

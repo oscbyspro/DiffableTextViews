@@ -34,13 +34,15 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
-        var S0 = self; S0.placeholders = .init(placeholders); return S0
-    }
-    
+    /// Marks a single character as a placeholder.
     @inlinable public func placeholders(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
         var S0 = self; S0.placeholders = .init((character, predicate)); return S0
+    }
+    
+    /// Marks multiple characters as placeholders.
+    @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
+        var S0 = self; S0.placeholders = .init(placeholders); return S0
     }
     
     //=------------------------------------------------------------------------=
@@ -249,17 +251,37 @@ extension PatternTextStyle {
 // MARK: * Style x Init
 //*============================================================================*
 //=----------------------------------------------------------------------------=
-// MARK: + String [...]
+// MARK: + String
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == PatternTextStyle<String> {
+    
+    /// Creates a `PatternTextStyle` without placeholders.
+    ///
+    /// ```
+    /// DiffableTextField(value: $number) {
+    ///     .pattern("+## (###) ###-##-##")
+    ///     .placeholders("#") { $0.isASCII && $0.isNumber }
+    /// }
+    /// ```
+    ///
     @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Array<Character> [...]
+// MARK: + Array<Character>
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
+    
+    /// Creates a `PatternTextStyle` without placeholders.
+    ///
+    /// ```
+    /// DiffableTextField(value: $number) {
+    ///     .pattern("+## (###) ###-##-##")
+    ///     .placeholders("#") { $0.isASCII && $0.isNumber }
+    /// }
+    /// ```
+    ///
     @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }
