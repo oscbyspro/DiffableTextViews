@@ -72,7 +72,7 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     
     func testDecimal() {
-        XCTAssertCurrencies(Decimal(string: "-1234567.89")!)
+        XCTAssertCurrencies(Decimal(string: "-34567890.12")!)
     }
 }
 

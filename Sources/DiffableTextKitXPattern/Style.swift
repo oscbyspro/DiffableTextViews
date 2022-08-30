@@ -24,14 +24,14 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     
     public var pattern: String
     public var placeholders: Placeholders
-    public var hidden: Bool
+    public var hidden: Bool = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ pattern: String, placeholders: Placeholders = .init(), hidden: Bool = false) {
-        self.pattern = pattern; self.placeholders = placeholders; self.hidden = hidden
+    @inlinable public init(_ pattern: String, placeholders: Placeholders = .init()) {
+        self.pattern = pattern; self.placeholders = placeholders
     }
     
     //=------------------------------------------------------------------------=
@@ -41,17 +41,18 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     /// Marks a single character as the style's placeholder.
     @inlinable public func placeholders(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
-        var S0 = self; S0.placeholders = .init((character, predicate)); return S0
+        self.placeholders((character, predicate))
+    }
+    
+    /// Marks a single character as the style's placeholder.
+    @inlinable public func placeholders(_ some: (Character, (Character) -> Bool)) -> Self {
+        var S0 = self; S0.placeholders = .init(some); return S0
     }
     
     /// Marks multiple characters as the style's placeholders.
-    @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
-        var S0 = self; S0.placeholders = .init(placeholders); return S0
+    @inlinable public func placeholders(_ many: [Character: (Character) -> Bool]) -> Self {
+        var S0 = self; S0.placeholders = .init(many); return S0
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
     
     /// Hides the pattern's suffix.
     ///

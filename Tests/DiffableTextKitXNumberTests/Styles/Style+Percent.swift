@@ -41,7 +41,7 @@ extension StyleTestsOnPercent {
     //=------------------------------------------------------------------------=
     
     func testDecimal() {
-        XCTAssertLocales(Decimal(string: "-1234567.89")!)
+        XCTAssertLocales(Decimal(string: "-34567890.12")!)
     }
 }
 

@@ -29,12 +29,16 @@ public struct PatternTextPlaceholders: Equatable {
         self.option = .none
     }
     
-    @inlinable public init(_ placeholers: (Character, (Character) -> Bool)) {
-        self.option = .some(Some(placeholers))
+    @inlinable public init(_ character: Character, where predicate: @escaping (Character) -> Bool) {
+        self.option = .some(Some((character, predicate)))
     }
     
-    @inlinable public init(_ placeholers: [Character: (Character) -> Bool]) {
-        self.option = .many(Many(placeholers))
+    @inlinable public init(_ some: (Character, (Character) -> Bool)) {
+        self.option = .some(Some(some))
+    }
+    
+    @inlinable public init(_ many: [Character: (Character) -> Bool]) {
+        self.option = .many(Many(many))
     }
     
     //=------------------------------------------------------------------------=
