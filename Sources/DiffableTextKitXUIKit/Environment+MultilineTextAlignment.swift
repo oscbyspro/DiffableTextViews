@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Multiline Text Alignment [...]
+// MARK: * Environment x Multiline Text Alignment
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_MultilineTextAlignment: EnvironmentKey {
     @usableFromInline static let defaultValue: TextAlignment = .leading
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_multilineTextAlignment: TextAlignment {
@@ -26,9 +33,28 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_multilineTextAlignment(_  alignment: TextAlignment) -> some View {
-        environment(\.diffableTextViews_multilineTextAlignment, alignment)
+    
+    /// Sets the alignment of text a diffable text view.
+    ///
+    /// It is similar to `View/multilineTextAlignment(_:)`.
+    ///
+    /// ```
+    /// DiffableTextField("Amount", value: $value, style: .number)
+    ///     .multilineTextAlignment(.trailing)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `TextAlignment.leading`.
+    /// - This method was added for consistency.
+    ///
+    @inlinable func diffableTextViews_multilineTextAlignment(_ alignment: TextAlignment) -> some View {
+        self.environment(\.diffableTextViews_multilineTextAlignment, alignment)
     }
 }
 

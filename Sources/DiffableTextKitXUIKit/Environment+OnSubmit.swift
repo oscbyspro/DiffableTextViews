@@ -31,10 +31,23 @@ public extension View {
     
     /// Adds an action to perform when the user submits a value to this view.
     ///
-    /// DiffableTextViews trigger this action when the user hits the return key.
+    /// It is similar to `View/onSubmit(_:)`.
     ///
-    @inlinable func diffableTextViews_onSubmit(_  action: (() -> Void)?) -> some View {
-        environment(\.diffableTextViews_onSubmit, action.map(Trigger.init))
+    /// ```
+    /// DiffableTextField("Username", text: $username, style: .normal)
+    ///     .onSubmit {
+    ///         guard model.validate() else { return }
+    ///         model.login()
+    ///     }
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The action triggers when the user hits the return key.
+    /// - The `View/onSubmit(_:)` environment value is inaccessible.
+    ///
+    @inlinable func diffableTextViews_onSubmit(_ action: (() -> Void)?) -> some View {
+        self.environment(\.diffableTextViews_onSubmit, action.map(Trigger.init))
     }
 }
 

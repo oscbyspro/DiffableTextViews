@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Submit Label [...]
+// MARK: * Environment x Submit Label
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_SubmitLabel: EnvironmentKey {
     @usableFromInline static let defaultValue: UIReturnKeyType = .default
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_submitLabel: UIReturnKeyType {
@@ -26,9 +33,28 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_submitLabel(_  label: UIReturnKeyType) -> some View {
-        environment(\.diffableTextViews_submitLabel, label)
+    
+    /// Sets the submit label for diffable text views.
+    ///
+    /// It is similar to `View/submitLabel(_:)`.
+    ///
+    /// ```
+    /// DiffableTextField("Prints on submit...", value: $value, style: style)
+    ///     .diffableTextViews_submitLabel(.return)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `UIReturnKeyType.default`.
+    /// - The `View/submitLabel(_:)` environment value is inaccessible.
+    ///
+    @inlinable func diffableTextViews_submitLabel(_ label: UIReturnKeyType) -> some View {
+        self.environment(\.diffableTextViews_submitLabel, label)
     }
 }
 

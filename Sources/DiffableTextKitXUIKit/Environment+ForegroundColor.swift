@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Foreground Color [...]
+// MARK: * Environment x Foreground Color
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_ForegroundColor: EnvironmentKey {
     @usableFromInline static let defaultValue: Color? = nil
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_foregroundColor: Color? {
@@ -26,9 +33,28 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_foregroundColor(_  color: Color?) -> some View {
-        environment(\.diffableTextViews_foregroundColor, color)
+    
+    /// Sets the text color of diffable text views.
+    ///
+    /// It is similar to `View/foregroundColor(_:)`.
+    ///
+    /// ```
+    /// DiffableTextField("Amount", value: $amount, style: .number)
+    ///     .diffableTextViews_foregroundColor(amount > 100 ? .red : nil)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `Color.primary`.
+    /// - The `View/foregroundColor(_:)` environment value is inaccessible.
+    ///
+    @inlinable func diffableTextViews_foregroundColor(_ color: Color?) -> some View {
+        self.environment(\.diffableTextViews_foregroundColor,  color)
     }
 }
 

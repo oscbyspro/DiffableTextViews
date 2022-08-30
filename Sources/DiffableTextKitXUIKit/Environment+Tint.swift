@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Tint [...]
+// MARK: * Environment x Tint
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_Tint: EnvironmentKey {
     @usableFromInline static let defaultValue: Color? = nil
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_tint: Color? {
@@ -26,9 +33,28 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_tint(_  color: Color?) -> some View {
-        environment(\.diffableTextViews_tint, color)
+    
+    /// Sets the tint color within diffable text views.
+    ///
+    /// It is similar to `View/tint(_:)` and affects text selection.
+    ///
+    /// ```
+    /// DiffableTextField("Look, selection is green!", value: $value)
+    ///     .diffableTextViews_tint(.green)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `Color.accentColor`.
+    /// - The `View/tint(_:)` environment value is inaccessible.
+    ///
+    @inlinable func diffableTextViews_tint(_ color: Color?) -> some View {
+        self.environment(\.diffableTextViews_tint,  color)
     }
 }
 

@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Keyboard Type [...]
+// MARK: * Environment x Keyboard Type
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_KeyboardType: EnvironmentKey {
     @usableFromInline static let defaultValue: UIKeyboardType = .default
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_keyboardType: UIKeyboardType {
@@ -26,9 +33,28 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_keyboardType(_  type: UIKeyboardType) -> some View {
-        environment(\.diffableTextViews_keyboardType, type)
+    
+    /// Sets the keyboard type for diffable text views.
+    ///
+    /// It is similar to `View/keyboardType(_:)`.
+    ///
+    /// ```
+    /// TextField("Amount", value: $amount, style: .currency("USD"))
+    ///     .keyboardType(.decimalPad)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `UIKeyboardType.default`.
+    /// - The `View/keyboardType(_:)` environment value is inaccessible.
+    ///
+    @inlinable func diffableTextViews_keyboardType(_ type: UIKeyboardType) -> some View {
+        self.environment(\.diffableTextViews_keyboardType, type)
     }
 }
 

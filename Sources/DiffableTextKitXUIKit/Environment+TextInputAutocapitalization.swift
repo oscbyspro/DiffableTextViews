@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Text Input Autocapitalization [...]
+// MARK: * Environment x Text Input Autocapitalization
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_TextInputAutocapitalization: EnvironmentKey {
     @usableFromInline static let defaultValue: UITextAutocapitalizationType? = nil
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_textInputAutocapitalization: UITextAutocapitalizationType? {
@@ -26,10 +33,29 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
+    
+    /// Sets how often the shift key in the keyboard is automatically enabled.
+    ///
+    /// It is similar to `View/textInputAutocapitalization(_:)`.
+    ///
+    /// ```
+    /// DiffableTextField("Username", value: $username, style: .normal)
+    ///     .diffableTextViews_textInputAutocapitalization(.never)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default is `TextInputAutocapitalization.sentences`.
+    /// - The `View/textInputAutocapitalization(_:)` environment value is inaccessible.
+    ///
     @inlinable func diffableTextViews_textInputAutocapitalization(
     _ autocapitalization: UITextAutocapitalizationType?) -> some View {
-        environment(\.diffableTextViews_textInputAutocapitalization, autocapitalization)
+        self.environment(\.diffableTextViews_textInputAutocapitalization, autocapitalization)
     }
 }
 

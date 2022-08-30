@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Autocorrection Disabled [...]
+// MARK: * Environment x Autocorrection Disabled
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_AutocorrectionDisabled: EnvironmentKey {
     @usableFromInline static let defaultValue: Bool = false
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_autocorrectionDisabled: Bool {
@@ -26,9 +33,28 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_autocorrectionDisabled(_  disabled: Bool = true) -> some View {
-        environment(\.diffableTextViews_autocorrectionDisabled, disabled)
+    
+    /// Sets whether to disable autocorrection for diffable text views.
+    ///
+    /// It is similar to `View/autocorrectionDisabled(_:)`.
+    ///
+    /// ```
+    /// DiffableTextField("Text", value: $text, style: .normal)
+    ///     .diffableTextViews_autocorrectionDisabled(true)
+    /// ```
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `false`.
+    /// - This method was added for consistency.
+    ///
+    @inlinable func diffableTextViews_autocorrectionDisabled(_ disabled: Bool = true) -> some View {
+        self.environment(\.diffableTextViews_autocorrectionDisabled, disabled)
     }
 }
 

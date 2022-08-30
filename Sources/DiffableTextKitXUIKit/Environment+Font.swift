@@ -12,12 +12,19 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Font [...]
+// MARK: * Environment x Font
 //*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Keys
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum DiffableTextViews_Font: EnvironmentKey {
     @usableFromInline static let defaultValue: DiffableTextFont? = nil
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Values
+//=----------------------------------------------------------------------------=
 
 extension EnvironmentValues {
     @inlinable var diffableTextViews_font: DiffableTextFont? {
@@ -26,9 +33,33 @@ extension EnvironmentValues {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + View
+//=----------------------------------------------------------------------------=
+
 public extension View {
-    @inlinable func diffableTextViews_font(_  font: DiffableTextFont?) -> some View {
-        environment(\.diffableTextViews_font, font)
+    
+    /// Sets the default font for text in diffable text views.
+    ///
+    /// It is similar to `View/font(_:)` but uses a SwiftUI-esque system font type.
+    ///
+    /// ```
+    /// DiffableTextField("Monospaced", value: $value, style: style)
+    ///     .diffableTextViews_font(.body.monospaced())
+    /// ```
+    ///
+    /// Monospaced fonts are recommended because they make as-you-type formatting
+    /// more visually predictable. Sometimes it does not matter much, however. As-you-type
+    /// formatting with trailing text alignment works fine with just about any font,
+    /// because then the caret and/or selection does not jump around as much.
+    ///
+    /// **Notes**
+    ///
+    /// - The default value is `DiffableTextFont.body`.
+    /// - It is not yet possible to convert `SwiftUI.Font` to `UIKit.UIFont`.
+    ///
+    @inlinable func diffableTextViews_font(_ font: DiffableTextFont?) -> some View {
+        self.environment(\.diffableTextViews_font, font)
     }
 }
 
