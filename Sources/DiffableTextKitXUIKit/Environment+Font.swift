@@ -39,7 +39,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets the default font for text in diffable text views.
+    /// Sets the font for diffable text views.
     ///
     /// It is similar to `View/font(_:)` but uses a SwiftUI-esque system font type.
     ///
@@ -49,9 +49,9 @@ public extension View {
     /// ```
     ///
     /// Monospaced fonts are recommended because they make as-you-type formatting
-    /// more visually predictable. Sometimes it does not matter much, however. As-you-type
-    /// formatting with trailing text alignment works fine with just about any font,
-    /// because then the caret and/or selection does not jump around as much.
+    /// more visually predictable. Sometimes it does not matter much, however. As-
+    /// you-type formatting with trailing text alignment works fine with any font,
+    /// because the caret and/or selection does not jump around as much.
     ///
     /// **Notes**
     ///

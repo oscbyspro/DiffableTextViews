@@ -39,7 +39,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets the tint color within diffable text views.
+    /// Sets the tint color for diffable text views.
     ///
     /// It is similar to `View/tint(_:)` and affects text selection.
     ///

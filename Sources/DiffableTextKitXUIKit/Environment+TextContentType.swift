@@ -39,8 +39,8 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets the text content type for this view, which the system uses to offer
-    /// suggestions while the user enters text on an iOS or tvOS device.
+    /// Sets the text content type for diffable text views, which the system uses
+    /// to offer suggestions while the user enters text on an iOS or tvOS device.
     ///
     /// It is similar to `View/textContentType(_:)`.
     ///

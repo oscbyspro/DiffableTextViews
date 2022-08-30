@@ -39,7 +39,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets the style for diffable text fields within this view.
+    /// Sets the text field style for diffable text views.
     ///
     /// It is similar to View/textFieldStyle, but based on UIKit.
     ///
