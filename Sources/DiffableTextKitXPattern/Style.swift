@@ -16,31 +16,35 @@ import DiffableTextKit
 public struct PatternTextStyle<Value>: DiffableTextStyle where Value: Equatable,
 Value: RangeReplaceableCollection, Value.Element == Character {
     
+    public typealias Placeholders = PatternTextPlaceholders
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let pattern: String
-    @usableFromInline var placeholders = Placeholders()
-    @usableFromInline var hidden = false
+    public var pattern: String
+    public var placeholders: Placeholders
+    public var hidden: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ pattern: String) { self.pattern = pattern }
+    @inlinable public init(_ pattern: String, placeholders: Placeholders = .init(), hidden: Bool = false) {
+        self.pattern = pattern; self.placeholders = placeholders; self.hidden = hidden
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Marks a single character as a placeholder.
+    /// Marks a single character as the style's placeholder.
     @inlinable public func placeholders(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
         var S0 = self; S0.placeholders = .init((character, predicate)); return S0
     }
     
-    /// Marks multiple characters as placeholders.
+    /// Marks multiple characters as the style's placeholders.
     @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
         var S0 = self; S0.placeholders = .init(placeholders); return S0
     }
@@ -250,11 +254,8 @@ extension PatternTextStyle {
 //*============================================================================*
 // MARK: * Style x Init
 //*============================================================================*
-//=----------------------------------------------------------------------------=
-// MARK: + String
-//=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == PatternTextStyle<String> {
+extension DiffableTextStyle {
     
     /// Creates a `PatternTextStyle` without placeholders.
     ///
@@ -265,23 +266,7 @@ extension DiffableTextStyle where Self == PatternTextStyle<String> {
     /// }
     /// ```
     ///
-    @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Array<Character>
-//=----------------------------------------------------------------------------=
-
-extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
-    
-    /// Creates a `PatternTextStyle` without placeholders.
-    ///
-    /// ```
-    /// DiffableTextField(value: $number) {
-    ///     .pattern("+## (###) ###-##-##")
-    ///     .placeholders("#") { $0.isASCII && $0.isNumber }
-    /// }
-    /// ```
-    ///
-    @inlinable public static func pattern(_ pattern: String) -> Self { Self(pattern) }
+    @inlinable public static func pattern<T>(_ pattern: String) -> Self where Self == PatternTextStyle<T> {
+        Self(pattern)
+    }
 }

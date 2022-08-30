@@ -72,7 +72,7 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     
     func testDecimal() {
-        XCTAssertCurrencies(-1.23 as Decimal)
+        XCTAssertCurrencies(Decimal(string: "-1234567.89")!)
     }
 }
 
@@ -106,7 +106,7 @@ extension StyleTestsOnCurrency {
     }
     
     func testInt8() {
-        XCTAssertCurrencies(-012 as Int8) // 9s
+        XCTAssertCurrencies(-12_ as Int8) // 9s
     }
     
     func testInt16() {
@@ -137,7 +137,7 @@ extension StyleTestsOnCurrency {
     }
     
     func testUInt8() {
-        XCTAssertCurrencies(012 as UInt8) // 9s
+        XCTAssertCurrencies(12_ as UInt8) // 9s
     }
     
     func testUInt16() {

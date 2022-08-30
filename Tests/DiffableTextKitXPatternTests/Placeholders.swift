@@ -19,6 +19,8 @@ import XCTest
 
 final class PlaceholdersTests: XCTestCase {
     
+    typealias Placeholders = PatternTextPlaceholders
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=

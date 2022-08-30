@@ -11,7 +11,7 @@
 // MARK: * Placeholders
 //*============================================================================*
 
-@usableFromInline struct Placeholders: Equatable {
+public struct PatternTextPlaceholders: Equatable {
     
     @usableFromInline typealias Predicate = (Character) -> Bool
     
@@ -25,16 +25,16 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
+    @inlinable public init() {
         self.option = .none
     }
     
-    @inlinable init(_ some: Some.Elements) {
-        self.option = .some(Some(some))
+    @inlinable public init(_ placeholers: (Character, (Character) -> Bool)) {
+        self.option = .some(Some(placeholers))
     }
     
-    @inlinable init(_ many: Many.Elements) {
-        self.option = .many(Many(many))
+    @inlinable public init(_ placeholers: [Character: (Character) -> Bool]) {
+        self.option = .many(Many(placeholers))
     }
     
     //=------------------------------------------------------------------------=
@@ -63,23 +63,21 @@
 // MARK: + Option(s)
 //=----------------------------------------------------------------------------=
 
-extension Placeholders {
+extension PatternTextPlaceholders {
     
     //*========================================================================*
     // MARK: * Some [...]
     //*========================================================================*
     
     @usableFromInline struct Some: Equatable {
+                
+        //=--------------------------------------------------------------------=
         
-        @usableFromInline typealias Elements = (Character, Predicate)
+        @usableFromInline let elements: (Character, Predicate)
         
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: Elements
-        
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(  _ elements: Elements) {
+        @inlinable init(  _ elements: (Character, Predicate)) {
             self.elements = elements
         }
         
@@ -97,16 +95,14 @@ extension Placeholders {
     //*========================================================================*
 
     @usableFromInline struct Many: Equatable {
+                
+        //=--------------------------------------------------------------------=
         
-        @usableFromInline typealias Elements = [Character: Predicate]
+        @usableFromInline let elements: [Character: Predicate]
         
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: Elements
-        
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(  _ elements: Elements) {
+        @inlinable init(  _ elements: [Character: Predicate]) {
             self.elements = elements
         }
         

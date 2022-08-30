@@ -57,6 +57,7 @@ public extension View {
     ///
     /// **Notes**
     ///
+    /// - The value is read when the view is set up.
     /// - The default value is `nil` (no toolbar installed).
     /// - The `SwiftUI/toolbar` environment value is inaccessible.
     ///

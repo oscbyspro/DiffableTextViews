@@ -41,7 +41,7 @@ extension StyleTestsOnNumber {
     //=------------------------------------------------------------------------=
     
     func testDecimal() {
-        XCTAssertLocales(-1.23 as Decimal)
+        XCTAssertLocales(Decimal(string: "-1234567.89")!)
     }
 }
 
@@ -75,7 +75,7 @@ extension StyleTestsOnNumber {
     }
     
     func testInt8() {
-        XCTAssertLocales(-012 as Int8) // 9s
+        XCTAssertLocales(-12_ as Int8) // 9s
     }
     
     func testInt16() {
@@ -106,7 +106,7 @@ extension StyleTestsOnNumber {
     }
     
     func testUInt8() {
-        XCTAssertLocales(012 as UInt8) // 9s
+        XCTAssertLocales(12_ as UInt8) // 9s
     }
     
     func testUInt16() {
