@@ -39,7 +39,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets the alignment of text a diffable text view.
+    /// Sets the alignment of text in diffable text views.
     ///
     /// It is similar to `View/multilineTextAlignment(_:)`.
     ///

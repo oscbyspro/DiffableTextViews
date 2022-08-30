@@ -39,7 +39,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets how often the shift key in the keyboard is automatically enabled.
+    /// Sets how often the shift key automatically enabled in diffable text views.
     ///
     /// It is similar to `View/textInputAutocapitalization(_:)`.
     ///

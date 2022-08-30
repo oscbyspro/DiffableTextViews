@@ -40,7 +40,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Adds a toolbar done button for convenient dismissal.
+    /// Adds a toolbar with a done button for convenient dismissal.
     ///
     /// Instructs the view to install a toolbar similar to SwiftUI's
     ///
@@ -57,7 +57,7 @@ public extension View {
     ///
     /// **Notes**
     ///
-    /// - The default value is `nil`.
+    /// - The default value is `nil` (no toolbar installed).
     /// - The `SwiftUI/toolbar` environment value is inaccessible.
     ///
     @inlinable func diffableTextViews_toolbarDoneButton(_ style: UIBarButtonItem.Style = .plain) -> some View {

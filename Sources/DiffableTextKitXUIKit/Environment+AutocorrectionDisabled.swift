@@ -39,7 +39,7 @@ extension EnvironmentValues {
 
 public extension View {
     
-    /// Sets whether to disable autocorrection for diffable text views.
+    /// Optionally disables autocorrection in diffable text views.
     ///
     /// It is similar to `View/autocorrectionDisabled(_:)`.
     ///
@@ -52,6 +52,7 @@ public extension View {
     ///
     /// - The default value is `false`.
     /// - This method was added for consistency.
+    /// - This method does not affect style autocorrection behavior.
     ///
     @inlinable func diffableTextViews_autocorrectionDisabled(_ disabled: Bool = true) -> some View {
         self.environment(\.diffableTextViews_autocorrectionDisabled, disabled)
