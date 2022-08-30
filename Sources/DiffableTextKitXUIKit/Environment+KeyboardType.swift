@@ -45,7 +45,7 @@ public extension View {
     ///
     /// ```
     /// TextField("Amount", value: $amount, style: .currency("USD"))
-    ///     .keyboardType(.decimalPad)
+    ///     .diffableTextViews_keyboardType(.decimalPad)
     /// ```
     ///
     /// **Notes**

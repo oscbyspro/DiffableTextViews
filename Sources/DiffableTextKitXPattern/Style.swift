@@ -40,19 +40,23 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     
     /// Marks a single character as the style's placeholder.
     @inlinable public func placeholders(_ character: Character,
-    where predicate: @escaping (Character) -> Bool) -> Self {
+    where  predicate: @escaping (Character) -> Bool) -> Self {
         self.placeholders((character, predicate))
     }
     
     /// Marks a single character as the style's placeholder.
     @inlinable public func placeholders(_ some: (Character, (Character) -> Bool)) -> Self {
-        var S0 = self; S0.placeholders = .init(some); return S0
+        var S0 = self;  S0.placeholders = Placeholders(some); return S0
     }
     
     /// Marks multiple characters as the style's placeholders.
     @inlinable public func placeholders(_ many: [Character: (Character) -> Bool]) -> Self {
-        var S0 = self; S0.placeholders = .init(many); return S0
+        var S0 = self;  S0.placeholders = Placeholders(many); return S0
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     /// Hides the pattern's suffix.
     ///
