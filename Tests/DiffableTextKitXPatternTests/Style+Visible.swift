@@ -24,7 +24,7 @@ final class StyleTestsOnVisible: XCTestCase, StyleTests {
     //=------------------------------------------------------------------------=
     
     let style = PatternTextStyle<String>
-        .pattern("+### (###) ##-##-##")
+        .pattern("+## (###) ###-##-##")
         .placeholders("#") { $0.isASCII && $0.isNumber }
         .hidden(false)
     
@@ -33,37 +33,33 @@ final class StyleTestsOnVisible: XCTestCase, StyleTests {
     //=------------------------------------------------------------------------=
     
     func testNone() {
-        XCTFormat___("", format: "+### (###) ##-##-##")
-        XCTInterpret("", format: "+### (###) ##-##-##", value: "")
+        OKFormat___("", format: "+## (###) ###-##-##")
+        OKInterpret("", format: "+## (###) ###-##-##", value: "")
     }
     
     func testSome() {
-        XCTFormat___("12300045", format: "+123 (000) 45-##-##")
-        XCTInterpret("12300045", format: "+123 (000) 45-##-##", value: "12300045")
+        OKFormat___("12000345", format: "+12 (000) 345-##-##")
+        OKInterpret("12000345", format: "+12 (000) 345-##-##", value: "12000345")
     }
     
     func testFull() {
-        XCTFormat___("123000456789", format: "+123 (000) 45-67-89")
-        XCTInterpret("123000456789", format: "+123 (000) 45-67-89", value: "123000456789")
+        OKFormat___("120003456789", format: "+12 (000) 345-67-89")
+        OKInterpret("120003456789", format: "+12 (000) 345-67-89", value: "120003456789")
     }
     
     func testMore() {
-        XCTFormat___("123000456789000", format: "+123 (000) 45-67-89|000")
-        XCTInterpret("123000456789000", format: "+123 (000) 45-67-89", value: "123000456789")
+        OKFormat___("120003456789000", format: "+12 (000) 345-67-89|000")
+        OKInterpret("120003456789000", format: "+12 (000) 345-67-89", value: "120003456789")
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-    
     func testNoneMismatch() {
-        XCTFormat___("ABC", format: "+### (###) ##-##-##|ABC")
-        XCTInterpret("ABC", format: "+### (###) ##-##-##", value: "")
+        OKFormat___("ABC", format: "+## (###) ###-##-##|ABC")
+        OKInterpret("ABC", format: "+## (###) ###-##-##", value: "")
     }
     
     func testSomeMismatch() {
-        XCTFormat___("12300045ABC", format: "+123 (000) 45-##-##|ABC")
-        XCTInterpret("12300045ABC", format: "+123 (000) 45-##-##", value: "12300045")
+        OKFormat___("12000345ABC", format: "+12 (000) 345-##-##|ABC")
+        OKInterpret("12000345ABC", format: "+12 (000) 345-##-##", value: "12000345")
     }
 }
 

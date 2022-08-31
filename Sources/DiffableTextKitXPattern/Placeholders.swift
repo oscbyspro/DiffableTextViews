@@ -11,7 +11,7 @@
 // MARK: * Placeholders
 //*============================================================================*
 
-public struct PatternTextPlaceholders: Equatable {
+public struct PatternTextPlaceholders: Equatable, ExpressibleByDictionaryLiteral {
     
     @usableFromInline typealias Predicate = (Character) -> Bool
     
@@ -39,6 +39,13 @@ public struct PatternTextPlaceholders: Equatable {
     
     @inlinable public init(_ many: [Character: (Character) -> Bool]) {
         self.option = .many(Many(many))
+    }
+    
+    @inlinable public init(dictionaryLiteral elements: (Character, (Character) -> Bool)...) {
+        switch elements.count /* O(1) */ {
+        case  0: self.init()
+        case  1: self.init(elements[0])
+        default: self.init(Dictionary(elements, uniquingKeysWith: { $1 })) }
     }
     
     //=------------------------------------------------------------------------=

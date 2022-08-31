@@ -33,10 +33,6 @@ protocol StyleTests: XCTestCase {
     func testSome()
     func testFull()
     func testMore()
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
     
     func testNoneMismatch()
     func testSomeMismatch()
@@ -52,11 +48,11 @@ extension StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTFormat___(_ input: String, format: String) {
+    func OKFormat___(_ input: String, format: String) {
          XCTAssertEqual(style.format(input),   format)
     }
     
-    func XCTInterpret(_ input: String, format: String, value: String) {
+    func OKInterpret(_ input: String, format: String, value: String) {
         let testable = style.interpret(input)
         XCTAssertEqual(testable.value, value)
         XCTAssertEqual(testable.snapshot.characters, format)

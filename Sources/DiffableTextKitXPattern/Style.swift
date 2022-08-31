@@ -24,14 +24,14 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     
     public var pattern: String
     public var placeholders: Placeholders
-    public var hidden: Bool = false
+    public var hidden: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ pattern: String, placeholders: Placeholders = .init()) {
-        self.pattern = pattern; self.placeholders = placeholders
+    @inlinable public init(_ pattern: String, placeholders: Placeholders = .init(), hidden: Bool = false) {
+        self.pattern = pattern; self.placeholders = placeholders; self.hidden = hidden
     }
     
     //=------------------------------------------------------------------------=

@@ -44,7 +44,7 @@ public extension View {
     /// It is similar to `View/autocorrectionDisabled(_:)`.
     ///
     /// ```
-    /// DiffableTextField("Text", value: $text, style: .normal)
+    /// DiffableTextField("Text...", value: $text, style: .normal)
     ///     .diffableTextViews_autocorrectionDisabled(true)
     /// ```
     ///

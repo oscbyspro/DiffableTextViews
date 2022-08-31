@@ -41,7 +41,7 @@ public extension View {
     
     /// Sets the text field style for diffable text views.
     ///
-    /// It is similar to View/textFieldStyle, but based on UIKit.
+    /// It is similar to `View/textFieldStyle(_:), but based on UIKit.
     ///
     /// ```
     /// DiffableTextField("Bordered", value: $value, style: style)
@@ -52,7 +52,7 @@ public extension View {
     ///
     /// - The value is read when the view is set up.
     /// - The default value is `UITextField.BorderStyle.none`.
-    /// - The `View/textFieldStyle` environment value is inaccessible.
+    /// - The `View/textFieldStyle(_:)` environment value is inaccessible.
     ///
     @inlinable func diffableTextViews_textFieldStyle(_ style: UITextField.BorderStyle) -> some View  {
         self.environment(\.diffableTextViews_textFieldStyle, style)

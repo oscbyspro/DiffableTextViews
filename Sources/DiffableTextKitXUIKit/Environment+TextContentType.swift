@@ -45,8 +45,12 @@ public extension View {
     /// It is similar to `View/textContentType(_:)`.
     ///
     /// ```
-    /// DiffableTextField("Enter your email", text: $emailAddress)
-    ///     .diffableTextViews_textContentTypetextContentType(.emailAddress)
+    /// DiffableTextField("Phone", value: $address) {
+    ///     .pattern("+## (###) ###-##-##")
+    ///     .placeholders("#") { $0.isASCII && $0.isNumber }
+    ///     .equals(())
+    /// }
+    /// .diffableTextViews_textContentType(.telephoneNumber)
     /// ```
     ///
     /// **Notes**

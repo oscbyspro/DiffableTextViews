@@ -44,7 +44,7 @@ public extension View {
     /// It is similar to `View/keyboardType(_:)`.
     ///
     /// ```
-    /// TextField("Amount", value: $amount, style: .currency("USD"))
+    /// DiffableTextField("Amount", value: $amount, style: .number)
     ///     .diffableTextViews_keyboardType(.decimalPad)
     /// ```
     ///

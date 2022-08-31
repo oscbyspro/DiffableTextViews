@@ -44,7 +44,7 @@ public extension View {
     /// It is similar to `View/multilineTextAlignment(_:)`.
     ///
     /// ```
-    /// DiffableTextField("Amount", value: $value, style: .number)
+    /// DiffableTextField("Amount", value: $amount, style: .number)
     ///     .diffableTextViews_multilineTextAlignment(.trailing)
     /// ```
     ///

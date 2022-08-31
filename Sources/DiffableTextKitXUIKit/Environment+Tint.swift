@@ -44,8 +44,8 @@ public extension View {
     /// It is similar to `View/tint(_:)` and affects text selection.
     ///
     /// ```
-    /// DiffableTextField("Look, selection is green!", value: $value)
-    ///     .diffableTextViews_tint(.green)
+    /// DiffableTextField("Tinted", value: $value, style: style)
+    ///     .diffableTextViews_tint(.gray)
     /// ```
     ///
     /// **Notes**

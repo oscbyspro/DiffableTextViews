@@ -44,7 +44,7 @@ public extension View {
     /// It is similar to `View/font(_:)` but uses a SwiftUI-esque system font type.
     ///
     /// ```
-    /// DiffableTextField("Monospaced", value: $value, style: style)
+    /// DiffableTextField("Amount", value: $amount, style: .number)
     ///     .diffableTextViews_font(.body.monospaced())
     /// ```
     ///

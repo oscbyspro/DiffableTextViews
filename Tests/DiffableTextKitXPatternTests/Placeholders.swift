@@ -30,14 +30,13 @@ final class PlaceholdersTests: XCTestCase {
     lazy var many = Placeholders(["#": \.isNumber, "@": \.isLetter])
     
     //=------------------------------------------------------------------------=
-    // MARK: Assertions
+    // MARK: Tests x Init
     //=------------------------------------------------------------------------=
     
-    func AssertSubscriptResults(_ instance: Placeholders,
-    _ scenarios: () -> [(Character, Character, Bool?)]) {
-        for scenario in scenarios() {
-            XCTAssertEqual(instance[scenario.0]?(scenario.1), scenario.2)
-        }
+    func testExpressibleByDictionaryLiteral() {
+        XCTAssertEqual(none, [:])
+        XCTAssertEqual(some, ["#": \.isNumber])
+        XCTAssertEqual(many, ["#": \.isNumber, "@": \.isLetter])
     }
     
     //=------------------------------------------------------------------------=
@@ -90,6 +89,16 @@ final class PlaceholdersTests: XCTestCase {
         XCTAssertNotEqual(
         Placeholders(["A": { _ in true }, "B": { _ in true }]),
         Placeholders(["A": { _ in true }, "_": { _ in true }]))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func AssertSubscriptResults(_ instance: Placeholders, _ scenarios: () -> [(Character, Character, Bool?)]) {
+        for scenario in scenarios() {
+            XCTAssertEqual(instance[scenario.0]?(scenario.1), scenario.2)
+        }
     }
 }
 

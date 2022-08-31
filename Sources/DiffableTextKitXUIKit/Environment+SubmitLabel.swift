@@ -44,8 +44,8 @@ public extension View {
     /// It is similar to `View/submitLabel(_:)`.
     ///
     /// ```
-    /// DiffableTextField("Prints on submit...", value: $value, style: style)
-    ///     .diffableTextViews_submitLabel(.return)
+    /// DiffableTextField("Search", value: $text, style: .normal)
+    ///     .diffableTextViews_submitLabel(.search)
     /// ```
     ///
     /// **Notes**

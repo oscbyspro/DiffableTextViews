@@ -59,7 +59,7 @@ public extension View {
     ///
     /// - The value is read when the view is set up.
     /// - The default value is `nil` (no toolbar installed).
-    /// - The `SwiftUI/toolbar` environment value is inaccessible.
+    /// - The `View/toolbar(_:)` environment value is inaccessible.
     ///
     @inlinable func diffableTextViews_toolbarDoneButton(_ style: UIBarButtonItem.Style = .plain) -> some View {
         self.environment(\.diffableTextViews_toolbarDoneButton, style)
