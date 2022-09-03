@@ -30,22 +30,22 @@ public struct PatternTextPlaceholders: Equatable, ExpressibleByDictionaryLiteral
     }
     
     @inlinable public init(_ character: Character, where predicate: @escaping (Character) -> Bool) {
-        self.option = .some(Some((character, predicate)))
+        self.option = .some(Some(base: (character, predicate)))
     }
     
     @inlinable public init(_ some: (Character, (Character) -> Bool)) {
-        self.option = .some(Some(some))
+        self.option = .some(Some(base: some))
     }
     
     @inlinable public init(_ many: [Character: (Character) -> Bool]) {
-        self.option = .many(Many(many))
+        self.option = .many(Many(base: many))
     }
     
     @inlinable public init(dictionaryLiteral elements: (Character, (Character) -> Bool)...) {
-        switch elements.count /* O(1) */ {
-        case  0: self.init()
-        case  1: self.init(elements[0])
-        default: self.init(Dictionary(elements, uniquingKeysWith: { $1 })) }
+        switch elements.count {
+        case 1:    self.init(elements[0])
+        case 2...: self.init(Dictionary(elements, uniquingKeysWith: { $1 }))
+        default:   self.init() }
     }
     
     //=------------------------------------------------------------------------=
@@ -68,36 +68,29 @@ public struct PatternTextPlaceholders: Equatable, ExpressibleByDictionaryLiteral
         case some(Some)
         case many(Many)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Option(s)
-//=----------------------------------------------------------------------------=
-
-extension PatternTextPlaceholders {
     
     //*========================================================================*
     // MARK: * Some [...]
     //*========================================================================*
     
     @usableFromInline struct Some: Equatable {
-                
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let elements: (Character, Predicate)
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(  _ elements: (Character, Predicate)) {
-            self.elements = elements
+        @usableFromInline let base: (Character, Predicate)
+        
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(base: (Character, Predicate)) {
+            self.base = base
         }
         
         @inlinable subscript(character: Character) -> Predicate? {
-            elements.0 == character ? elements.1 : nil
+            base.0 == character ? base.1 : nil
         }
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.elements.0 == rhs.elements.0
+            lhs.base.0 == rhs.base.0
         }
     }
     
@@ -109,20 +102,20 @@ extension PatternTextPlaceholders {
                 
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: [Character: Predicate]
+        @usableFromInline let base: [Character: Predicate]
         
         //=--------------------------------------------------------------------=
         
-        @inlinable init(  _ elements: [Character: Predicate]) {
-            self.elements = elements
+        @inlinable init(base: [Character: Predicate]) {
+            self.base = base
         }
         
         @inlinable subscript(character: Character) -> Predicate? {
-            elements[character]
+            base[character]
         }
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.elements.keys == rhs.elements.keys
+            lhs.base.keys == rhs.base.keys
         }
     }
 }

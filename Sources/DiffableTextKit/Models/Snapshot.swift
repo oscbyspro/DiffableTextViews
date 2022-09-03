@@ -110,15 +110,11 @@ extension Snapshot {
     // MARK: Sequence
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(
-    _ characters: some Sequence<Character>,
-    as attribute: Attribute = .content) {
+    @inlinable public init(_ characters: some Sequence<Character>, as attribute: Attribute = .content) {
         self.init(characters, as: { _ in attribute })
     }
     
-    @inlinable public init(
-    _ characters: some Sequence<Character>,
-    as attribute: (Character) -> Attribute) {
+    @inlinable public init(_ characters: some Sequence<Character>, as attribute: (Character) -> Attribute) {
         self.init(); self.append(contentsOf: characters, as: attribute)
     }
 }
@@ -165,6 +161,14 @@ extension Snapshot {
     @inlinable public func index(_ position: Index, offsetBy distance: Int) -> Index {
         let character = _characters.index(position.character, offsetBy: distance)
         let attribute = _attributes.index(position.attribute, offsetBy: distance)
+        return Index(character, as: attribute)
+    }
+    
+    @inlinable public func index(_ position: Index, offsetBy distance: Int, limitedBy limit: Index) -> Index? {
+        guard let attribute = _attributes.index(position.attribute/*----*/,
+        offsetBy: distance, limitedBy: limit.attribute) else { return nil }
+        guard let character = _characters.index(position.character/*----*/,
+        offsetBy: distance, limitedBy: limit.character) else { return nil }
         return Index(character, as: attribute)
     }
     
@@ -246,10 +250,9 @@ extension Snapshot {
     // MARK: Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func insert(
-    _ symbol: Symbol, at position: Index) {
-        self._characters.insert(symbol.character,at: position.character)
-        self._attributes.insert(symbol.attribute,at: position.attribute)
+    @inlinable public mutating func insert(_ symbol: Symbol, at position: Index) {
+        self._characters.insert(symbol.character, at: position.character)
+        self._attributes.insert(symbol.attribute, at: position.attribute)
     }
         
     @inlinable public mutating func insert(
