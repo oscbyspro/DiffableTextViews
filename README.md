@@ -19,24 +19,24 @@ An open source package for as-you-type formatting in SwiftUI.
 
 # Installation
 
-Simple instructions on how to install this package.
+How to install this package.
 
-### Swift Package Manager
+### Xcode (SPM)
 
 1. Select https://github.com/oscbyspro/DiffableTextViews
-2. Select a **VERSIONED** release
+2. Select a **VERSIONED** release (5.0.0)
 
-### Import
+### Package.swift
 
 ```swift
-import DiffableTextViews
+.package(url: "https://github.com/oscbyspro/DiffableTextViews", from: "5.0.0"),
 ```
 
 ### Requirements
 
-| Swift | iOS   | iPadOS | Mac Catalyst | tvOS  |
-|:-----:|:-----:|:------:|:------------:|:-----:|
-| 5.7+  | 15.0+ | 15.0+  | 15.0+        | 15.0+ |
+| Version | Swift | iOS   | iPadOS | Mac Catalyst | tvOS  |
+|:-------:|:-----:|:-----:|:------:|:------------:|:-----:|
+| 5.0.0+  | 5.7+  | 15.0+ | 15.0+  | 15.0+        | 15.0+ |
 
 # Apps
 
